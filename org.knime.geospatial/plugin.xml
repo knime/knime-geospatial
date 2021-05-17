@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.knime.workbench.repository.categories">
+      <category
+            description="KNIME AP Geospatial Plugin"
+            level-id="template"
+            name="KNIME AP Geospatial Plugin"
+            path="/misc">
+      </category>
+   </extension>   
+</plugin>
