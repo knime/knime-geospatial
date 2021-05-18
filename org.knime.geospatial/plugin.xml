@@ -1,13 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension
-         point="org.knime.workbench.repository.categories">
-      <category
-            description="KNIME AP Geospatial Plugin"
-            level-id="template"
-            name="KNIME AP Geospatial Plugin"
-            path="/misc">
-      </category>
-   </extension>   
+  <extension
+   point="org.knime.core.PortType">
+    <portType
+     color="#ffc0cb"
+     name="Image"
+     objectClass="org.knime.geospatial.geojson.GeoJSONPortObject"
+     objectSerializer="org.knime.geospatial.geojson.GeoJSONPortObject$Serializer"
+     specClass="org.knime.geospatial.geojson.GeoJSONPortObjectSpec"
+     specSerializer="org.knime.geospatial.geojson.GeoJSONPortObjectSpec$Serializer">
+    </portType>
+  </extension>
+  <extension
+   point="org.knime.workbench.repository.categories">
+    <category
+     description="KNIME AP Geospatial Plugin"
+     level-id="geospatial"
+     name="KNIME AP Geospatial Plugin"
+     path="/misc">
+    </category>
+  </extension>
+  <extension
+   point="org.knime.workbench.repository.nodes">
+    <node
+     category-path="/misc/geospatial"
+     factory-class="org.knime.geospatial.reader.ShapefileReaderNodeFactory">
+    </node>
+    <node
+     category-path="/misc/geospatial"
+     factory-class="org.knime.geospatial.writer.GeoJSONWriterNodeFactory">
+    </node>
+  </extension>
 </plugin>
