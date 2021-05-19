@@ -2,6 +2,7 @@ package org.knime.geospatial.reader;
 
 import java.util.Optional;
 
+import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.context.NodeCreationConfiguration;
 import org.knime.core.node.context.url.URLConfiguration;
 import org.knime.core.node.port.PortType;
@@ -10,7 +11,6 @@ import org.knime.filehandling.core.connections.FSLocation;
 import org.knime.filehandling.core.node.portobject.reader.PortObjectReaderNodeConfig;
 import org.knime.filehandling.core.node.portobject.reader.PortObjectReaderNodeDialog;
 import org.knime.filehandling.core.node.portobject.reader.PortObjectReaderNodeFactory;
-import org.knime.geospatial.geojson.GeoJSONPortObject;
 
 public class ShapefileReaderNodeFactory extends
 		PortObjectReaderNodeFactory<ShapefileReaderNodeModel, PortObjectReaderNodeDialog<PortObjectReaderNodeConfig>> {
@@ -23,7 +23,7 @@ public class ShapefileReaderNodeFactory extends
 
 	@Override
 	protected PortType getOutputPortType() {
-		return GeoJSONPortObject.TYPE;
+		return BufferedDataTable.TYPE;
 	}
 
 	@Override

@@ -4,7 +4,7 @@ Bundle-Name: KNIME AP Repository Template
 Bundle-SymbolicName: org.knime.geospatial;singleton:=true
 Bundle-Version: 4.4.0.qualifier
 Bundle-ClassPath: .,
-  lib/commons-lang3-3.8.1.jar,
+ lib/commons-lang3-3.8.1.jar,
  lib/commons-pool-1.5.4.jar,
  lib/commons-text-1.6.jar,
  lib/ejml-core-0.34.jar,
@@ -45,6 +45,7 @@ Bundle-ClassPath: .,
 Bundle-Vendor: KNIME AG, Zurich, Switzerland
 Export-Package: org.knime.template
 Require-Bundle: org.knime.core;bundle-version="[4.0.0,5.0.0)",
- org.knime.filehandling.core;bundle-version="[4.1.0,5.0.0)"
+ org.knime.filehandling.core;bundle-version="[4.1.0,5.0.0)",
+ org.knime.json;bundle-version="[4.1.0,5.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

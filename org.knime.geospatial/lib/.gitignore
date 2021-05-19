@@ -1,3 +1,4 @@
-*.jar
+#*.jar
+*sources.jar
 *.zip
 */target/
