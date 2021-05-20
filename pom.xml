@@ -64,9 +64,9 @@
 			<url>${knime.json.p2}</url>
 		</repository>
 		<repository>
-			<id>p2-knime-jsnippets</id>
+			<id>p2-knime-javasnippet</id>
 			<layout>p2</layout>
-			<url>${knime.jsnippets.p2}</url>
+			<url>${knime.javasnippet.p2}</url>
 		</repository>
 		<repository>
 			<id>p2-knime-shared</id>
