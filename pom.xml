@@ -54,6 +54,11 @@
 			<url>${knime.base.p2}</url>
 		</repository>
 		<repository>
+			<id>p2-knime-expressions</id>
+			<layout>p2</layout>
+			<url>${knime.expressions.p2}</url>
+		</repository>
+		<repository>
 			<id>p2-knime-filehandling</id>
 			<layout>p2</layout>
 			<url>${knime.filehandling.p2}</url>
