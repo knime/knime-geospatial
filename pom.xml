@@ -69,6 +69,11 @@
 			<url>${knime.json.p2}</url>
 		</repository>
 		<repository>
+			<id>p2-knime-js-core</id>
+			<layout>p2</layout>
+			<url>${knime.js.core.p2}</url>
+		</repository>
+		<repository>
 			<id>p2-knime-javasnippet</id>
 			<layout>p2</layout>
 			<url>${knime.javasnippet.p2}</url>
