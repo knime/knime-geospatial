@@ -17,4 +17,11 @@
      factory-class="org.knime.geospatial.reader.ShapefileReaderNodeFactory">
     </node>
   </extension>
+  <extension
+   point="org.knime.workbench.repository.nodes">
+    <node
+     category-path="/misc/geospatial"
+     factory-class="org.knime.geospatial.converter.LatLongToGeoJsonNodeFactory">
+    </node>
+  </extension>
 </plugin>
