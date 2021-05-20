@@ -16,6 +16,11 @@
      category-path="/misc/geospatial"
      factory-class="org.knime.geospatial.reader.ShapefileReaderNodeFactory">
     </node>
+    <node
+          category-path="/misc/geospatial"
+          deprecated="false"
+          factory-class="org.knime.geospatial.node.viz.leaflet.LeafletNodeFactory">
+    </node>
   </extension>
   <extension
    point="org.knime.workbench.repository.nodes">
@@ -24,23 +29,6 @@
      factory-class="org.knime.geospatial.converter.LatLongToGeoJsonNodeFactory">
     </node>
   </extension>
-   <extension
-         point="org.knime.workbench.repository.categories">
-      <category
-            description="KNIME AP Geospatial Plugin"
-            level-id="template"
-            name="KNIME AP Geospatial Plugin"
-            path="/misc">
-      </category>
-   </extension>
-   <extension
-         point="org.knime.workbench.repository.nodes">
-      <node
-            category-path="misc"
-            deprecated="false"
-            factory-class="org.knime.geospatial.node.viz.leaflet.LeafletNodeFactory">
-      </node>
-   </extension>
    <extension
          point="org.knime.js.core.webResources">
       <webResourceBundle
