@@ -228,6 +228,8 @@ implements CSSModifiable, BufferedDataTableHolder, LayoutTemplateProvider {
             representation.setCenterLat(m_config.getCenterLatValue());
             representation.setCenterLong(m_config.getCenterLongValue());
             representation.setZoomLevel(m_config.getZoomLevel());
+            representation.setMapProvider(m_config.getMapProvider());
+            representation.setMapAttribution(m_config.getMapAttribution());
 
             final LeafletViewValue value = getViewValue();
             if (isViewValueEmpty()) {

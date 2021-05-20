@@ -86,11 +86,13 @@ public class LeafletViewRepresentation extends JSONViewContent {
     private String m_selectionColumnName;
     private boolean m_showResetSelectionButton;
     private boolean m_enableShowSelectedRowsOnly;
-    
+
     private double m_centerLatValue;
     private double m_centerLongValue;
-    
+
     private double m_zoomLevel;
+    private String m_mapProvider;
+    private String m_mapAttribution;
 
     private JSONDataTable m_table;
 
@@ -313,7 +315,6 @@ public class LeafletViewRepresentation extends JSONViewContent {
 
     // -- Paging getters & setters --
 
-
     /**
      * @return The JSON data table.
      */
@@ -329,47 +330,75 @@ public class LeafletViewRepresentation extends JSONViewContent {
     public void setTable(final JSONDataTable table) {
         m_table = table;
     }
-    
+
     /**
      * @return The center lat value.
      */
     public double getCenterLat() {
     	return m_centerLatValue;
     }
-    
+
     /**
      * @param centerLat The centerLat to set.
      */
     public void setCenterLat(final double centerLat) {
     	m_centerLatValue = centerLat;
     }
-    
+
     /**
      * @return The center long value.
      */
     public double getCenterLong() {
     	return m_centerLongValue;
     }
-    
+
     /**
      * @param centerLat The centerLong to set.
      */
     public void setCenterLong(final double centerLong) {
     	m_centerLongValue = centerLong;
     }
-    
+
     /**
      * @return The zoom level value.
      */
     public double getZoomLevel() {
     	return m_zoomLevel;
     }
-    
+
     /**
      * @param centerLat The centerLong to set.
      */
     public void setZoomLevel(final double zoomLevel) {
-    	m_zoomLevel = zoomLevel;
+		m_zoomLevel = zoomLevel;
+    }
+
+    /**
+     * @return The map provider.
+     */
+    public String getMapProvider() {
+		return m_mapProvider;
+    }
+
+    /**
+     * @param mapProvider the map provider to set.
+     */
+    public void setMapProvider(final String mapProvider) {
+		m_mapProvider = mapProvider;
+    }
+
+    /**
+     * @return The map attribution.
+     */
+    public String getMapAttribution() {
+		return m_mapAttribution;
+    }
+
+    /**
+     * @param mapAttribution the map attribution to set.
+     */
+    public void setMapAttribution(final String mapAttribution) {
+		m_mapAttribution = mapAttribution;
     }
 
     // -- Save & Load Settings --
@@ -396,6 +425,8 @@ public class LeafletViewRepresentation extends JSONViewContent {
         settings.addDouble(LeafletViewConfig.CFG_CENTER_LAT_VALUE, m_centerLatValue);
         settings.addDouble(LeafletViewConfig.CFG_CENTER_LONG_VALUE, m_centerLongValue);
         settings.addDouble(LeafletViewConfig.CFG_ZOOM_LEVEL, m_zoomLevel);
+        settings.addString(LeafletViewConfig.CFG_MAP_PROVIDER, m_mapProvider);
+        settings.addString(LeafletViewConfig.CFG_MAP_ATTRIBUTION, m_mapAttribution);
 
     }
 
@@ -421,6 +452,8 @@ public class LeafletViewRepresentation extends JSONViewContent {
         m_centerLatValue = settings.getDouble(LeafletViewConfig.CFG_CENTER_LAT_VALUE);
         m_centerLongValue = settings.getDouble(LeafletViewConfig.CFG_CENTER_LONG_VALUE);
         m_zoomLevel = settings.getDouble(LeafletViewConfig.CFG_ZOOM_LEVEL);
+        m_mapProvider = settings.getString(LeafletViewConfig.CFG_MAP_PROVIDER);
+        m_mapAttribution = settings.getString(LeafletViewConfig.CFG_MAP_ATTRIBUTION);
     }
 
     /**
@@ -454,6 +487,8 @@ public class LeafletViewRepresentation extends JSONViewContent {
                 .append(m_centerLatValue, other.m_centerLatValue)
                 .append(m_centerLongValue, other.m_centerLongValue)
                 .append(m_zoomLevel, other.m_zoomLevel)
+                .append(m_mapProvider, other.m_mapProvider)
+                .append(m_mapAttribution, other.m_mapAttribution)
                 .isEquals();
     }
 
@@ -477,6 +512,8 @@ public class LeafletViewRepresentation extends JSONViewContent {
                 .append(m_centerLatValue)
                 .append(m_centerLongValue)
                 .append(m_zoomLevel)
+                .append(m_mapProvider)
+                .append(m_mapAttribution)
                 .toHashCode();
     }
 }

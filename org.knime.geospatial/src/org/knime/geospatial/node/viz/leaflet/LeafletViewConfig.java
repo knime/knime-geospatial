@@ -112,7 +112,15 @@ public final class LeafletViewConfig {
     final static String CFG_ZOOM_LEVEL = "zoomLevel";
     final static double DEFAULT_ZOOM_LEVEL = 11;
     private double m_zoomLevel = DEFAULT_ZOOM_LEVEL;
-    
+
+    final static String CFG_MAP_PROVIDER = "mapProvider";
+    final static String DEFAULT_MAP_PROVIDER = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+    private String m_mapProvider = DEFAULT_MAP_PROVIDER;
+
+    final static String CFG_MAP_ATTRIBUTION = "mapAttribution";
+    final static String DEFAULT_MAP_ATTRIBUTION = "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors";
+    private String m_mapAttribution = DEFAULT_MAP_ATTRIBUTION;
+
     // View edit controls
     final static String CFG_ENABLE_CONFIG = "enableViewConfiguration";
     final static boolean DEFAULT_ENABLE_CONFIG = true;
@@ -161,7 +169,7 @@ public final class LeafletViewConfig {
     final static String CFG_SHOW_RESET_SELECTION_BUTTON = "showResetSelectionButton";
     final static boolean DEFAULT_SHOW_RESET_SELECTION_BUTTON = true;
     private boolean m_showResetSelectionButton = DEFAULT_SHOW_RESET_SELECTION_BUTTON;
-    
+
     // Zooming & Panning
     final static String CFG_ENABLE_ZOOM = "enableZoom";
     final static boolean DEFAULT_ENABLE_ZOOM = true;
@@ -357,6 +365,34 @@ public final class LeafletViewConfig {
      */
     public void setZoomLevel(final double zoomLevel) {
         m_zoomLevel = zoomLevel;
+    }
+
+    /**
+     * @return the map provider
+     */
+    public String getMapProvider() {
+        return m_mapProvider;
+    }
+
+    /**
+     * @param mapProvider the map provider to set
+     */
+    public void setMapProvider(final String mapProvider) {
+        m_mapProvider = mapProvider;
+    }
+
+    /**
+     * @return the map attribution
+     */
+    public String getMapAttribution() {
+        return m_mapAttribution;
+    }
+
+    /**
+     * @param mapAttribution the map attribution to set
+     */
+    public void setMapAttribution(final String mapAttribution) {
+        m_mapAttribution = mapAttribution;
     }
 
     // -- View edit controls getters & setters --
@@ -619,6 +655,8 @@ public final class LeafletViewConfig {
         settings.addDouble(CFG_CENTER_LAT_VALUE, m_centerLatValue);
         settings.addDouble(CFG_CENTER_LONG_VALUE, m_centerLongValue);
         settings.addDouble(CFG_ZOOM_LEVEL, m_zoomLevel);
+        settings.addString(CFG_MAP_PROVIDER, m_mapProvider);
+        settings.addString(CFG_MAP_ATTRIBUTION, m_mapAttribution);
     }
 
     /** Loads parameters in NodeModel.
@@ -659,6 +697,8 @@ public final class LeafletViewConfig {
         m_centerLatValue = settings.getDouble(CFG_CENTER_LAT_VALUE);
         m_centerLongValue = settings.getDouble(CFG_CENTER_LONG_VALUE);
         m_zoomLevel = settings.getDouble(CFG_ZOOM_LEVEL);
+        m_mapProvider = settings.getString(CFG_MAP_PROVIDER);
+        m_mapAttribution = settings.getString(CFG_MAP_ATTRIBUTION);
     }
 
     /** Loads parameters in Dialog.
@@ -699,6 +739,8 @@ public final class LeafletViewConfig {
         m_centerLatValue = settings.getDouble(CFG_CENTER_LAT_VALUE, DEFAULT_CENTER_LAT_VALUE);
         m_centerLongValue = settings.getDouble(CFG_CENTER_LONG_VALUE, DEFAULT_CENTER_LONG_VALUE);
         m_zoomLevel = settings.getDouble(CFG_ZOOM_LEVEL, DEFAULT_ZOOM_LEVEL);
+        m_mapProvider = settings.getString(CFG_MAP_PROVIDER, DEFAULT_MAP_PROVIDER);
+        m_mapAttribution = settings.getString(CFG_MAP_ATTRIBUTION, DEFAULT_MAP_ATTRIBUTION);
     }
 
 }

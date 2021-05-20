@@ -56,6 +56,7 @@ import java.text.DecimalFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -95,6 +96,10 @@ public class LeafletNodeDialog extends NodeDialogPane {
     private final JCheckBox m_showSelectedRowOnlyCheckBox;
     private final JCheckBox m_enableShowSelectedRowOnlyCheckBox;
 
+    private final JTextField m_mapProvider;
+    private final JTextField m_mapAttribution;
+
+
 
     LeafletNodeDialog() {
         m_config = new LeafletViewConfig();
@@ -123,7 +128,10 @@ public class LeafletNodeDialog extends NodeDialogPane {
         m_showResetSelectionButtonCheckBox = new JCheckBox("Show reset selection button");
         m_showSelectedRowOnlyCheckBox = new JCheckBox("Show selected rows only");
         m_enableShowSelectedRowOnlyCheckBox = new JCheckBox("Enable 'Show selected rows only' option");
-        
+
+        m_mapProvider = new JTextField(20);
+        m_mapAttribution = new JTextField(20);
+
         addTab("View Configuration", createViewConfigTab());
         addTab("Interactivity", createInteractivityTab());
     }
@@ -145,6 +153,8 @@ public class LeafletNodeDialog extends NodeDialogPane {
         m_config.setShowResetSelectionButton(m_showResetSelectionButtonCheckBox.isSelected());
         m_config.setShowSelectedRowsOnly(m_showSelectedRowOnlyCheckBox.isSelected());
         m_config.setEnableShowSelectedRowsOnly(m_enableShowSelectedRowOnlyCheckBox.isSelected());
+        m_config.setMapProvider(m_mapProvider.getText());
+        m_config.setMapAttribution(m_mapAttribution.getText());
         
         m_config.saveSettings(settings);
     }
@@ -169,6 +179,8 @@ public class LeafletNodeDialog extends NodeDialogPane {
         m_showResetSelectionButtonCheckBox.setSelected(m_config.getShowResetSelectionButton());
         m_showSelectedRowOnlyCheckBox.setSelected(m_config.getShowSelectedRowsOnly());
         m_enableShowSelectedRowOnlyCheckBox.setSelected(m_config.getEnableShowSelectedRowsOnly());
+        m_mapProvider.setText(m_config.getMapProvider());
+        m_mapAttribution.setText(m_config.getMapAttribution());
         
         m_zoomLevel.setValue(m_config.getZoomLevel());
     }
@@ -201,6 +213,16 @@ public class LeafletNodeDialog extends NodeDialogPane {
         generalPanel.add(new JLabel("Zoom Level:"), generalPanelConstraints);
         generalPanelConstraints.gridx++;
         generalPanel.add(m_zoomLevel, generalPanelConstraints);
+        generalPanelConstraints.gridx = 0;
+        generalPanelConstraints.gridy++;
+        generalPanel.add(new JLabel("Map Provider:"), generalPanelConstraints);
+        generalPanelConstraints.gridx++;
+        generalPanel.add(m_mapProvider, generalPanelConstraints);
+        generalPanelConstraints.gridx = 0;
+        generalPanelConstraints.gridy++;
+        generalPanel.add(new JLabel("Map Attribution:"), generalPanelConstraints);
+        generalPanelConstraints.gridx++;
+        generalPanel.add(m_mapAttribution, generalPanelConstraints);
         generalPanelConstraints.gridx = 0;
         generalPanelConstraints.gridy++;
 

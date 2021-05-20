@@ -17,7 +17,7 @@ window.leafletNamespace = (function () {
         this._geoObjects = [];
     };
 
-    Leaflet.prototype.getPolygoneBounds = function () {
+    Leaflet.prototype.getPolygoneBounds = function() {
         var polygons = []
         this._map.eachLayer(function (layer) {
             if (layer instanceof L.Polygon && !(layer instanceof L.Rectangle)) {
@@ -28,24 +28,28 @@ window.leafletNamespace = (function () {
         return polygons
     };
 
+    Leaflet.prototype.showHideTooltip = function (hide) {
+        this._map.eachLayer(function (layer) {
+
+            if (!hide) {
+                layer.unbindTooltip();
+            } else {
+                if (layer.feature){
+                    let tooltip = '<h2><b>' + layer.feature.id + '</b></h2>';
+                    Object.keys(layer.feature.properties).forEach(property => {
+                        tooltip += '<b>' + property + ': </b>' + layer.feature.properties[property] + '<br>';    
+                    });
+                    layer.bindTooltip(tooltip);
+                }
+            }
+        })
+        return polygons
+    }
+
     Leaflet.prototype.init = function (representation, value) {
-        debugger;
         this._representation = representation;
         this._value = value;
-        // ------------------------ Code Editor --------------------------------
-        // let codeContainer = document.createElement('div');
-        // codeContainer.id = 'codeContainer';
-        // document.body.appendChild(codeContainer);
-        // codeContainer.style.height = '500px';
-        // debugger;
-        
-        // const editor = monaco.editor.create(document.getElementById("codeContainer"), {
-        //     theme: 'vs-dark',
-        //     wordWrap: 'on',
-        //     value: ['function x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
-		// 		language: 'javascript'
-        // });
-        // --------------------------------------------------------
+        knimeService.subscribeToSelection(representation.table.id, this.handleSelection);
 
         let refreshButton = document.createElement('button');
         refreshButton.innerHTML = 'Reset Viewport';
@@ -57,35 +61,22 @@ window.leafletNamespace = (function () {
         let fitBounds = document.createElement('button');
         fitBounds.innerHTML = 'Fit Bounds';
         fitBounds.onclick = () => {
-            console.log(this.getPolygoneBounds());
-            let minNorthEast;
-            let maxSouthWest;
-            this._geoObjects.forEach((geoObject) => {
-                let bounds = geoObject.getBounds();
-                if (!minNorthEast && !maxSouthWest) {
-                    minNorthEast = {_northEast: bounds._northEast};
-                    maxSouthWest = {_southWest: bounds._southWest};
-                }
-                debugger;
-                if (bounds._northEast.lat > minNorthEast._northEast.lat) {
-                    minNorthEast._northEast.lat = bounds._northEast.lat;
-                }
-                if (bounds._northEast.lng > minNorthEast._northEast.lng) {
-                    minNorthEast._northEast.lng = bounds._northEast.lng;
-                }
-                if (bounds._southWest.lat < maxSouthWest._southWest.lat) {
-                    maxSouthWest._southWest.lat = bounds._southWest.lat;
-                }
-                if (bounds._southWest.lng < maxSouthWest._southWest.lng) {
-                    maxSouthWest._southWest.lng = bounds._southWest.lng;
-                }
-            });
-            var southWest = L.latLng(maxSouthWest._southWest.lat, maxSouthWest._southWest.lng),
-                northEast = L.latLng(minNorthEast._northEast.lat, minNorthEast._northEast.lng),
-                finalBounds = L.latLngBounds(southWest, northEast);
-            this._map.fitBounds(finalBounds);
+           this.fitToBounds();
         };
         document.body.appendChild(fitBounds);
+
+        this._toggleTooltip = document.createElement('input');
+        this._toggleTooltip.type = 'checkbox'
+        this._toggleTooltip.checked = false;
+        this._toggleTooltip.id = 'toggleTooltip';
+        this._toggleTooltip.onchange = (e) => {
+            this.showHideTooltip(e.target.checked);
+        }
+        document.body.appendChild(this._toggleTooltip);
+
+        var label = document.createElement('label')
+        label.htmlFor = 'toggleTooltip';
+        document.body.appendChild(document.createTextNode('Toggle Tooltip'));
 
         let mapContainer = document.createElement('div');
         mapContainer.id = 'mapContainer';
@@ -93,20 +84,18 @@ window.leafletNamespace = (function () {
         document.body.appendChild(mapContainer);
         this._map = L.map('mapContainer').setView([this._representation.centerLat, this._representation.centerLong], this._representation.zoomLevel);
 
-        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+        L.tileLayer(this._representation.mapProvider, {
             maxZoom: 18,
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-                'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            id: 'mapbox/light-v9',
-            tileSize: 512,
-            zoomOffset: -1
+            attribution: this._representation.mapAttribution
         }).addTo(this._map);
 
         this._representation.table.rows.forEach(row => {
             let geoJson = JSON.parse(row.data[0]);
+            geoJson.rowId = row.rowKey;
             let self = this;
             this._geoObjects.push(L.geoJSON(geoJson, {
                 renderer: this._canvasRenderer,
+                style: geojsonMarkerOptions,
                 pointToLayer: function (feature, latlng) {
                     self._latLongPoints.push(latlng);
                     if (feature.properties.style) {
@@ -114,16 +103,23 @@ window.leafletNamespace = (function () {
                     }
                     return L.circleMarker(latlng, geojsonMarkerOptions);
                 },
-                // Popup
-                onEachFeature: function (feature, layer) {
-                    let tooltip = '<h2><b>' + feature.id + '</b></h2>';
-                    Object.keys(feature.properties).forEach(property => {
-                        tooltip += '<b>' + property + ': </b>' + feature.properties[property] + '<br>';    
+            }).addTo(this._map).on('click', function(e) {
+                if (!e.layer.feature.selected) {
+                    knimeService.addRowsToSelection(leafletNamespace._representation.table.id, [e.layer.feature.rowId]);
+                    e.layer.feature.selected = true;
+                    e.layer.setStyle({
+                        fillColor: '#F00',
+                        color: 'yellow'
                     });
-                    layer.bindPopup(tooltip);
+                } else {
+                    knimeService.removeRowsFromSelection(leafletNamespace._representation.table.id, [e.layer.feature.rowId]);
+                    e.layer.feature.selected = false;
+                    e.layer.setStyle(e.layer.feature.properties.style ? e.layer.feature.properties.style : geojsonMarkerOptions);
                 }
-            }).addTo(this._map));
+            }));
         });
+
+        this.fitToBounds();
     };
 
     Leaflet.prototype.getComponentValue = function () {
@@ -131,12 +127,62 @@ window.leafletNamespace = (function () {
         this._value.centerLatValue = this._value.center.lat;
         this._value.centerLongValue = this._value.center.lng;
         this._value.zoomLevel = this._map.getZoom();
-        debugger;
         return this._value;
+    };
+
+    Leaflet.prototype.fitToBounds = function() {
+        let minNorthEast;
+        let maxSouthWest;
+        this._geoObjects.forEach((geoObject) => {
+            let bounds = geoObject.getBounds();
+            if (!minNorthEast && !maxSouthWest) {
+                minNorthEast = {_northEast: bounds._northEast};
+                maxSouthWest = {_southWest: bounds._southWest};
+            }
+            if (bounds._northEast.lat > minNorthEast._northEast.lat) {
+                minNorthEast._northEast.lat = bounds._northEast.lat;
+            }
+            if (bounds._northEast.lng > minNorthEast._northEast.lng) {
+                minNorthEast._northEast.lng = bounds._northEast.lng;
+            }
+            if (bounds._southWest.lat < maxSouthWest._southWest.lat) {
+                maxSouthWest._southWest.lat = bounds._southWest.lat;
+            }
+            if (bounds._southWest.lng < maxSouthWest._southWest.lng) {
+                maxSouthWest._southWest.lng = bounds._southWest.lng;
+            }
+        });
+        var southWest = L.latLng(maxSouthWest._southWest.lat, maxSouthWest._southWest.lng),
+            northEast = L.latLng(minNorthEast._northEast.lat, minNorthEast._northEast.lng),
+            finalBounds = L.latLngBounds(southWest, northEast);
+        this._map.fitBounds(finalBounds);
     };
 
     Leaflet.prototype.validate = function () {
         return true;
     };
+
+    Leaflet.prototype.handleSelection = function(selectionEvent) {
+        leafletNamespace._map.eachLayer(function (layer) {
+            if (selectionEvent.changeSet.added) {
+                selectionEvent.changeSet.added.forEach(addedRow => {
+                    if (layer.feature?.rowId === addedRow) {
+                        layer.setStyle({
+                            fillColor: '#F00',
+                            color: 'yellow'
+                        });
+                    }
+                })
+            }
+            if (selectionEvent.changeSet.removed) {
+                selectionEvent.changeSet.removed.forEach(removedRow => {
+                    if (layer.feature?.rowId === removedRow) {
+                        layer.setStyle(layer.feature.properties.style ? e.layer.feature.properties.style : geojsonMarkerOptions);
+                    }
+                })
+            }
+        });
+    };
+
     return new Leaflet();
 })();
