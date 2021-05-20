@@ -8,6 +8,6 @@
    </feature>
 
    <category-def name="knime-geospatial" label="Build artifacts from knime-geospatial">
-       <description>Build artifacts from knime-geospatial</description>
+       <description>KNIME Geospatial Node</description>
    </category-def>
 </site>
