@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<knimeNode icon="./leaflet.png" type="Visualizer"
+	xmlns="http://knime.org/node/v3.1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://knime.org/node/v3.1 http://knime.org/node/v3.1.xsd">
+
+	<name>Leaflet Map View</name>
+	<shortDescription>A node which creates a Leaflet view using Javascript.</shortDescription>
+	<fullDescription>
+		<intro>
+			<p>
+				This node displays the given GeoJson data as an interactive
+				map view.
+			</p>
+			<p>
+				The node supports custom CSS styling. You can simply put CSS rules
+				into a single string and set it as a flow variable 'customCSS' in
+				the node configuration dialog. You will find the list of available
+				classes and their description on our
+				<a href="https://knime.com/css-styling">documentation page</a>
+				.
+			</p>
+		</intro>
+		<tab name="Options">
+			<option name="Label column">
+				A column whose values will be used as the labels
+				for the heatmap's rows. By default, the row IDs are used as labels.
+			</option>
+		</tab>
+		<tab name="View Configuration">
+			<option name="Image width in pixels">
+				The width, in pixels, of the output SVG image. If
+				"Resize view to fill window" is not selected, this is also the
+				static width of the view.
+			</option>
+
+		</tab>
+		<tab name="Interactivity">
+			<option name="Enable view edit">
+				If checked all edit controls selected below will
+				be rendered in the view. Unchecking this option disables all edit
+				controls.
+			</option>
+		</tab>
+	</fullDescription>
+
+	<interactiveView name="Leaflet Map View">
+		A Leaflet map view representation of the
+		input data table.
+	</interactiveView>
+	<ports>
+		<inPort name="Input table" index="0">
+			Input GeoJson data.
+		</inPort>
+		<outPort name="Image port" index="0">
+			An SVG image representation
+			of the view.
+		</outPort>
+	</ports>
+</knimeNode>

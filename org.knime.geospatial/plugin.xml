@@ -24,4 +24,79 @@
      factory-class="org.knime.geospatial.converter.LatLongToGeoJsonNodeFactory">
     </node>
   </extension>
+   <extension
+         point="org.knime.workbench.repository.categories">
+      <category
+            description="KNIME AP Geospatial Plugin"
+            level-id="template"
+            name="KNIME AP Geospatial Plugin"
+            path="/misc">
+      </category>
+   </extension>
+   <extension
+         point="org.knime.workbench.repository.nodes">
+      <node
+            category-path="misc"
+            deprecated="false"
+            factory-class="org.knime.geospatial.node.viz.leaflet.LeafletNodeFactory">
+      </node>
+   </extension>
+   <extension
+         point="org.knime.js.core.webResources">
+      <webResourceBundle
+            debug="true"
+            name="Leaflet Map View"
+            usesDefine="false"
+            version="1.0.0"
+            webResourceBundleID="org.knime.geospatial.node.viz.leaflet.bundle">
+         <webResource
+               relativePathSource="js-src/org/knime/geospatial/node/viz/leaflet/"
+               relativePathTarget="js-src/org/knime/geospatial/node/viz/leaflet/">
+         </webResource>
+         <importResource
+               relativePath="js-src/org/knime/geospatial/node/viz/leaflet/leaflet.js"
+               type="JAVASCRIPT">
+         </importResource>
+         <importResource
+               relativePath="js-src/org/knime/geospatial/node/viz/leaflet/style.css"
+               type="CSS">
+         </importResource>
+         <webDependency
+               webResourceBundleID="leaflet_1.7.1">
+         </webDependency>
+      </webResourceBundle>
+      <webResourceBundle
+            debug="false"
+            exports="L"
+            name="leaflet"
+            usesDefine="false"
+            version="1.7.1"
+            webResourceBundleID="leaflet_1.7.1">
+         <webResource
+               relativePathSource="js-lib/leaflet/"
+               relativePathTarget="js-lib/leaflet/">
+         </webResource>
+         <importResource
+               relativePath="js-lib/leaflet/leaflet.js"
+               type="JAVASCRIPT">
+         </importResource>
+         <importResource
+               relativePath="js-lib/leaflet/leaflet.css"
+               type="CSS">
+         </importResource>
+      </webResourceBundle>
+   </extension>
+   <extension
+         point="org.knime.js.core.javascriptComponents">
+      <javascriptComponent
+            getComponentValue-method-name="getComponentValue"
+            implementationBundleID="org.knime.geospatial.node.viz.leaflet.bundle"
+            init-method-name="init"
+            javascriptComponentID="org.knime.geospatial.node.viz.leaflet"
+            name="Leaflet Map View"
+            namespace="leafletNamespace"
+            setValidationError-method-name="setValidationError"
+            validate-method-name="validate">
+      </javascriptComponent>
+   </extension>   
 </plugin>
