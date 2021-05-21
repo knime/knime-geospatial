@@ -1,6 +1,8 @@
 package org.knime.geospatial.reader;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
@@ -18,6 +20,7 @@ import org.geotools.data.geojson.GeoJSONDataStoreFactory;
 import org.geotools.data.simple.SimpleFeatureStore;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.feature.FeatureIterator;
+import org.geotools.geojson.geom.GeometryJSON;
 import org.geotools.util.URLs;
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpecCreator;
@@ -37,6 +40,7 @@ import org.knime.core.node.port.PortObject;
 import org.knime.core.util.FileUtil;
 import org.knime.filehandling.core.node.portobject.reader.PortObjectFromPathReaderNodeModel;
 import org.knime.filehandling.core.node.portobject.reader.PortObjectReaderNodeConfig;
+import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.Feature;
 import org.opengis.feature.Property;
 import org.opengis.feature.simple.SimpleFeature;
@@ -44,6 +48,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 final class ShapefileReaderNodeModel extends PortObjectFromPathReaderNodeModel<PortObjectReaderNodeConfig> {
 
@@ -79,20 +84,18 @@ final class ShapefileReaderNodeModel extends PortObjectFromPathReaderNodeModel<P
 		String featureCollection = sb.toString();
 
 		// split features into individual json cells per feature
-		BufferedDataContainer geoJson = exec.createDataContainer(new DataTableSpecCreator()
-				.addColumns(new DataColumnSpecCreator("features", JSONCell.TYPE).createSpec()).createSpec());
 		JSONCellFactory fac = new JSONCellFactory();
 		final JsonNode jsonNode = new ObjectMapper().readTree(featureCollection).get("features");
-		int i = 0;
-		for (JsonNode node : jsonNode) {
-			geoJson.addRowToTable(new BlobSupportDataRow(new RowKey(String.format("Row%d", i++)),
-					new DataCell[] { fac.createCell(node.toString()) }));
-		}
-		geoJson.close();
+//		int i = 0;
+//		for (JsonNode node : jsonNode) {
+//			geoJson.addRowToTable(new BlobSupportDataRow(new RowKey(String.format("Row%d", i++)),
+//					new DataCell[] {  }));
+//		}
+//		geoJson.close();
 
 		// first pass: determine property names
 		Map<String, Integer> propNamesToIndex = new LinkedHashMap<>();
-		i = 0;
+		int i = 0;
 		try (FeatureIterator<SimpleFeature> iterator = inputFeatureCollection.features()) {
 			while (iterator.hasNext()) {
 				Feature feature = iterator.next();
@@ -105,6 +108,7 @@ final class ShapefileReaderNodeModel extends PortObjectFromPathReaderNodeModel<P
 			}
 		}
 		DataTableSpecCreator creator = new DataTableSpecCreator();
+		creator.addColumns(new DataColumnSpecCreator("features", JSONCell.TYPE).createSpec());
 		for (String propName : propNamesToIndex.keySet()) {
 			creator.addColumns(new DataColumnSpecCreator(propName, StringCell.TYPE).createSpec());
 		}
@@ -113,14 +117,28 @@ final class ShapefileReaderNodeModel extends PortObjectFromPathReaderNodeModel<P
 		// second pass: build table
 		i = 0;
 		try (FeatureIterator<SimpleFeature> iterator = inputFeatureCollection.features()) {
-			while (iterator.hasNext()) {
+			for (JsonNode node : jsonNode) {
+				DataCell[] cells = new DataCell[propNamesToIndex.size() + 1];
 				Feature feature = iterator.next();
-				DataCell[] cells = new DataCell[propNamesToIndex.size()];
+				// TODO: currently, we write a temporary GeoJSON, split it into individual features
+				// and then overwrite the geometry in these features for increased precision.
+				// this is pretty hacky and there is a lot of redundant work in there
+				Geometry the_geom = (Geometry) feature.getDefaultGeometryProperty().getValue();
+				GeometryJSON g = new GeometryJSON(16);
+				StringWriter sw = new StringWriter();
+				try {
+					g.write(the_geom, sw);
+				} catch (IOException e) {
+				}
+				ObjectMapper mapper = new ObjectMapper();
+				((ObjectNode) node).set("geometry", mapper.readTree(sw.toString()));
+				cells[0] = fac.createCell(node.toString());
+
 				for (Property prop : feature.getProperties()) {
-					cells[propNamesToIndex.get(prop.getName().getLocalPart())] = new StringCell(
+					cells[propNamesToIndex.get(prop.getName().getLocalPart()) + 1] = new StringCell(
 							prop.getValue().toString());
 				}
-				for (int j = 0; j < cells.length; j++) {
+				for (int j = 1; j < cells.length; j++) {
 					if (cells[j] == null) {
 						cells[j] = DataType.getMissingCell();
 					}
@@ -130,7 +148,7 @@ final class ShapefileReaderNodeModel extends PortObjectFromPathReaderNodeModel<P
 		}
 		props.close();
 
-		return new PortObject[] { exec.createJoinedTable(geoJson.getTable(), props.getTable(), exec) };
+		return new PortObject[] { props.getTable() };
 	}
 
 }
