@@ -98,10 +98,11 @@ window.leafletNamespace = (function () {
                 style: geojsonMarkerOptions,
                 pointToLayer: function (feature, latlng) {
                     self._latLongPoints.push(latlng);
+                    let tempGeoStyle = geojsonMarkerOptions;
                     if (feature.properties.style) {
-                        geojsonMarkerOptions = feature.properties.style;
+                        tempGeoStyle = feature.properties.style;
                     }
-                    return L.circleMarker(latlng, geojsonMarkerOptions);
+                    return L.circleMarker(latlng, tempGeoStyle);
                 },
             }).addTo(this._map).on('click', function(e) {
                 if (!e.layer.feature.selected) {

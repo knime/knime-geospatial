@@ -79,8 +79,8 @@ import org.knime.js.core.settings.DialogUtil;
  */
 public class LeafletNodeDialog extends NodeDialogPane {
 	
-	private static final int TEXT_FIELD_Width = 260;
-	private static final int TEXT_FIELD_Height = 20;
+	private static final int TEXT_FIELD_WIDTH = 260;
+	private static final int TEXT_FIELD_HEIGHT = 20;
 
     private final LeafletViewConfig m_config;
     private final JSpinner m_centerLatValue;
@@ -105,19 +105,19 @@ public class LeafletNodeDialog extends NodeDialogPane {
         m_config = new LeafletViewConfig();
         
         m_centerLatValue = new JSpinner(new SpinnerNumberModel(47.671207d, -90d, 90d, 0.001d));
-        m_centerLatValue.setPreferredSize(new Dimension(TEXT_FIELD_Width, TEXT_FIELD_Height));
+        m_centerLatValue.setPreferredSize(new Dimension(TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT));
         JSpinner.NumberEditor latEditor = (JSpinner.NumberEditor)m_centerLatValue.getEditor();
         DecimalFormat latFormat = latEditor.getFormat();
         latFormat.setMaximumFractionDigits(8);
         
         m_centerLongValue = new JSpinner(new SpinnerNumberModel(9.169613d, -180d, 180d, 0.001d));
-        m_centerLongValue.setPreferredSize(new Dimension(TEXT_FIELD_Width, TEXT_FIELD_Height));
+        m_centerLongValue.setPreferredSize(new Dimension(TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT));
         JSpinner.NumberEditor longEditor = (JSpinner.NumberEditor)m_centerLongValue.getEditor();
         DecimalFormat longFormat = longEditor.getFormat();
         longFormat.setMaximumFractionDigits(8);
         
         m_zoomLevel = new JSpinner(new SpinnerNumberModel(10, 1, 25, 1));
-        m_zoomLevel.setPreferredSize(new Dimension(TEXT_FIELD_Width, TEXT_FIELD_Height));
+        m_zoomLevel.setPreferredSize(new Dimension(TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT));
         
         m_subscribeFilterCheckBox = new JCheckBox("Subscribe to filter events");
         m_enableSelectionCheckBox = new JCheckBox("Enable selection");

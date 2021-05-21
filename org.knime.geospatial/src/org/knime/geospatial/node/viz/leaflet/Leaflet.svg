@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg257"
+   inkscape:version="1.0.2-2 (e86c870879, 2021-01-15)"
+   sodipodi:docname="Leaflet.svg">
+  <defs
+     id="defs251">
+    <linearGradient
+       id="eMnGCwAmLT02-fill"
+       x1="673.251379"
+       y1="154.568707"
+       x2="766.043463"
+       y2="170.263338"
+       spreadMethod="pad"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         id="eMnGCwAmLT02-fill-0"
+         offset="0%"
+         stop-color="rgb(137,196,66)" />
+      <stop
+         id="eMnGCwAmLT02-fill-1"
+         offset="100%"
+         stop-color="rgb(116,184,68)" />
+    </linearGradient>
+    <linearGradient
+       id="eMnGCwAmLT03-fill"
+       x1="1235.174652"
+       y1="1520.388615"
+       x2="1315.244429"
+       y2="1533.931426"
+       spreadMethod="pad"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         id="eMnGCwAmLT03-fill-0"
+         offset="0%"
+         stop-color="rgb(116,184,68)" />
+      <stop
+         id="eMnGCwAmLT03-fill-1"
+         offset="100%"
+         stop-color="rgb(74,150,52)" />
+    </linearGradient>
+    <linearGradient
+       id="eMnGCwAmLT04-fill"
+       x1="-124.915111"
+       y1="-2877.668281"
+       x2="-274.466824"
+       y2="-2827.512802"
+       spreadMethod="pad"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         id="eMnGCwAmLT04-fill-0"
+         offset="0%"
+         stop-color="rgb(193,234,113)" />
+      <stop
+         id="eMnGCwAmLT04-fill-1"
+         offset="100%"
+         stop-color="rgb(172,218,85)" />
+    </linearGradient>
+    <linearGradient
+       id="eMnGCwAmLT05-fill"
+       x1="442.352618"
+       y1="-1492.384435"
+       x2="312.039791"
+       y2="-1448.681143"
+       spreadMethod="pad"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         id="eMnGCwAmLT05-fill-0"
+         offset="0%"
+         stop-color="rgb(172,218,85)" />
+      <stop
+         id="eMnGCwAmLT05-fill-1"
+         offset="100%"
+         stop-color="rgb(137,196,66)" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.8"
+     inkscape:cx="218.38157"
+     inkscape:cy="187.64138"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     inkscape:window-width="2560"
+     inkscape:window-height="1361"
+     inkscape:window-x="4791"
+     inkscape:window-y="194"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata254">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       style="shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
+       id="g321"
+       transform="matrix(0.26458333,0,0,0.26458333,-100.08753,39.940572)"
+       inkscape:export-xdpi="7.4325538"
+       inkscape:export-ydpi="7.4325538">
+      <path
+         id="eMnGCwAmLT02"
+         d="m 674.318,92.395 c 2.234,2.608 46.097,17.218 61.347,34.97 15.25,17.754 21.907,33.598 19.754,48.832 -2.15,15.234 -11.47,14.982 -15.54,20.53 -4.07,5.547 -9.69,12.388 -20.49,11.66 -14.14,-0.948 -28.72,-8.014 -39.25,-32.54 -10.53,-24.527 -9.72,-47.567 -8.88,-60.35 0.84,-12.78 3.04,-23.102 3.04,-23.102 z"
+         transform="matrix(1.1434428,0.01153309,-0.0096505,0.95679396,-100.86773,-1.5208528)"
+         fill="url(#eMnGCwAmLT02-fill)"
+         stroke="none"
+         stroke-width="1" />
+      <path
+         id="eMnGCwAmLT03"
+         d="m 1239.667,1476.602 65.69,97.927 -3.028,3.38"
+         transform="matrix(0.72841728,-0.08825438,0.11715312,0.96693624,-403.11301,-1218.1299)"
+         fill="url(#eMnGCwAmLT03-fill)"
+         stroke="none"
+         stroke-width="1" />
+      <path
+         id="eMnGCwAmLT04"
+         d="m 839.46,0 c -3.05,4.944 -72.6,40.807 -93.475,74.472 -20.873,33.665 -26.828,60.172 -19.26,85.09 7.566,24.914 22.03,23.792 30.275,32.008 8.246,8.22 19.432,18.193 37.3,14.166 23.395,-5.275 45.94,-20.89 57.155,-64.65 11.214,-43.762 3.86,-82.083 -0.88,-103.242 C 845.838,16.687 839.462,0 839.462,0 Z"
+         fill="url(#eMnGCwAmLT04-fill)"
+         stroke="none"
+         stroke-width="1" />
+      <path
+         id="eMnGCwAmLT05"
+         d="m 1406.26,1383.39 -84.338,180.893 4.95,4.97"
+         transform="matrix(1.0014139,0,0,0.99602058,-567.983,-1376)"
+         fill="url(#eMnGCwAmLT05-fill)"
+         stroke="none"
+         stroke-width="1" />
+    </g>
+  </g>
+</svg>
