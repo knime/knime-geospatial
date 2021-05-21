@@ -1,11 +1,7 @@
 window.leafletNamespace = (function () {
     var geojsonMarkerOptions = {
-        radius: 8,
         fillColor: "#ff7800",
-        color: "#000",
-        weight: 1,
-        opacity: 1,
-        fillOpacity: 0.8
+        color: "#0078A8",
     };
 
     var Leaflet = function () {
@@ -80,7 +76,9 @@ window.leafletNamespace = (function () {
 
         let mapContainer = document.createElement('div');
         mapContainer.id = 'mapContainer';
-        mapContainer.style.height = '500px';
+        mapContainer.style.height = 'calc(100% - 25px)';
+        document.body.style.height = '100%';
+        document.body.parentElement.style.height = '100%';
         document.body.appendChild(mapContainer);
         this._map = L.map('mapContainer').setView([this._representation.centerLat, this._representation.centerLong], this._representation.zoomLevel);
 
@@ -95,7 +93,12 @@ window.leafletNamespace = (function () {
             let self = this;
             this._geoObjects.push(L.geoJSON(geoJson, {
                 renderer: this._canvasRenderer,
-                style: geojsonMarkerOptions,
+                style: function(feature) {
+                    if (feature.properties.style  && !feature.properties.style.color) {
+                        feature.properties.style.color = '#0078A8';
+                    }
+                    return feature.properties.style ? feature.properties.style : geojsonMarkerOptions;
+                },
                 pointToLayer: function (feature, latlng) {
                     self._latLongPoints.push(latlng);
                     let tempGeoStyle = geojsonMarkerOptions;
@@ -109,7 +112,6 @@ window.leafletNamespace = (function () {
                     knimeService.addRowsToSelection(leafletNamespace._representation.table.id, [e.layer.feature.rowId]);
                     e.layer.feature.selected = true;
                     e.layer.setStyle({
-                        fillColor: '#F00',
                         color: 'yellow'
                     });
                 } else {
