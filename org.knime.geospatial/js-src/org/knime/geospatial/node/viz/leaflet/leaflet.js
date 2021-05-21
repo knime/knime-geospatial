@@ -171,7 +171,6 @@ window.leafletNamespace = (function () {
                 selectionEvent.changeSet.added.forEach(addedRow => {
                     if (layer.feature?.rowId === addedRow) {
                         layer.setStyle({
-                            fillColor: '#F00',
                             color: 'yellow'
                         });
                     }
@@ -180,7 +179,7 @@ window.leafletNamespace = (function () {
             if (selectionEvent.changeSet.removed) {
                 selectionEvent.changeSet.removed.forEach(removedRow => {
                     if (layer.feature?.rowId === removedRow) {
-                        layer.setStyle(layer.feature.properties.style ? e.layer.feature.properties.style : geojsonMarkerOptions);
+                        layer.setStyle(layer.feature.properties.style ? layer.feature.properties.style : geojsonMarkerOptions);
                     }
                 })
             }
