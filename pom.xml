@@ -20,7 +20,7 @@
 		<feature-branch-extension.branchListProperty>git.branch</feature-branch-extension.branchListProperty>
 		<feature-branch-extension.appendArtifactoryProperties>false</feature-branch-extension.appendArtifactoryProperties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <changelog.skip>true</changelog.skip>
+        <changelog.baseref>fd30fe1</changelog.baseref>
 	</properties>
 
 	<modules>
@@ -28,7 +28,7 @@
 		<module>org.knime.features.geospatial</module>
 		<module>org.knime.update.geospatial</module>
 	</modules>
-	
+
 	<dependencies>
         <dependency>
             <groupId>junit</groupId>
