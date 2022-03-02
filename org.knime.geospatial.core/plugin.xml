@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.knime.core.DataType">
+      <DataType
+            cellClass="org.knime.geospatial.core.data.cell.GeoPointCell">
+         <serializer
+               cellClass="org.knime.geospatial.core.data.cell.GeoPointCell"
+               serializerClass="org.knime.geospatial.core.data.cell.GeoPointCell$GeoPointCellSerializer">
+         </serializer>
+         <ValueFactory
+               deprecated="false"
+               valueFactoryClass="org.knime.geospatial.core.data.cell.GeoPointValueFactory">
+         </ValueFactory>
+      </DataType>
+   </extension>
+   <extension
+         point="org.knime.core.DataValueRenderer">
+      <dataValue
+            valueClass="org.knime.geospatial.core.data.GeoPointValue">
+         <renderer
+               rendererFactoryClass="org.knime.core.data.renderer.MultiLineStringValueRenderer$Factory"
+               suggestAsDefault="true">
+         </renderer>
+      </dataValue>
+      <dataValue
+            valueClass="org.knime.geospatial.core.data.GeoValue">
+         <renderer
+               rendererFactoryClass="org.knime.core.data.renderer.MultiLineStringValueRenderer$Factory"
+               suggestAsDefault="true">
+         </renderer>
+      </dataValue>
+   </extension>
+</plugin>

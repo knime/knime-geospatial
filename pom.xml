@@ -15,7 +15,7 @@
     <name>Aggregator POM for knime-core-geospatial</name>
 
 	<properties>
-		<revision>4.4.0</revision>
+		<revision>4.6.0</revision>
 		<changelist>-SNAPSHOT</changelist>
 		<feature-branch-extension.branchListProperty>git.branch</feature-branch-extension.branchListProperty>
 		<feature-branch-extension.appendArtifactoryProperties>false</feature-branch-extension.appendArtifactoryProperties>
@@ -24,6 +24,9 @@
 	</properties>
 
 	<modules>
+        <module>org.knime.geospatial.core/lib/fetch_jars</module>
+        <module>org.knime.geospatial.core</module>
+<!-- <module>org.knime.geospatial/lib/fetch_jars</module> -->
 		<module>org.knime.geospatial</module>
 		<module>org.knime.features.geospatial</module>
 		<module>org.knime.update.geospatial</module>

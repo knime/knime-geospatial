@@ -1,5 +1,7 @@
-**/bin/
+*/bin/
 **/target/
-**/build/
+*/build/
+*.jar
+*/.polyglot.build.properties 
 **/.flattened-pom.xml
 **/CHANGELOG.md
