@@ -42,58 +42,74 @@
  *  when such Node is propagated with or for interoperation with KNIME.
  * ------------------------------------------------------------------------
  */
+package org.knime.geospatial.core.data.metadata;
 
-package org.knime.geospatial.core.data;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.knime.core.data.DataValue;
+import org.knime.core.data.DataCell;
+import org.knime.core.data.meta.DataColumnMetaDataCreator;
+import org.knime.core.node.util.CheckUtils;
+import org.knime.geospatial.core.data.GeoValue;
 import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
-import org.knime.geospatial.core.data.util.GeoUtilityFactory;
 
 /**
- * {@link DataValue} implementation that represents a geometric object. This is
- * the most generic geometric {@link DataValue} that is implemented by all other
- * geometric objects.
+ * {@link DataColumnMetaDataCreator} for {@link GeoValueMetaData}.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
+ * @noreference non-public API
+ * @noinstantiate non-public API
  */
-public interface GeoValue extends DataValue {
+public final class GeoValueMetaDataCreator implements DataColumnMetaDataCreator<GeoValueMetaData> {
 
-	/**
-	 * Meta information to this value type.
-	 *
-	 * @see DataValue#UTILITY
-	 */
-	UtilityFactory UTILITY = new GeoUtilityFactory(GeoValue.class, null);
+	private final Set<GeoReferenceSystem> m_specs;
 
-	/**
-	 * Returns a {@link String} with the Well Known Text (WKT) representation of
-	 * this geometric object.
-	 *
-	 * @return the WKT String
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry">WKT</a>
-	 */
-	String getWKT();
+	GeoValueMetaDataCreator() {
+		this(new HashSet<>());
+	}
 
+	private GeoValueMetaDataCreator(final Set<GeoReferenceSystem> fsLocationSpecs) {
+		m_specs = new HashSet<>(fsLocationSpecs);
+	}
 
-	/**
-	 * Returns a {@link byte[]} with the Well Known Binary (WKB) representation of
-	 * this geometric object.
-	 *
-	 * @return the WKB byte[]
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary">WKB</a>
-	 */
-	byte[] getWKB();
+	@Override
+	public void update(final DataCell cell) {
+		if (cell.isMissing() || !(cell instanceof GeoValue)) {
+			return;
+		}
+		final GeoValue value = (GeoValue) cell;
+		m_specs.add(value.getReferenceSystem());
+	}
 
-	/**
-	 * Returns the coordinate reference system (CRS) of this geometric object that
-	 * is used to precisely measure locations on the surface of the Earth of these
-	 * coordinates.
-	 *
-	 * @return {@link GeoReferenceSystem}
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Spatial_reference_system_identifier">CRS</a>
-	 */
-	GeoReferenceSystem getReferenceSystem();
+	@Override
+	public GeoValueMetaData create() {
+		return new GeoValueMetaData(m_specs);
+	}
+
+	@Override
+	public GeoValueMetaDataCreator copy() {
+		return new GeoValueMetaDataCreator(m_specs);
+	}
+
+	@Override
+	public GeoValueMetaDataCreator merge(final DataColumnMetaDataCreator<GeoValueMetaData> other) {
+		CheckUtils.checkArgument(other instanceof GeoValueMetaDataCreator,
+				"Can only merge with GeoValueMetaDataCreator but received object of type %s.",
+				other.getClass().getName());
+		final GeoValueMetaDataCreator otherCreator = (GeoValueMetaDataCreator)other;
+		m_specs.addAll(otherCreator.m_specs);
+		return this;
+	}
+
+	@Override
+	public GeoValueMetaDataCreator merge(final GeoValueMetaData other) {
+		m_specs.addAll(other.getCoordinateReferenceSystem());
+		return this;
+	}
+
+	@Override
+	public Class<GeoValueMetaData> getMetaDataClass() {
+		return GeoValueMetaData.class;
+	}
+
 }

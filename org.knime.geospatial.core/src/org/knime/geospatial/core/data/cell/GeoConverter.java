@@ -43,57 +43,51 @@
  * ------------------------------------------------------------------------
  */
 
-package org.knime.geospatial.core.data;
+package org.knime.geospatial.core.data.cell;
 
-import org.knime.core.data.DataValue;
-import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
-import org.knime.geospatial.core.data.util.GeoUtilityFactory;
+import java.io.IOException;
+
+import mil.nga.sf.Geometry;
+import mil.nga.sf.wkb.GeometryReader;
+import mil.nga.sf.wkt.GeometryWriter;
 
 /**
- * {@link DataValue} implementation that represents a geometric object. This is
- * the most generic geometric {@link DataValue} that is implemented by all other
- * geometric objects.
+ * Utility class to convert between the different geometric object
+ * representations.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
-public interface GeoValue extends DataValue {
+final class GeoConverter {
 
-	/**
-	 * Meta information to this value type.
-	 *
-	 * @see DataValue#UTILITY
-	 */
-	UtilityFactory UTILITY = new GeoUtilityFactory(GeoValue.class, null);
+	private GeoConverter() {
+		// Avoid object creation
+	}
 
-	/**
-	 * Returns a {@link String} with the Well Known Text (WKT) representation of
-	 * this geometric object.
-	 *
-	 * @return the WKT String
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry">WKT</a>
-	 */
-	String getWKT();
+	public static String wkb2wkt(final byte[] wkb) throws IOException {
+		final Geometry geo = GeometryReader.readGeometry(wkb);
+		final String wkt = GeometryWriter.writeGeometry(geo);
+		return wkt;
+	}
 
+	public static byte[] wkt2wkb(final String wkt) throws IOException {
+		final Geometry geo = mil.nga.sf.wkt.GeometryReader.readGeometry(wkt);
+		final byte[] wkb = geo2wkb(geo);
+		return wkb;
+	}
 
-	/**
-	 * Returns a {@link byte[]} with the Well Known Binary (WKB) representation of
-	 * this geometric object.
-	 *
-	 * @return the WKB byte[]
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary">WKB</a>
-	 */
-	byte[] getWKB();
+	public static byte[] geo2wkb(final Geometry geo) throws IOException {
+		final byte[] wkb = mil.nga.sf.wkb.GeometryWriter.writeGeometry(geo);
+		return wkb;
+	}
 
-	/**
-	 * Returns the coordinate reference system (CRS) of this geometric object that
-	 * is used to precisely measure locations on the surface of the Earth of these
-	 * coordinates.
-	 *
-	 * @return {@link GeoReferenceSystem}
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Spatial_reference_system_identifier">CRS</a>
-	 */
-	GeoReferenceSystem getReferenceSystem();
+	public static Geometry wkt2Geo(final String wkt) throws IOException {
+		final Geometry geo = mil.nga.sf.wkt.GeometryReader.readGeometry(wkt);
+		return geo;
+	}
+
+	public static Geometry wkb2Geo(final byte[] wkb) throws IOException {
+		final Geometry geo = mil.nga.sf.wkb.GeometryReader.readGeometry(wkb);
+		return geo;
+	}
+
 }

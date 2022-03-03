@@ -42,58 +42,42 @@
  *  when such Node is propagated with or for interoperation with KNIME.
  * ------------------------------------------------------------------------
  */
-
-package org.knime.geospatial.core.data;
+package org.knime.geospatial.core.data.metadata;
 
 import org.knime.core.data.DataValue;
-import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
-import org.knime.geospatial.core.data.util.GeoUtilityFactory;
+import org.knime.core.data.meta.DataColumnMetaDataCreator;
+import org.knime.core.data.meta.DataColumnMetaDataExtension;
+import org.knime.core.data.meta.DataColumnMetaDataSerializer;
+import org.knime.geospatial.core.data.GeoValue;
 
 /**
- * {@link DataValue} implementation that represents a geometric object. This is
- * the most generic geometric {@link DataValue} that is implemented by all other
- * geometric objects.
+ * {@link DataColumnMetaDataExtension} for {@link GeoValueMetaDataCreator}
+ * objects.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
+ * @noreference non-public API
+ * @noinstantiate non-public API
  */
-public interface GeoValue extends DataValue {
+public final class GeoValueMetaDataExtension implements DataColumnMetaDataExtension<GeoValueMetaData> {
 
-	/**
-	 * Meta information to this value type.
-	 *
-	 * @see DataValue#UTILITY
-	 */
-	UtilityFactory UTILITY = new GeoUtilityFactory(GeoValue.class, null);
+	@Override
+	public DataColumnMetaDataCreator<GeoValueMetaData> create() {
+		return new GeoValueMetaDataCreator();
+	}
 
-	/**
-	 * Returns a {@link String} with the Well Known Text (WKT) representation of
-	 * this geometric object.
-	 *
-	 * @return the WKT String
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry">WKT</a>
-	 */
-	String getWKT();
+	@Override
+	public Class<? extends DataValue> getDataValueClass() {
+		return GeoValue.class;
+	}
 
+	@Override
+	public Class<GeoValueMetaData> getMetaDataClass() {
+		return GeoValueMetaData.class;
+	}
 
-	/**
-	 * Returns a {@link byte[]} with the Well Known Binary (WKB) representation of
-	 * this geometric object.
-	 *
-	 * @return the WKB byte[]
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary">WKB</a>
-	 */
-	byte[] getWKB();
+	@Override
+	public DataColumnMetaDataSerializer<GeoValueMetaData> createSerializer() {
+		return new GeoValueMetaData.GeoValueMetaDataSerializer();
+	}
 
-	/**
-	 * Returns the coordinate reference system (CRS) of this geometric object that
-	 * is used to precisely measure locations on the surface of the Earth of these
-	 * coordinates.
-	 *
-	 * @return {@link GeoReferenceSystem}
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Spatial_reference_system_identifier">CRS</a>
-	 */
-	GeoReferenceSystem getReferenceSystem();
 }

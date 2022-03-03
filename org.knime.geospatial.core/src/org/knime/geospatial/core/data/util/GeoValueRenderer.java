@@ -1,5 +1,6 @@
 /*
  * ------------------------------------------------------------------------
+ *
  *  Copyright by KNIME AG, Zurich, Switzerland
  *  Website: http://www.knime.com; Email: contact@knime.com
  *
@@ -40,60 +41,78 @@
  *  propagated with or for interoperation with KNIME.  The owner of a Node
  *  may freely choose the license terms applicable to such Node, including
  *  when such Node is propagated with or for interoperation with KNIME.
- * ------------------------------------------------------------------------
+ * ---------------------------------------------------------------------
+ *
+ * History
+ *   Aug 28, 2019 (Simon Schmid, KNIME GmbH, Konstanz, Germany): created
  */
+package org.knime.geospatial.core.data.util;
 
-package org.knime.geospatial.core.data;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import org.knime.core.data.DataValue;
+import org.knime.core.data.DataColumnSpec;
+import org.knime.core.data.renderer.AbstractDataValueRendererFactory;
+import org.knime.core.data.renderer.DataValueRenderer;
+import org.knime.core.data.renderer.DefaultDataValueRenderer;
+import org.knime.geospatial.core.data.GeoValue;
+import org.knime.geospatial.core.data.metadata.GeoValueMetaData;
 import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
-import org.knime.geospatial.core.data.util.GeoUtilityFactory;
 
 /**
- * {@link DataValue} implementation that represents a geometric object. This is
- * the most generic geometric {@link DataValue} that is implemented by all other
- * geometric objects.
+ * Generic renderer for {@link GeoValue} which prints each coordinate system
+ * separated by commas.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
-public interface GeoValue extends DataValue {
+public final class GeoValueRenderer extends DefaultDataValueRenderer {
+
+	/** */
+	private static final long serialVersionUID = 1L;
+
+	private static final String DESCRIPTION_PROB_DISTR = "Nominal Probability Distribution";
+
+	private GeoValueRenderer(final DataColumnSpec colSpec) {
+		super(colSpec);
+	}
 
 	/**
-	 * Meta information to this value type.
-	 *
-	 * @see DataValue#UTILITY
+	 * @return "Probability Distribution" {@inheritDoc}
 	 */
-	UtilityFactory UTILITY = new GeoUtilityFactory(GeoValue.class, null);
+	@Override
+	public String getDescription() {
+		return DESCRIPTION_PROB_DISTR;
+	}
 
-	/**
-	 * Returns a {@link String} with the Well Known Text (WKT) representation of
-	 * this geometric object.
-	 *
-	 * @return the WKT String
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry">WKT</a>
-	 */
-	String getWKT();
+	@Override
+	protected void setValue(final Object value) {
+		if (value instanceof GeoValue) {
+			final GeoValueMetaData metaData = getMetaData();
+			final Set<GeoReferenceSystem> possibleValues = metaData.getCoordinateReferenceSystem();
+			final String coords = possibleValues.stream().map(GeoReferenceSystem::getReferenceSystem)
+					.collect(Collectors.joining(", "));
+			super.setValue(coords);
+		} else {
+			super.setValue(value);
+		}
+	}
 
+	private GeoValueMetaData getMetaData() {
+		final DataColumnSpec spec = getColSpec();
+		return GeoValueMetaData.extractFromSpec(spec);
+	}
 
-	/**
-	 * Returns a {@link byte[]} with the Well Known Binary (WKB) representation of
-	 * this geometric object.
-	 *
-	 * @return the WKB byte[]
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary">WKB</a>
-	 */
-	byte[] getWKB();
+	/** Renderer factory registered through extension point. */
+	public static final class DefaultRendererFactory extends AbstractDataValueRendererFactory {
 
-	/**
-	 * Returns the coordinate reference system (CRS) of this geometric object that
-	 * is used to precisely measure locations on the surface of the Earth of these
-	 * coordinates.
-	 *
-	 * @return {@link GeoReferenceSystem}
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Spatial_reference_system_identifier">CRS</a>
-	 */
-	GeoReferenceSystem getReferenceSystem();
+		@Override
+		public String getDescription() {
+			return DESCRIPTION_PROB_DISTR;
+		}
+
+		@Override
+		public DataValueRenderer createRenderer(final DataColumnSpec colSpec) {
+			return new GeoValueRenderer(colSpec);
+		}
+	}
 }

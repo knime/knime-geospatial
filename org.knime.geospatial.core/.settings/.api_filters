@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component id="org.knime.geospatial.core" version="2">
+    <resource path="src/org/knime/geospatial/core/data/metadata/GeoValueMetaData.java" type="org.knime.geospatial.core.data.metadata.GeoValueMetaData">
+        <filter id="574619656">
+            <message_arguments>
+                <message_argument value="DataColumnMetaData"/>
+                <message_argument value="GeoValueMetaData"/>
+            </message_arguments>
+        </filter>
+    </resource>
+    <resource path="src/org/knime/geospatial/core/data/metadata/GeoValueMetaData.java" type="org.knime.geospatial.core.data.metadata.GeoValueMetaData$GeoValueMetaDataSerializer">
+        <filter id="574619656">
+            <message_arguments>
+                <message_argument value="DataColumnMetaDataSerializer&lt;T&gt;"/>
+                <message_argument value="GeoValueMetaDataSerializer"/>
+            </message_arguments>
+        </filter>
+    </resource>
+    <resource path="src/org/knime/geospatial/core/data/metadata/GeoValueMetaDataCreator.java" type="org.knime.geospatial.core.data.metadata.GeoValueMetaDataCreator">
+        <filter id="574619656">
+            <message_arguments>
+                <message_argument value="DataColumnMetaDataCreator&lt;T&gt;"/>
+                <message_argument value="GeoValueMetaDataCreator"/>
+            </message_arguments>
+        </filter>
+    </resource>
+    <resource path="src/org/knime/geospatial/core/data/metadata/GeoValueMetaDataExtension.java" type="org.knime.geospatial.core.data.metadata.GeoValueMetaDataExtension">
+        <filter id="574619656">
+            <message_arguments>
+                <message_argument value="DataColumnMetaDataExtension&lt;T&gt;"/>
+                <message_argument value="GeoValueMetaDataExtension"/>
+            </message_arguments>
+        </filter>
+    </resource>
+</component>

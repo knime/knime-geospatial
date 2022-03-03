@@ -43,57 +43,29 @@
  * ------------------------------------------------------------------------
  */
 
-package org.knime.geospatial.core.data;
+package org.knime.geospatial.core.data.cell;
 
-import org.knime.core.data.DataValue;
+import java.io.IOException;
+
 import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
-import org.knime.geospatial.core.data.util.GeoUtilityFactory;
 
 /**
- * {@link DataValue} implementation that represents a geometric object. This is
- * the most generic geometric {@link DataValue} that is implemented by all other
- * geometric objects.
+ * Interface that has a method to create a {@link AbstractGeoCell} instance.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
+ * @param <G> the concrete implementation of the {@link AbstractGeoCell} class
  */
-public interface GeoValue extends DataValue {
-
+public interface CellFactory<G extends AbstractGeoCell> {
 	/**
-	 * Meta information to this value type.
+	 * Returns the concrete {@link AbstractGeoCell} implementation for the given
+	 * Well Known Binary (wkb).
 	 *
-	 * @see DataValue#UTILITY
+	 * @param wkb                          Well Known Binary representation of the
+	 *                                     geometric object
+	 * @param geoCoordinateReferenceSystem the {@link GeoReferenceSystem} of the
+	 *                                     geometric object
+	 * @return concrete {@link AbstractGeoCell} implementation of the given wkb
+	 * @throws IOException if the wkb is invalid
 	 */
-	UtilityFactory UTILITY = new GeoUtilityFactory(GeoValue.class, null);
-
-	/**
-	 * Returns a {@link String} with the Well Known Text (WKT) representation of
-	 * this geometric object.
-	 *
-	 * @return the WKT String
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry">WKT</a>
-	 */
-	String getWKT();
-
-
-	/**
-	 * Returns a {@link byte[]} with the Well Known Binary (WKB) representation of
-	 * this geometric object.
-	 *
-	 * @return the WKB byte[]
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary">WKB</a>
-	 */
-	byte[] getWKB();
-
-	/**
-	 * Returns the coordinate reference system (CRS) of this geometric object that
-	 * is used to precisely measure locations on the surface of the Earth of these
-	 * coordinates.
-	 *
-	 * @return {@link GeoReferenceSystem}
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Spatial_reference_system_identifier">CRS</a>
-	 */
-	GeoReferenceSystem getReferenceSystem();
+	G createGeoCell(byte[] wkb, GeoReferenceSystem geoCoordinateReferenceSystem) throws IOException;
 }

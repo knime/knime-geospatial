@@ -43,57 +43,44 @@
  * ------------------------------------------------------------------------
  */
 
-package org.knime.geospatial.core.data;
-
-import org.knime.core.data.DataValue;
-import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
-import org.knime.geospatial.core.data.util.GeoUtilityFactory;
+package org.knime.geospatial.core.data.reference;
 
 /**
- * {@link DataValue} implementation that represents a geometric object. This is
- * the most generic geometric {@link DataValue} that is implemented by all other
- * geometric objects.
+ * Default implementation of the {@link GeoReferenceSystem} interface.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
-public interface GeoValue extends DataValue {
+public class DefaultGeoReferenceSystem implements GeoReferenceSystem {
 
-	/**
-	 * Meta information to this value type.
-	 *
-	 * @see DataValue#UTILITY
-	 */
-	UtilityFactory UTILITY = new GeoUtilityFactory(GeoValue.class, null);
+	private final String m_refCoord;
 
-	/**
-	 * Returns a {@link String} with the Well Known Text (WKT) representation of
-	 * this geometric object.
-	 *
-	 * @return the WKT String
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry">WKT</a>
-	 */
-	String getWKT();
+	DefaultGeoReferenceSystem(final String refCoord) {
+		m_refCoord = refCoord;
+	}
 
+	@Override
+	public String getReferenceSystem() {
+		return m_refCoord;
+	}
 
-	/**
-	 * Returns a {@link byte[]} with the Well Known Binary (WKB) representation of
-	 * this geometric object.
-	 *
-	 * @return the WKB byte[]
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary">WKB</a>
-	 */
-	byte[] getWKB();
+	@Override
+	public int hashCode() {
+		return m_refCoord.hashCode();
+	}
 
-	/**
-	 * Returns the coordinate reference system (CRS) of this geometric object that
-	 * is used to precisely measure locations on the surface of the Earth of these
-	 * coordinates.
-	 *
-	 * @return {@link GeoReferenceSystem}
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Spatial_reference_system_identifier">CRS</a>
-	 */
-	GeoReferenceSystem getReferenceSystem();
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final DefaultGeoReferenceSystem other = (DefaultGeoReferenceSystem) obj;
+		return m_refCoord.equals(other.m_refCoord);
+	}
+
 }

@@ -45,52 +45,58 @@
 
 package org.knime.geospatial.core.data.cell;
 
-import java.io.IOException;
-
-import org.knime.core.data.DataCellDataInput;
-import org.knime.core.data.DataCellDataOutput;
+import org.knime.core.data.DataCell;
 import org.knime.core.data.DataCellSerializer;
 import org.knime.core.data.DataType;
 import org.knime.geospatial.core.data.GeoPointValue;
+import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
 
-public class GeoPointCell extends GeoCell implements GeoPointValue {
+/**
+ * {@link DataCell} implementation that represents a geometric point.
+ *
+ * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
+ */
+public class GeoPointCell extends AbstractGeoCell implements GeoPointValue {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * The {@link DataType} of this {@link DataCell} implementation.
+	 */
 	public static final DataType TYPE = DataType.getType(GeoPointCell.class);
 
-	public GeoPointCell(final byte[] wkb, final String refCoord) throws IOException {
+	protected GeoPointCell(final byte[] wkb, final GeoReferenceSystem refCoord) {
 		super(wkb, refCoord);
 	}
 
-	public GeoPointCell(final String wkt, final String refCoord) throws IOException {
-		super(wkt, refCoord);
-	}
-
-
 	/**
-	 * Serializer for {@link GeoPointCell}.
+	 * {@link DataCellSerializer} implementation of this {@link DataCell}
+	 * implementation.
 	 *
 	 * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
-	 * @noreference This class is not intended to be referenced by clients
 	 */
-	public static final class GeoPointCellSerializer implements DataCellSerializer<GeoPointCell> {
-
-		@Override
-		public void serialize(final GeoPointCell cell, final DataCellDataOutput output) throws IOException {
-			output.writeInt(cell.getWKB().length);
-			output.write(cell.getWKB());
-			output.writeUTF(cell.getRefCoord());
+	public static final class CellSerializer extends AbstractGeoCellSerializer<GeoPointCell> {
+		/**
+		 * Constructor for class CellSerializer that is used in the extension point.
+		 */
+		public CellSerializer() {
+			super(GeoPointCell::new);
 		}
+	}
 
-		@Override
-		public GeoPointCell deserialize(final DataCellDataInput input) throws IOException {
-			final int length = input.readInt();
-			final byte[] bytes = new byte[length];
-			input.readFully(bytes);
-			final String refCoord = input.readUTF();
-			return new GeoPointCell(bytes, refCoord);
+	/**
+	 * {@link AbstractGeoValueFactory} implementation of this {@link DataCell}
+	 * implementation.
+	 *
+	 * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
+	 */
+	public static class ValueFactory extends AbstractGeoValueFactory<GeoPointCell> {
+		/**
+		 * Constructor for class ValueFactory that is used in the extension
+		 * point.
+		 */
+		public ValueFactory() {
+			super(GeoPointCell::new);
 		}
-
 	}
 }

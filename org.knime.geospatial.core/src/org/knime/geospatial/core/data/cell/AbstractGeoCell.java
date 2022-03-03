@@ -43,33 +43,81 @@
  * ------------------------------------------------------------------------
  */
 
-package org.knime.geospatial.core.data;
+package org.knime.geospatial.core.data.cell;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Objects;
 
-import mil.nga.sf.Geometry;
-import mil.nga.sf.wkb.GeometryReader;
-import mil.nga.sf.wkt.GeometryWriter;
+import org.knime.core.data.DataCell;
+import org.knime.core.data.StringValue;
+import org.knime.core.node.NodeLogger;
+import org.knime.geospatial.core.data.GeoValue;
+import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
 
 /**
+ * Abstract {@link DataCell} implementation that represents a geometric object.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
-public final class GeoConverter {
+public abstract class AbstractGeoCell extends DataCell implements GeoValue, StringValue {
 
-	private GeoConverter() {
-		// Avoid object creation
+	private static final long serialVersionUID = 1L;
+
+	private static final NodeLogger LOGGER = NodeLogger.getLogger(AbstractGeoCell.class);
+
+	protected final byte[] m_wkb;
+	protected final GeoReferenceSystem m_refCoord;
+
+	AbstractGeoCell(final byte[] m_wkb, final GeoReferenceSystem m_refCoord) {
+		this.m_wkb = m_wkb;
+		this.m_refCoord = m_refCoord;
 	}
 
-	public static String wkb2wkt(final byte[] wkb) throws IOException {
-		final Geometry geo = GeometryReader.readGeometry(wkb);
-		final String wkt = GeometryWriter.writeGeometry(geo);
-		return wkt;
+	@Override
+	public String getWKT() {
+		try {
+			return GeoConverter.wkb2wkt(getWKB());
+		} catch (final IOException e) {
+			LOGGER.warn("Exception converting WKB to WKT", e);
+			throw new IllegalArgumentException("Exception converting WKB to WKT for details see log file");
+		}
 	}
 
-	public static byte[] wkt2wkb(final String wkt) throws IOException {
-		final Geometry geo = mil.nga.sf.wkt.GeometryReader.readGeometry(wkt);
-		final byte[] wkb = mil.nga.sf.wkb.GeometryWriter.writeGeometry(geo);
-		return wkb;
+	@Override
+	public byte[] getWKB() {
+		return m_wkb;
 	}
+
+	@Override
+	public GeoReferenceSystem getReferenceSystem() {
+		return m_refCoord;
+	}
+
+	@Override
+	public String getStringValue() {
+		return getWKT();
+	}
+
+	@Override
+	public String toString() {
+		return getWKT();
+	}
+
+	@Override
+	protected boolean equalsDataCell(final DataCell dc) {
+		final GeoCell other = (GeoCell) dc;
+		return Objects.equals(m_refCoord, other.m_refCoord) && Arrays.equals(m_wkb, other.m_wkb);
+	}
+
+	@Override
+	public int hashCode() {
+		// TODO: Maybe we should cache the hash code for efficiency
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(m_wkb);
+		result = prime * result + Objects.hash(m_refCoord);
+		return result;
+	}
+
 }

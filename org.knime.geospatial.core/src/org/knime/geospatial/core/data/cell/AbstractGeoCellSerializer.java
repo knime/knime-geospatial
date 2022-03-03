@@ -43,57 +43,44 @@
  * ------------------------------------------------------------------------
  */
 
-package org.knime.geospatial.core.data;
+package org.knime.geospatial.core.data.cell;
 
-import org.knime.core.data.DataValue;
-import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
-import org.knime.geospatial.core.data.util.GeoUtilityFactory;
+import java.io.IOException;
+
+import org.knime.core.data.DataCellDataInput;
+import org.knime.core.data.DataCellDataOutput;
+import org.knime.core.data.DataCellSerializer;
+import org.knime.geospatial.core.data.reference.GeoReferenceSystemFactory;
+
 
 /**
- * {@link DataValue} implementation that represents a geometric object. This is
- * the most generic geometric {@link DataValue} that is implemented by all other
- * geometric objects.
+ * {@link DataCellSerializer} implementation that is used by all the different
+ * {@link AbstractGeoCell} implementations.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
+ * @param <G> the concrete implementation of the {@link AbstractGeoCell} class
  */
-public interface GeoValue extends DataValue {
+public abstract class AbstractGeoCellSerializer<G extends AbstractGeoCell> implements DataCellSerializer<G> {
 
-	/**
-	 * Meta information to this value type.
-	 *
-	 * @see DataValue#UTILITY
-	 */
-	UtilityFactory UTILITY = new GeoUtilityFactory(GeoValue.class, null);
+	private final CellFactory<G> m_factory;
 
-	/**
-	 * Returns a {@link String} with the Well Known Text (WKT) representation of
-	 * this geometric object.
-	 *
-	 * @return the WKT String
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry">WKT</a>
-	 */
-	String getWKT();
+	protected AbstractGeoCellSerializer(final CellFactory<G> factory) {
+		m_factory = factory;
+	}
 
+	@Override
+	public void serialize(final AbstractGeoCell cell, final DataCellDataOutput output) throws IOException {
+		output.writeInt(cell.getWKB().length);
+		output.write(cell.getWKB());
+		output.writeUTF(cell.getReferenceSystem().getReferenceSystem());
+	}
 
-	/**
-	 * Returns a {@link byte[]} with the Well Known Binary (WKB) representation of
-	 * this geometric object.
-	 *
-	 * @return the WKB byte[]
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary">WKB</a>
-	 */
-	byte[] getWKB();
-
-	/**
-	 * Returns the coordinate reference system (CRS) of this geometric object that
-	 * is used to precisely measure locations on the surface of the Earth of these
-	 * coordinates.
-	 *
-	 * @return {@link GeoReferenceSystem}
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Spatial_reference_system_identifier">CRS</a>
-	 */
-	GeoReferenceSystem getReferenceSystem();
+	@Override
+	public G deserialize(final DataCellDataInput input) throws IOException {
+		final int length = input.readInt();
+		final byte[] wkb = new byte[length];
+		input.readFully(wkb);
+		final String refCoord = input.readUTF();
+		return m_factory.createGeoCell(wkb, GeoReferenceSystemFactory.create(refCoord));
+	}
 }

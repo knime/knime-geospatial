@@ -43,57 +43,61 @@
  * ------------------------------------------------------------------------
  */
 
-package org.knime.geospatial.core.data;
+package org.knime.geospatial.core.data.cell;
 
-import org.knime.core.data.DataValue;
+import org.knime.core.data.DataCell;
+import org.knime.core.data.DataCellSerializer;
+import org.knime.core.data.DataType;
+import org.knime.geospatial.core.data.GeoLineValue;
 import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
-import org.knime.geospatial.core.data.util.GeoUtilityFactory;
 
 /**
- * {@link DataValue} implementation that represents a geometric object. This is
- * the most generic geometric {@link DataValue} that is implemented by all other
- * geometric objects.
+ * {@link DataCell} implementation that represents a geometric line.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
-public interface GeoValue extends DataValue {
+public class GeoLineCell extends AbstractGeoCell implements GeoLineValue {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Meta information to this value type.
-	 *
-	 * @see DataValue#UTILITY
+	 * The {@link DataType} of this {@link DataCell} implementation.
 	 */
-	UtilityFactory UTILITY = new GeoUtilityFactory(GeoValue.class, null);
+	public static final DataType TYPE = DataType.getType(GeoLineCell.class);
+
+	protected GeoLineCell(final byte[] wkb, final GeoReferenceSystem refCoord) {
+		super(wkb, refCoord);
+	}
 
 	/**
-	 * Returns a {@link String} with the Well Known Text (WKT) representation of
-	 * this geometric object.
+	 * {@link DataCellSerializer} implementation of this {@link DataCell}
+	 * implementation.
 	 *
-	 * @return the WKT String
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry">WKT</a>
+	 * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
 	 */
-	String getWKT();
-
-
-	/**
-	 * Returns a {@link byte[]} with the Well Known Binary (WKB) representation of
-	 * this geometric object.
-	 *
-	 * @return the WKB byte[]
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary">WKB</a>
-	 */
-	byte[] getWKB();
+	public static final class CellSerializer extends AbstractGeoCellSerializer<GeoLineCell> {
+		/**
+		 * Constructor for class CellSerializer that is used in the extension point.
+		 */
+		public CellSerializer() {
+			super(GeoLineCell::new);
+		}
+	}
 
 	/**
-	 * Returns the coordinate reference system (CRS) of this geometric object that
-	 * is used to precisely measure locations on the surface of the Earth of these
-	 * coordinates.
+	 * {@link AbstractGeoValueFactory} implementation of this {@link DataCell}
+	 * implementation.
 	 *
-	 * @return {@link GeoReferenceSystem}
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Spatial_reference_system_identifier">CRS</a>
+	 * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
 	 */
-	GeoReferenceSystem getReferenceSystem();
+	public static class ValueFactory extends AbstractGeoValueFactory<GeoLineCell> {
+		/**
+		 * Constructor for class ValueFactory that is used in the extension
+		 * point.
+		 */
+		public ValueFactory() {
+			super(GeoLineCell::new);
+		}
+
+	}
 }

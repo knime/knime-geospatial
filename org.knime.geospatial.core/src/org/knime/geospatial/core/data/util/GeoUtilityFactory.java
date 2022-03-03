@@ -43,57 +43,74 @@
  * ------------------------------------------------------------------------
  */
 
-package org.knime.geospatial.core.data;
+package org.knime.geospatial.core.data.util;
 
+import java.net.URL;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
+import org.apache.commons.lang3.StringUtils;
 import org.knime.core.data.DataValue;
-import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
-import org.knime.geospatial.core.data.util.GeoUtilityFactory;
+import org.knime.core.data.DataValueComparator;
+import org.knime.core.data.ExtensibleUtilityFactory;
+import org.knime.geospatial.core.data.GeoValue;
 
-/**
- * {@link DataValue} implementation that represents a geometric object. This is
- * the most generic geometric {@link DataValue} that is implemented by all other
- * geometric objects.
- *
- * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
- */
-public interface GeoValue extends DataValue {
+/** Implementations of the meta information of this value class. */
+public class GeoUtilityFactory extends ExtensibleUtilityFactory {
 
-	/**
-	 * Meta information to this value type.
-	 *
-	 * @see DataValue#UTILITY
-	 */
-	UtilityFactory UTILITY = new GeoUtilityFactory(GeoValue.class, null);
+	/** Singleton icon to be used to display this cell type. */
+	private static final Icon ICON;
 
-	/**
-	 * Returns a {@link String} with the Well Known Text (WKT) representation of
-	 * this geometric object.
-	 *
-	 * @return the WKT String
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry">WKT</a>
-	 */
-	String getWKT();
+	private static final GeoValueComparator GEO_COMPARATOR = new GeoValueComparator();
 
+	static {
+		final URL url = GeoUtilityFactory.class.getResource("../icons/globe.png");
+		ICON = new ImageIcon(url);
+	}
+
+	private final String m_name;
 
 	/**
-	 * Returns a {@link byte[]} with the Well Known Binary (WKB) representation of
-	 * this geometric object.
+	 * Only subclasses are allowed to instantiate this class.
 	 *
-	 * @return the WKB byte[]
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary">WKB</a>
+	 * @param valueClass the concrete {@link GeoValue} class
+	 *
+	 * @param geoType
 	 */
-	byte[] getWKB();
+	public GeoUtilityFactory(final Class<? extends GeoValue> valueClass, final String geoType) {
+		super(valueClass);
+		m_name = "Geo" + (StringUtils.isBlank(geoType) ? "" : " (" + geoType + ")");
+	}
 
-	/**
-	 * Returns the coordinate reference system (CRS) of this geometric object that
-	 * is used to precisely measure locations on the surface of the Earth of these
-	 * coordinates.
-	 *
-	 * @return {@link GeoReferenceSystem}
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Spatial_reference_system_identifier">CRS</a>
-	 */
-	GeoReferenceSystem getReferenceSystem();
+	@Override
+	public Icon getIcon() {
+		return ICON;
+	}
+
+	@Override
+	protected DataValueComparator getComparator() {
+		return GEO_COMPARATOR;
+	}
+
+	@Override
+	public String getName() {
+		return m_name;
+	}
+
+	@Override
+	public String getGroupName() {
+		return "Geospatial";
+	}
+
+	private static class GeoValueComparator extends DataValueComparator {
+		@Override
+		protected int compareDataValues(final DataValue v1, final DataValue v2) {
+			final GeoValue g1 = (GeoValue) v1;
+			final GeoValue g2 = (GeoValue) v2;
+			return g1.getWKT().compareTo(g2.getWKT());
+		}
+
+	}
+
 }

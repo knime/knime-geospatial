@@ -23,7 +23,8 @@ import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
-import org.knime.geospatial.core.data.cell.GeoPointCell;
+import org.knime.geospatial.core.data.cell.GeoCell;
+import org.knime.geospatial.core.data.cell.GeoCellFactory;
 
 final class WKT2GeoCellNodeModel extends NodeModel {
 
@@ -38,7 +39,7 @@ final class WKT2GeoCellNodeModel extends NodeModel {
 	}
 
 	static DataColumnSpec createGeoSpec() {
-		return new DataColumnSpecCreator("geometry", GeoPointCell.TYPE).createSpec();
+		return new DataColumnSpecCreator("geometry", GeoCell.TYPE).createSpec();
 	}
 
 	static DataTableSpec createOutSpec(final DataTableSpec inSpec) {
@@ -68,8 +69,8 @@ final class WKT2GeoCellNodeModel extends NodeModel {
 				final RowKey key = row.getKey();
 				final String wktVal = ((StringValue) row.getCell(wktIndex)).getStringValue();
 
-				cont.addRowToTable(
-						new BlobSupportDataRow(key, new DataCell[] { new GeoPointCell(wktVal, "test ref system") }));
+				cont.addRowToTable(new BlobSupportDataRow(key, new DataCell[] {
+						GeoCellFactory.create(wktVal, "test ref system") }));
 			}
 
 			cont.close();

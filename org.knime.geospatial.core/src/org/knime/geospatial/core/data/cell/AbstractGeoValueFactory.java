@@ -59,25 +59,33 @@ import org.knime.core.table.access.VarBinaryAccess.VarBinaryReadAccess;
 import org.knime.core.table.access.VarBinaryAccess.VarBinaryWriteAccess;
 import org.knime.core.table.schema.DataSpec;
 import org.knime.core.table.schema.StructDataSpec;
-import org.knime.geospatial.core.data.GeoConverter;
-import org.knime.geospatial.core.data.GeoPointValue;
+import org.knime.geospatial.core.data.GeoValue;
+import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
+import org.knime.geospatial.core.data.reference.GeoReferenceSystemFactory;
 
 /**
- * {@link ValueFactory} for {@link GeoPointReadValue} and
- * {@link GeoPointWriteValue} objects.
+ * {@link ValueFactory} implementation of this {@link DataCell} implementation.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
+ * @param <G> the concrete implementation of the {@link AbstractGeoCell} class
  */
-public class GeoPointValueFactory implements ValueFactory<StructReadAccess, StructWriteAccess> {
+public class AbstractGeoValueFactory<G extends AbstractGeoCell>
+implements ValueFactory<StructReadAccess, StructWriteAccess> {
 
-	@Override
-	public GeoPointReadValue createReadValue(final StructReadAccess access) {
-		return new GeoPointReadValue(access);
+	private final CellFactory<G> m_factory;
+
+	protected AbstractGeoValueFactory(final CellFactory<G> factory) {
+		m_factory = factory;
 	}
 
 	@Override
-	public GeoPointWriteValue createWriteValue(final StructWriteAccess access) {
-		return new GeoPointWriteValue(access);
+	public GeoWriteValue createWriteValue(final StructWriteAccess access) {
+		return new GeoWriteValue(access);
+	}
+
+	@Override
+	public GeoReadValue<G> createReadValue(final StructReadAccess access) {
+		return new GeoReadValue<>(m_factory, access);
 	}
 
 	@Override
@@ -86,24 +94,34 @@ public class GeoPointValueFactory implements ValueFactory<StructReadAccess, Stru
 	}
 
 	/**
-	 * {@link ReadValue} for {@link GeoPointValue}.
+	 * {@link ReadValue} for {@link GeoValue}.
 	 *
 	 * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
+	 * @param <G> the concrete implementation of the {@link AbstractGeoCell} class
 	 */
-	public static final class GeoPointReadValue implements ReadValue, GeoPointValue {
+	public static class GeoReadValue<G extends AbstractGeoCell> implements ReadValue, GeoValue {
 
 		private final VarBinaryReadAccess m_wkb;
 
 		private final StringReadAccess m_refCoord;
 
-		private GeoPointReadValue(final StructReadAccess structAccess) {
+		private final CellFactory<G> m_factory;
+
+		GeoReadValue(final CellFactory<G> factory, final StructReadAccess structAccess) {
+			m_factory = factory;
 			m_wkb = structAccess.getAccess(0);
 			m_refCoord = structAccess.getAccess(1);
 		}
 
 		@Override
-		public String getWKT() throws IOException {
-			return GeoConverter.wkb2wkt(getWKB());
+		public String getWKT() {
+			try {
+				return GeoConverter.wkb2wkt(getWKB());
+			} catch (final IOException e) {
+				// this should not happen since the GeoCell was already create via the factory
+				// before
+				throw new IllegalArgumentException("Exception converting WKB to WKT: " + e.getMessage(), e);
+			}
 		}
 
 		@Override
@@ -112,41 +130,48 @@ public class GeoPointValueFactory implements ValueFactory<StructReadAccess, Stru
 		}
 
 		@Override
-		public String getRefCoord() {
-			return m_refCoord.getStringValue();
+		public GeoReferenceSystem getReferenceSystem() {
+			try {
+				return GeoReferenceSystemFactory.create(m_refCoord.getStringValue());
+			} catch (final IOException e) {
+				// this should not happen since the GeoReferenceSystem was already create via
+				// the factory before
+				throw new IllegalArgumentException("Exception creating GeoReferenceSystem: " + e.getMessage(), e);
+			}
 		}
 
 		@Override
 		public DataCell getDataCell() {
 			try {
-				return new GeoPointCell(getWKB(), getRefCoord());
+				return m_factory.createGeoCell(getWKB(), getReferenceSystem());
 			} catch (final IOException e) {
-				throw new IllegalArgumentException("Exception creating GeoPointCell: " + e.getMessage());
+				// this should not happen since the GeoCell was already create via the factory
+				// before
+				throw new IllegalArgumentException("Exception creating GeoCell: " + e.getMessage(), e);
 			}
 		}
-
 	}
 
 	/**
-	 * {@link WriteValue} for {@link GeoPointValue}.
+	 * {@link WriteValue} for {@link GeoValue}.
 	 *
 	 * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
 	 */
-	public static final class GeoPointWriteValue implements WriteValue<GeoPointValue> {
+	public static final class GeoWriteValue implements WriteValue<GeoValue> {
 
 		private final VarBinaryWriteAccess m_wkb;
 
 		private final StringWriteAccess m_refCoord;
 
-		private GeoPointWriteValue(final StructWriteAccess structAccess) {
+		GeoWriteValue(final StructWriteAccess structAccess) {
 			m_wkb = structAccess.getWriteAccess(0);
 			m_refCoord = structAccess.getWriteAccess(1);
 		}
 
 		@Override
-		public void setValue(final GeoPointValue value) {
+		public void setValue(final GeoValue value) {
 			m_wkb.setByteArray(value.getWKB());
-			m_refCoord.setStringValue(value.getRefCoord());
+			m_refCoord.setStringValue(value.getReferenceSystem().getReferenceSystem());
 		}
 	}
 }

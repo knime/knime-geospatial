@@ -45,84 +45,60 @@
 
 package org.knime.geospatial.core.data.cell;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Objects;
-
 import org.knime.core.data.DataCell;
+import org.knime.core.data.DataCellSerializer;
 import org.knime.core.data.DataType;
-import org.knime.core.data.StringValue;
-import org.knime.geospatial.core.data.GeoConverter;
-import org.knime.geospatial.core.data.GeoValue;
+import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
+
 
 /**
+ * {@link DataCell} implementation that represents a geometric object. This is
+ * the most generic geometric cell which can hold any geometric type.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
-public abstract class GeoCell extends DataCell implements GeoValue, StringValue {
+public class GeoCell extends AbstractGeoCell {
 
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * The {@link DataType} of this {@link DataCell} implementation.
+	 */
 	public static final DataType TYPE = DataType.getType(GeoCell.class);
 
-	private final byte[] m_wkb;
-	private final String m_refCoord;
-
-	protected GeoCell(final byte[] wkb, final String refCoord) throws IOException {
-		m_wkb = wkb;
-		m_refCoord = refCoord;
+	protected GeoCell(final byte[] wkb, final GeoReferenceSystem refCoord) {
+		super(wkb, refCoord);
 	}
 
-	protected GeoCell(final String wkt, final String refCoord) throws IOException {
-		m_wkb = GeoConverter.wkt2wkb(wkt);
-		m_refCoord = refCoord;
-	}
-
-	@Override
-	public String getWKT() throws IOException {
-		return GeoConverter.wkb2wkt(getWKB());
-	}
-
-	@Override
-	public byte[] getWKB() {
-		return m_wkb;
-	}
-
-	@Override
-	public String getRefCoord() {
-		return m_refCoord;
-	}
-
-	@Override
-	public String getStringValue() {
-		try {
-			return getWKT();
-		} catch (final IOException e) {
-			return "Failed to convert to WKT: " + e.getMessage();
+	/**
+	 * {@link DataCellSerializer} implementation of this {@link DataCell}
+	 * implementation.
+	 *
+	 * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
+	 */
+	public static final class CellSerializer extends AbstractGeoCellSerializer<GeoCell> {
+		/**
+		 * Constructor for class CellSerializer that is used in the extension point.
+		 */
+		public CellSerializer() {
+			super(GeoCell::new);
 		}
 	}
 
-	@Override
-	public String toString() {
-		try {
-			return getWKT();
-		} catch (final IOException e) {
-			return "Failed to convert to WKT: " + e.getMessage();
+	/**
+	 * {@link AbstractGeoValueFactory} implementation of this {@link DataCell}
+	 * implementation.
+	 *
+	 * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
+	 */
+	public static class ValueFactory extends AbstractGeoValueFactory<GeoCell> {
+		/**
+		 * Constructor for class ValueFactory that is used in the extension
+		 * point.
+		 */
+		public ValueFactory() {
+			super(GeoCell::new);
 		}
-	}
 
-	@Override
-	protected boolean equalsDataCell(final DataCell dc) {
-		final GeoCell other = (GeoCell) dc;
-		return Objects.equals(m_refCoord, other.m_refCoord) && Arrays.equals(m_wkb, other.m_wkb);
 	}
-
-	@Override
-	public int hashCode() {
-		// TODO: Maybe we should cache the hash code for efficiency
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + Arrays.hashCode(m_wkb);
-		result = prime * result + Objects.hash(m_refCoord);
-		return result;
-	}
-
 }

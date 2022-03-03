@@ -42,20 +42,16 @@
  *  when such Node is propagated with or for interoperation with KNIME.
  * ------------------------------------------------------------------------
  */
-
 package org.knime.geospatial.core.data;
 
-import java.io.IOException;
-import java.net.URL;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-
 import org.knime.core.data.DataValue;
-import org.knime.core.data.DataValueComparator;
-import org.knime.core.data.ExtensibleUtilityFactory;
-import org.knime.core.node.NodeLogger;
+import org.knime.geospatial.core.data.util.GeoUtilityFactory;
 
+/**
+ * {@link DataValue} implementation that represents a geometric point.
+ *
+ * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
+ */
 public interface GeoPointValue extends GeoValue {
 
 	/**
@@ -63,60 +59,5 @@ public interface GeoPointValue extends GeoValue {
 	 *
 	 * @see DataValue#UTILITY
 	 */
-	UtilityFactory UTILITY = new GeoUtilityFactory();
-
-	/** Implementations of the meta information of this value class. */
-	class GeoUtilityFactory extends ExtensibleUtilityFactory {
-		/** Singleton icon to be used to display this cell type. */
-		private static final Icon ICON;
-
-		private static final GeoValueComparator GEO_COMPARATOR = new GeoValueComparator();
-		static {
-			final URL url = GeoValue.class.getResource("icons/globe.png");
-			ICON = new ImageIcon(url);
-		}
-
-		/** Only subclasses are allowed to instantiate this class. */
-		protected GeoUtilityFactory() {
-			super(GeoValue.class);
-		}
-
-		@Override
-		public Icon getIcon() {
-			return ICON;
-		}
-
-		@Override
-		protected DataValueComparator getComparator() {
-			return GEO_COMPARATOR;
-		}
-
-		@Override
-		public String getName() {
-			return "Geospatial (point)";
-		}
-
-		@Override
-		public String getGroupName() {
-			return "Geospatial";
-		}
-	}
-
-	class GeoValueComparator extends DataValueComparator {
-
-		private final NodeLogger LOGGER = NodeLogger.getLogger(GeoPointValue.GeoValueComparator.class);
-
-		@Override
-		protected int compareDataValues(final DataValue v1, final DataValue v2) {
-			final GeoValue g1 = (GeoValue) v1;
-			final GeoValue g2 = (GeoValue) v2;
-			try {
-				return g1.getWKT().compareTo(g2.getWKT());
-			} catch (final IOException e) {
-				LOGGER.warn("Exception comparing WKTs", e);
-				return 0;
-			}
-		}
-
-	}
+	UtilityFactory UTILITY = new GeoUtilityFactory(GeoPointValue.class, "point");
 }
