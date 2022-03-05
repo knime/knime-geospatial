@@ -1,8 +1,11 @@
 package org.knime.geospatial.reader;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
@@ -11,14 +14,17 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.io.FilenameUtils;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.FeatureSource;
+import org.geotools.data.PrjFileReader;
 import org.geotools.data.geojson.GeoJSONDataStoreFactory;
 import org.geotools.data.simple.SimpleFeatureStore;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.feature.FeatureIterator;
 import org.geotools.geojson.geom.GeometryJSON;
+import org.geotools.referencing.crs.DefaultEngineeringCRS;
 import org.geotools.util.URLs;
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpecCreator;
@@ -46,6 +52,8 @@ import org.opengis.feature.Feature;
 import org.opengis.feature.Property;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,6 +62,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 final class ShapefileReaderNodeModel extends PortObjectFromPathReaderNodeModel<PortObjectReaderNodeConfig> {
 
 	private static final String GEO_COL_NAME = "geo";
+
+	private static final String PROJECTION_FILE_EXTENSION = ".prj";
 
 	ShapefileReaderNodeModel(final NodeCreationConfiguration creationConfig, final PortObjectReaderNodeConfig config) {
 		super(creationConfig, config);
@@ -67,11 +77,7 @@ final class ShapefileReaderNodeModel extends PortObjectFromPathReaderNodeModel<P
 				.getDataStore(Collections.singletonMap("url", URLs.fileToUrl(inputPath.toFile())));
 		final String inputTypeName = inputDataStore.getTypeNames()[0];
 
-		// TODO: Read the prj file as text
-		//		PrjFileReader prjFileReader = new PrjFileReader(null);
-		//		prjFileReader.getCoordinateReferenceSystem().toWKT();
-		final String crs = "";
-
+		final CoordinateReferenceSystem crs = getCRS(inputPath);
 		final SimpleFeatureType inputType = inputDataStore.getSchema(inputTypeName);
 		final FeatureSource<SimpleFeatureType, SimpleFeature> source = inputDataStore.getFeatureSource(inputTypeName);
 		final FeatureCollection<SimpleFeatureType, SimpleFeature> inputFeatureCollection = source.getFeatures();
@@ -95,12 +101,13 @@ final class ShapefileReaderNodeModel extends PortObjectFromPathReaderNodeModel<P
 		// split features into individual json cells per feature
 		final JSONCellFactory fac = new JSONCellFactory();
 		final JsonNode jsonNode = new ObjectMapper().readTree(featureCollection).get("features");
-		//		int i = 0;
-		//		for (JsonNode node : jsonNode) {
-		//			geoJson.addRowToTable(new BlobSupportDataRow(new RowKey(String.format("Row%d", i++)),
-		//					new DataCell[] {  }));
-		//		}
-		//		geoJson.close();
+		// int i = 0;
+		// for (JsonNode node : jsonNode) {
+		// geoJson.addRowToTable(new BlobSupportDataRow(new
+		// RowKey(String.format("Row%d", i++)),
+		// new DataCell[] { }));
+		// }
+		// geoJson.close();
 
 		// first pass: determine property names
 		final Map<String, Integer> propNamesToIndex = new LinkedHashMap<>();
@@ -132,7 +139,8 @@ final class ShapefileReaderNodeModel extends PortObjectFromPathReaderNodeModel<P
 			for (final JsonNode node : jsonNode) {
 				final DataCell[] cells = new DataCell[propNamesToIndex.size() + 2];
 				final Feature feature = iterator.next();
-				// TODO: currently, we write a temporary GeoJSON, split it into individual features
+				// TODO: currently, we write a temporary GeoJSON, split it into individual
+				// features
 				// and then overwrite the geometry in these features for increased precision.
 				// this is pretty hacky and there is a lot of redundant work in there
 				final Geometry the_geom = (Geometry) feature.getDefaultGeometryProperty().getValue();
@@ -148,7 +156,7 @@ final class ShapefileReaderNodeModel extends PortObjectFromPathReaderNodeModel<P
 
 				final WKTWriter writer = new WKTWriter();
 				final String wkt = writer.write(the_geom);
-				final DataCell geoCell = GeoCellFactory.create(wkt, crs);
+				final DataCell geoCell = GeoCellFactory.create(wkt, crs.toWKT());
 				cellTypes.add(geoCell.getType());
 				cells[1] = geoCell;
 
@@ -175,7 +183,28 @@ final class ShapefileReaderNodeModel extends PortObjectFromPathReaderNodeModel<P
 					new DataColumnSpecCreator(GEO_COL_NAME, cellTypes.iterator().next()).createSpec());
 			resultTable = exec.createSpecReplacerTable(props.getTable(), specCreator.createSpec());
 		}
-		return new PortObject[] { resultTable};
+		return new PortObject[] { resultTable };
+	}
+
+	private static CoordinateReferenceSystem getCRS(final Path inputPath)
+			throws IOException, FileNotFoundException, FactoryException {
+		final String pathString = inputPath.toString();
+		final String prjFileString = FilenameUtils.removeExtension(pathString) + PROJECTION_FILE_EXTENSION;
+		final File prjFile = new File(prjFileString);
+		CoordinateReferenceSystem crs = null;
+		if (prjFile.exists()) {
+			try (FileInputStream instream = new FileInputStream(prjFile);
+					final FileChannel channel = instream.getChannel();
+					PrjFileReader projReader = new PrjFileReader(channel);) {
+				crs = projReader.getCoordinateReferenceSystem();
+			}
+		}
+		if (crs == null) {
+			// return default reference system
+			crs = DefaultEngineeringCRS.GENERIC_2D;
+
+		}
+		return crs;
 	}
 
 }
