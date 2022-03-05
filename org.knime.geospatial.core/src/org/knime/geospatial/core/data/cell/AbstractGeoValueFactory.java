@@ -171,7 +171,7 @@ implements ValueFactory<StructReadAccess, StructWriteAccess> {
 		@Override
 		public void setValue(final GeoValue value) {
 			m_wkb.setByteArray(value.getWKB());
-			m_refCoord.setStringValue(value.getReferenceSystem().getReferenceSystem());
+			m_refCoord.setStringValue(value.getReferenceSystem().getWKTCRS());
 		}
 	}
 }

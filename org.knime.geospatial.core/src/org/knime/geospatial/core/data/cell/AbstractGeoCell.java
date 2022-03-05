@@ -67,11 +67,11 @@ public abstract class AbstractGeoCell extends DataCell implements GeoValue, Stri
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(AbstractGeoCell.class);
 
 	protected final byte[] m_wkb;
-	protected final GeoReferenceSystem m_refCoord;
+	protected final GeoReferenceSystem m_refSystem;
 
-	AbstractGeoCell(final byte[] m_wkb, final GeoReferenceSystem m_refCoord) {
-		this.m_wkb = m_wkb;
-		this.m_refCoord = m_refCoord;
+	AbstractGeoCell(final byte[] wkb, final GeoReferenceSystem refSystem) {
+		m_wkb = wkb;
+		m_refSystem = refSystem;
 	}
 
 	@Override
@@ -91,7 +91,7 @@ public abstract class AbstractGeoCell extends DataCell implements GeoValue, Stri
 
 	@Override
 	public GeoReferenceSystem getReferenceSystem() {
-		return m_refCoord;
+		return m_refSystem;
 	}
 
 	@Override
@@ -107,7 +107,7 @@ public abstract class AbstractGeoCell extends DataCell implements GeoValue, Stri
 	@Override
 	protected boolean equalsDataCell(final DataCell dc) {
 		final GeoCell other = (GeoCell) dc;
-		return Objects.equals(m_refCoord, other.m_refCoord) && Arrays.equals(m_wkb, other.m_wkb);
+		return Objects.equals(m_refSystem, other.m_refSystem) && Arrays.equals(m_wkb, other.m_wkb);
 	}
 
 	@Override
@@ -115,8 +115,8 @@ public abstract class AbstractGeoCell extends DataCell implements GeoValue, Stri
 		// TODO: Maybe we should cache the hash code for efficiency
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + Objects.hash(m_refSystem);
 		result = prime * result + Arrays.hashCode(m_wkb);
-		result = prime * result + Objects.hash(m_refCoord);
 		return result;
 	}
 

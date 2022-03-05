@@ -1,5 +1,6 @@
 /*
  * ------------------------------------------------------------------------
+ *
  *  Copyright by KNIME AG, Zurich, Switzerland
  *  Website: http://www.knime.com; Email: contact@knime.com
  *
@@ -40,27 +41,63 @@
  *  propagated with or for interoperation with KNIME.  The owner of a Node
  *  may freely choose the license terms applicable to such Node, including
  *  when such Node is propagated with or for interoperation with KNIME.
- * ------------------------------------------------------------------------
+ * ---------------------------------------------------------------------
+ *
+ * History
+ *   Aug 28, 2019 (Simon Schmid, KNIME GmbH, Konstanz, Germany): created
  */
+package org.knime.geospatial.core.data.util;
 
-package org.knime.geospatial.core.data.reference;
+import org.knime.core.data.DataColumnSpec;
+import org.knime.core.data.renderer.AbstractDataValueRendererFactory;
+import org.knime.core.data.renderer.DataValueRenderer;
+import org.knime.core.data.renderer.DefaultDataValueRenderer;
+import org.knime.geospatial.core.data.GeoValue;
 
 /**
- * Representation of a coordinate reference system (CRS).
+ * Renderer for {@link GeoValue} which prints the WKT string.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
- * @see <a href="https://en.wikipedia.org/wiki/Spatial_reference_system">CRS</a>
  */
-public interface GeoReferenceSystem {
+public final class GeoValueWKTRenderer extends DefaultDataValueRenderer {
+
+	/** */
+	private static final long serialVersionUID = 1L;
+
+	private static final String DESCRIPTION_WKT = "Well Known Text";
+
+	private GeoValueWKTRenderer(final DataColumnSpec colSpec) {
+		super(colSpec);
+	}
 
 	/**
-	 * Returns the Well Known Text representation of the coordinate reference system
-	 * (WKT-CRS).
-	 *
-	 * @return String with the WKT-CRS
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_coordinate_reference_systems">WKT-CRS</a>
+	 * @return "Well Known Text" {@inheritDoc}
 	 */
-	String getWKTCRS();
+	@Override
+	public String getDescription() {
+		return DESCRIPTION_WKT;
+	}
 
+	@Override
+	protected void setValue(final Object value) {
+		if (value instanceof GeoValue) {
+			super.setValue(((GeoValue) value).getWKT());
+		} else {
+			super.setValue(value);
+		}
+	}
+
+	/** Renderer factory registered through extension point. */
+	public static final class Factory extends AbstractDataValueRendererFactory {
+
+		@Override
+		public String getDescription() {
+			return DESCRIPTION_WKT;
+		}
+
+		@Override
+		public DataValueRenderer createRenderer(final DataColumnSpec colSpec) {
+			return new GeoValueWKTRenderer(colSpec);
+		}
+	}
 }

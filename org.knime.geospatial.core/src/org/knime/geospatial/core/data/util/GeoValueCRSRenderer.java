@@ -48,71 +48,57 @@
  */
 package org.knime.geospatial.core.data.util;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.renderer.AbstractDataValueRendererFactory;
 import org.knime.core.data.renderer.DataValueRenderer;
 import org.knime.core.data.renderer.DefaultDataValueRenderer;
 import org.knime.geospatial.core.data.GeoValue;
-import org.knime.geospatial.core.data.metadata.GeoValueMetaData;
-import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
 
 /**
- * Generic renderer for {@link GeoValue} which prints each coordinate system
- * separated by commas.
+ * Renderer for {@link GeoValue} which prints the coordinate reference system
+ * (CRS) as string.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
-public final class GeoValueRenderer extends DefaultDataValueRenderer {
+public final class GeoValueCRSRenderer extends DefaultDataValueRenderer {
 
 	/** */
 	private static final long serialVersionUID = 1L;
 
-	private static final String DESCRIPTION_PROB_DISTR = "Nominal Probability Distribution";
+	private static final String DESCRIPTION_WKT = "Coordinate Reference System";
 
-	private GeoValueRenderer(final DataColumnSpec colSpec) {
+	private GeoValueCRSRenderer(final DataColumnSpec colSpec) {
 		super(colSpec);
 	}
 
 	/**
-	 * @return "Probability Distribution" {@inheritDoc}
+	 * @return "Coordinate Reference System" {@inheritDoc}
 	 */
 	@Override
 	public String getDescription() {
-		return DESCRIPTION_PROB_DISTR;
+		return DESCRIPTION_WKT;
 	}
 
 	@Override
 	protected void setValue(final Object value) {
 		if (value instanceof GeoValue) {
-			final GeoValueMetaData metaData = getMetaData();
-			final Set<GeoReferenceSystem> possibleValues = metaData.getCoordinateReferenceSystem();
-			final String coords = possibleValues.stream().map(GeoReferenceSystem::getReferenceSystem)
-					.collect(Collectors.joining(", "));
-			super.setValue(coords);
+			super.setValue(((GeoValue) value).getReferenceSystem().getWKTCRS());
 		} else {
 			super.setValue(value);
 		}
 	}
 
-	private GeoValueMetaData getMetaData() {
-		final DataColumnSpec spec = getColSpec();
-		return GeoValueMetaData.extractFromSpec(spec);
-	}
-
 	/** Renderer factory registered through extension point. */
-	public static final class DefaultRendererFactory extends AbstractDataValueRendererFactory {
+	public static final class Factory extends AbstractDataValueRendererFactory {
 
 		@Override
 		public String getDescription() {
-			return DESCRIPTION_PROB_DISTR;
+			return DESCRIPTION_WKT;
 		}
 
 		@Override
 		public DataValueRenderer createRenderer(final DataColumnSpec colSpec) {
-			return new GeoValueRenderer(colSpec);
+			return new GeoValueCRSRenderer(colSpec);
 		}
 	}
 }

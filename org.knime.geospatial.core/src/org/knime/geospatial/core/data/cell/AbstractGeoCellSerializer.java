@@ -72,7 +72,7 @@ public abstract class AbstractGeoCellSerializer<G extends AbstractGeoCell> imple
 	public void serialize(final AbstractGeoCell cell, final DataCellDataOutput output) throws IOException {
 		output.writeInt(cell.getWKB().length);
 		output.write(cell.getWKB());
-		output.writeUTF(cell.getReferenceSystem().getReferenceSystem());
+		output.writeUTF(cell.getReferenceSystem().getWKTCRS());
 	}
 
 	@Override

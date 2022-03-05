@@ -42,22 +42,34 @@
       <dataValue
             valueClass="org.knime.geospatial.core.data.GeoValue">
          <renderer
-               rendererFactoryClass="org.knime.core.data.renderer.MultiLineStringValueRenderer$Factory"
+               rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueWKTRenderer$Factory"
                suggestAsDefault="true">
+         </renderer>
+         <renderer
+               rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueCRSRenderer$Factory"
+               suggestAsDefault="false">
          </renderer>
       </dataValue>
       <dataValue
             valueClass="org.knime.geospatial.core.data.GeoPointValue">
          <renderer
-               rendererFactoryClass="org.knime.core.data.renderer.MultiLineStringValueRenderer$Factory"
+               rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueWKTRenderer$Factory"
                suggestAsDefault="true">
+         </renderer>
+         <renderer
+               rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueCRSRenderer$Factory"
+               suggestAsDefault="false">
          </renderer>
       </dataValue>
       <dataValue
             valueClass="org.knime.geospatial.core.data.GeoLineValue">
          <renderer
-               rendererFactoryClass="org.knime.core.data.renderer.MultiLineStringValueRenderer$Factory"
+               rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueWKTRenderer$Factory"
                suggestAsDefault="true">
+         </renderer>
+         <renderer
+               rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueCRSRenderer$Factory"
+               suggestAsDefault="false">
          </renderer>
       </dataValue>
    </extension>

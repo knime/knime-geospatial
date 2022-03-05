@@ -45,6 +45,8 @@
 
 package org.knime.geospatial.core.data.reference;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Default implementation of the {@link GeoReferenceSystem} interface.
  *
@@ -52,20 +54,23 @@ package org.knime.geospatial.core.data.reference;
  */
 public class DefaultGeoReferenceSystem implements GeoReferenceSystem {
 
-	private final String m_refCoord;
+	private final String m_refSystem;
 
-	DefaultGeoReferenceSystem(final String refCoord) {
-		m_refCoord = refCoord;
+	DefaultGeoReferenceSystem(final String refSystem) {
+		if (StringUtils.isEmpty(refSystem)) {
+			throw new IllegalArgumentException("refSystem must not be empty");
+		}
+		m_refSystem = refSystem;
 	}
 
 	@Override
-	public String getReferenceSystem() {
-		return m_refCoord;
+	public String getWKTCRS() {
+		return m_refSystem;
 	}
 
 	@Override
 	public int hashCode() {
-		return m_refCoord.hashCode();
+		return m_refSystem.hashCode();
 	}
 
 	@Override
@@ -80,7 +85,7 @@ public class DefaultGeoReferenceSystem implements GeoReferenceSystem {
 			return false;
 		}
 		final DefaultGeoReferenceSystem other = (DefaultGeoReferenceSystem) obj;
-		return m_refCoord.equals(other.m_refCoord);
+		return m_refSystem.equals(other.m_refSystem);
 	}
 
 }

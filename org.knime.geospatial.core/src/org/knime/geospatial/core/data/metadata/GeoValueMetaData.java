@@ -174,7 +174,7 @@ public final class GeoValueMetaData implements DataColumnMetaData {
 			int idx = 0;
 			for (final GeoReferenceSystem spec : geoValueMetaData.getCoordinateReferenceSystem()) {
 				final Config subConfig = config.addConfig(CFG_ENTRY + idx);
-				subConfig.addString(CFG_REF_COORD, spec.getReferenceSystem());
+				subConfig.addString(CFG_REF_COORD, spec.getWKTCRS());
 				idx++;
 			}
 		}
