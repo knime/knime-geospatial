@@ -62,14 +62,14 @@ import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
  */
 public final class GeoValueMetaDataCreator implements DataColumnMetaDataCreator<GeoValueMetaData> {
 
-	private final Set<GeoReferenceSystem> m_specs;
+	private final Set<GeoReferenceSystem> m_refs;
 
 	GeoValueMetaDataCreator() {
 		this(new HashSet<>());
 	}
 
-	private GeoValueMetaDataCreator(final Set<GeoReferenceSystem> fsLocationSpecs) {
-		m_specs = new HashSet<>(fsLocationSpecs);
+	private GeoValueMetaDataCreator(final Set<GeoReferenceSystem> refSystems) {
+		m_refs = new HashSet<>(refSystems);
 	}
 
 	@Override
@@ -78,17 +78,17 @@ public final class GeoValueMetaDataCreator implements DataColumnMetaDataCreator<
 			return;
 		}
 		final GeoValue value = (GeoValue) cell;
-		m_specs.add(value.getReferenceSystem());
+		m_refs.add(value.getReferenceSystem());
 	}
 
 	@Override
 	public GeoValueMetaData create() {
-		return new GeoValueMetaData(m_specs);
+		return new GeoValueMetaData(m_refs);
 	}
 
 	@Override
 	public GeoValueMetaDataCreator copy() {
-		return new GeoValueMetaDataCreator(m_specs);
+		return new GeoValueMetaDataCreator(m_refs);
 	}
 
 	@Override
@@ -97,13 +97,13 @@ public final class GeoValueMetaDataCreator implements DataColumnMetaDataCreator<
 				"Can only merge with GeoValueMetaDataCreator but received object of type %s.",
 				other.getClass().getName());
 		final GeoValueMetaDataCreator otherCreator = (GeoValueMetaDataCreator)other;
-		m_specs.addAll(otherCreator.m_specs);
+		m_refs.addAll(otherCreator.m_refs);
 		return this;
 	}
 
 	@Override
 	public GeoValueMetaDataCreator merge(final GeoValueMetaData other) {
-		m_specs.addAll(other.getCoordinateReferenceSystem());
+		m_refs.addAll(other.getReferenceSystem());
 		return this;
 	}
 

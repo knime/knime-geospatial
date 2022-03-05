@@ -58,7 +58,6 @@ import org.knime.core.node.config.Config;
 import org.knime.core.node.config.ConfigRO;
 import org.knime.core.node.config.ConfigWO;
 import org.knime.core.node.util.CheckUtils;
-import org.knime.filehandling.core.connections.DefaultFSLocationSpec;
 import org.knime.geospatial.core.data.GeoValue;
 import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
 import org.knime.geospatial.core.data.reference.GeoReferenceSystemFactory;
@@ -72,7 +71,7 @@ import org.knime.geospatial.core.data.reference.GeoReferenceSystemFactory;
  */
 public final class GeoValueMetaData implements DataColumnMetaData {
 
-	private final Set<GeoReferenceSystem> m_refCoordinates;
+	private final Set<GeoReferenceSystem> m_refSystem;
 
 	/**
 	 * Extracts the {@link GeoValueMetaData} from the given {@link DataColumnSpec
@@ -101,12 +100,12 @@ public final class GeoValueMetaData implements DataColumnMetaData {
 	/**
 	 * Creates a {@link GeoValueMetaData} instance.
 	 *
-	 * @param refCoord reference geo coordinate system
+	 * @param refSystem coordinate reference system
 	 *
 	 */
-	public GeoValueMetaData(final GeoReferenceSystem refCoord) {
-		m_refCoordinates = new HashSet<>();
-		m_refCoordinates.add(refCoord);
+	public GeoValueMetaData(final GeoReferenceSystem refSystem) {
+		m_refSystem = new HashSet<>();
+		m_refSystem.add(refSystem);
 	}
 
 	/**
@@ -115,17 +114,17 @@ public final class GeoValueMetaData implements DataColumnMetaData {
 	 * @param refCoords the set of reference coordinate systems
 	 */
 	public GeoValueMetaData(final Set<GeoReferenceSystem> refCoords) {
-		m_refCoordinates = new HashSet<>(refCoords);
+		m_refSystem = new HashSet<>(refCoords);
 	}
 
 	/**
-	 * Returns the set of {@link DefaultFSLocationSpec}s hold by this meta data
+	 * Returns the set of {@link GeoReferenceSystem}s hold by this meta data
 	 * instance.
 	 *
-	 * @return the set of {@link DefaultFSLocationSpec}s
+	 * @return the set of {@link GeoReferenceSystem}s
 	 */
-	public Set<GeoReferenceSystem> getCoordinateReferenceSystem() {
-		return m_refCoordinates;
+	public Set<GeoReferenceSystem> getReferenceSystem() {
+		return m_refSystem;
 	}
 
 	@Override
@@ -135,14 +134,14 @@ public final class GeoValueMetaData implements DataColumnMetaData {
 		}
 		if (o instanceof GeoValueMetaData) {
 			final GeoValueMetaData other = (GeoValueMetaData) o;
-			return m_refCoordinates.equals(other.m_refCoordinates);
+			return m_refSystem.equals(other.m_refSystem);
 		}
 		return false;
 	}
 
 	@Override
 	public int hashCode() {
-		return m_refCoordinates.hashCode();
+		return m_refSystem.hashCode();
 	}
 
 	/**
@@ -157,9 +156,9 @@ public final class GeoValueMetaData implements DataColumnMetaData {
 			return GeoValueMetaData.class;
 		}
 
-		private static final String CFG_ENTRY = "geo_ref_coord_spec_";
+		private static final String CFG_ENTRY = "geo_ref_system_spec_";
 
-		private static final String CFG_REF_COORD = "ref_coord";
+		private static final String CFG_REF_SYSTEM = "reference_system";
 
 		/**
 		 * Serializes the given {@link GeoValueMetaData} to the given {@link ConfigWO}.
@@ -172,9 +171,9 @@ public final class GeoValueMetaData implements DataColumnMetaData {
 			CheckUtils.checkNotNull(geoValueMetaData,
 					"The GeoValueMetaData provided to the serializer must not be null.");
 			int idx = 0;
-			for (final GeoReferenceSystem spec : geoValueMetaData.getCoordinateReferenceSystem()) {
+			for (final GeoReferenceSystem spec : geoValueMetaData.getReferenceSystem()) {
 				final Config subConfig = config.addConfig(CFG_ENTRY + idx);
-				subConfig.addString(CFG_REF_COORD, spec.getWKTCRS());
+				subConfig.addString(CFG_REF_SYSTEM, spec.getWKTCRS());
 				idx++;
 			}
 		}
@@ -192,23 +191,23 @@ public final class GeoValueMetaData implements DataColumnMetaData {
 		@Override
 		public GeoValueMetaData load(final ConfigRO config) throws InvalidSettingsException {
 			final Set<GeoReferenceSystem> set = new HashSet<>();
-			if (config.containsKey(CFG_REF_COORD)) {
-				set.add(loadRefCoord(config));
+			if (config.containsKey(CFG_REF_SYSTEM)) {
+				set.add(loadRefSystem(config));
 			} else {
 				@SuppressWarnings("unchecked")
 				final Enumeration<ConfigRO> children = (Enumeration<ConfigRO>) config.children();
 				while (children.hasMoreElements()) {
 					final ConfigRO subConfig = children.nextElement();
-					set.add(loadRefCoord(subConfig));
+					set.add(loadRefSystem(subConfig));
 				}
 			}
 			return new GeoValueMetaData(set);
 		}
 
-		private static GeoReferenceSystem loadRefCoord(final ConfigRO config) throws InvalidSettingsException {
+		private static GeoReferenceSystem loadRefSystem(final ConfigRO config) throws InvalidSettingsException {
 			try {
-				final String refCoord = config.getString(CFG_REF_COORD);
-				return GeoReferenceSystemFactory.create(refCoord);
+				final String refSystem = config.getString(CFG_REF_SYSTEM);
+				return GeoReferenceSystemFactory.create(refSystem);
 			} catch (final IOException e) {
 				// this should not happen since the GeoReferenceSystem was already create via
 				// the factory before
