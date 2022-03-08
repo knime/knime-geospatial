@@ -48,26 +48,24 @@ package org.knime.geospatial.core.data.cell;
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataCellSerializer;
 import org.knime.core.data.DataType;
+import org.knime.geospatial.core.data.GeoMultiPointValue;
 import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
 
-
 /**
- * {@link DataCell} implementation that represents a geometric object. This is
- * the most generic geometric cell which can hold any geometric
- * type.GeoMultiPointCell.java
+ * {@link DataCell} implementation that represents a geometric multi point.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
-public class GeoCell extends AbstractGeoCell {
+public class GeoMultiPointCell extends AbstractGeoCell implements GeoMultiPointValue {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * The {@link DataType} of this {@link DataCell} implementation.
 	 */
-	public static final DataType TYPE = DataType.getType(GeoCell.class);
+	public static final DataType TYPE = DataType.getType(GeoMultiPointCell.class);
 
-	protected GeoCell(final byte[] wkb, final GeoReferenceSystem refCoord) {
+	protected GeoMultiPointCell(final byte[] wkb, final GeoReferenceSystem refCoord) {
 		super(wkb, refCoord);
 	}
 
@@ -77,12 +75,12 @@ public class GeoCell extends AbstractGeoCell {
 	 *
 	 * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
 	 */
-	public static final class CellSerializer extends AbstractGeoCellSerializer<GeoCell> {
+	public static final class CellSerializer extends AbstractGeoCellSerializer<GeoMultiPointCell> {
 		/**
 		 * Constructor for class CellSerializer that is used in the extension point.
 		 */
 		public CellSerializer() {
-			super(GeoCell::new);
+			super(GeoMultiPointCell::new);
 		}
 	}
 
@@ -92,14 +90,13 @@ public class GeoCell extends AbstractGeoCell {
 	 *
 	 * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
 	 */
-	public static class ValueFactory extends AbstractGeoValueFactory<GeoCell> {
+	public static class ValueFactory extends AbstractGeoValueFactory<GeoMultiPointCell> {
 		/**
 		 * Constructor for class ValueFactory that is used in the extension
 		 * point.
 		 */
 		public ValueFactory() {
-			super(GeoCell::new);
+			super(GeoMultiPointCell::new);
 		}
-
 	}
 }

@@ -47,6 +47,7 @@ package org.knime.geospatial.core.data.cell;
 
 import java.io.IOException;
 
+import org.knime.core.node.NodeLogger;
 import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
 import org.knime.geospatial.core.data.reference.GeoReferenceSystemFactory;
 
@@ -58,9 +59,9 @@ import mil.nga.sf.GeometryType;
  * {@link AbstractGeoCell} implementations. The class is also doing input
  * validation e.g. if the given WKT or WKB is valid and the geometric type
  * supported.
- * 
+ *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
- * 
+ *
  * @see <a href=
  *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry">WKT</a>
  * @see <a href=
@@ -69,6 +70,8 @@ import mil.nga.sf.GeometryType;
  *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary">WKB</a>
  */
 public class GeoCellFactory {
+
+	private static final NodeLogger LOGGER = NodeLogger.getLogger(GeoCellFactory.class);
 
 	/**
 	 * Creates the concrete {@link AbstractGeoCell} instance for the given geometric
@@ -117,44 +120,48 @@ public class GeoCellFactory {
 	}
 
 	private static AbstractGeoCell create(final GeometryType geometryType, final byte[] wkb,
-			final GeoReferenceSystem refSystem)
-					throws IOException {
+			final GeoReferenceSystem refSystem) {
 		switch (geometryType) {
 		case GEOMETRY:
-			return new GeoPointCell(wkb, refSystem);
+			return new GeoCell(wkb, refSystem);
 
-		case POINT:
-			return new GeoPointCell(wkb, refSystem);
 		case CIRCULARSTRING:
 		case LINESTRING:
 			return new GeoLineCell(wkb, refSystem);
 
-		case POLYGON:
-		case TRIANGLE:
+		case POINT:
 			return new GeoPointCell(wkb, refSystem);
+
+		case POLYGON:
+		case CURVEPOLYGON:
+		case TRIANGLE:
+			return new GeoPolygonCell(wkb, refSystem);
 
 		case GEOMETRYCOLLECTION:
-			return new GeoPointCell(wkb, refSystem);
+			return new GeoCollectionCell(wkb, refSystem);
 
 		case MULTILINESTRING:
-			return new GeoLineCell(wkb, refSystem);
+			return new GeoMultiLineCell(wkb, refSystem);
 
 		case MULTIPOINT:
-			return new GeoPointCell(wkb, refSystem);
+			return new GeoMultiPointCell(wkb, refSystem);
 
 		case MULTIPOLYGON:
-			return new GeoPointCell(wkb, refSystem);
+			return new GeoMultiPolygonCell(wkb, refSystem);
 
-		case CURVE:
-		case COMPOUNDCURVE:
 		case MULTICURVE:
 		case MULTISURFACE:
-		case CURVEPOLYGON:
-		case POLYHEDRALSURFACE:
+			LOGGER.debug("Unsupported geo type found: " + geometryType);
+			return new GeoCollectionCell(wkb, refSystem);
+
 		case SURFACE:
+		case POLYHEDRALSURFACE:
+		case CURVE:
+		case COMPOUNDCURVE:
 		case TIN:
 		default:
-			throw new IOException("Geometry type: " + geometryType.name() + " not supported");
+			LOGGER.debug("Unsupported geo type found: " + geometryType);
+			return new GeoCell(wkb, refSystem);
 		}
 	}
 

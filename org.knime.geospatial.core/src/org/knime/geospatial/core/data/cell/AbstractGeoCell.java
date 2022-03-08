@@ -51,7 +51,6 @@ import java.util.Objects;
 
 import org.knime.core.data.DataCell;
 import org.knime.core.data.StringValue;
-import org.knime.core.node.NodeLogger;
 import org.knime.geospatial.core.data.GeoValue;
 import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
 
@@ -63,8 +62,6 @@ import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
 public abstract class AbstractGeoCell extends DataCell implements GeoValue, StringValue {
 
 	private static final long serialVersionUID = 1L;
-
-	private static final NodeLogger LOGGER = NodeLogger.getLogger(AbstractGeoCell.class);
 
 	protected final byte[] m_wkb;
 	protected final GeoReferenceSystem m_refSystem;
@@ -79,11 +76,11 @@ public abstract class AbstractGeoCell extends DataCell implements GeoValue, Stri
 		try {
 			return GeoConverter.wkb2wkt(getWKB());
 		} catch (final IOException e) {
-			LOGGER.warn("Exception converting WKB to WKT", e);
-			throw new IllegalArgumentException("Exception converting WKB to WKT for details see log file");
+			throw new IllegalArgumentException("Exception converting WKB to WKT for details see log file", e);
 		}
 	}
 
+	// TODO: Return Stream???
 	@Override
 	public byte[] getWKB() {
 		return m_wkb;

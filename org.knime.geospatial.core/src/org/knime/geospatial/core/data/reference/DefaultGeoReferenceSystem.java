@@ -52,7 +52,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
-public class DefaultGeoReferenceSystem implements GeoReferenceSystem {
+class DefaultGeoReferenceSystem implements GeoReferenceSystem {
 
 	private final String m_refSystem;
 

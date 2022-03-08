@@ -48,26 +48,27 @@ package org.knime.geospatial.core.data.cell;
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataCellSerializer;
 import org.knime.core.data.DataType;
+import org.knime.geospatial.core.data.GeoCollectionValue;
 import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
 
 
 /**
- * {@link DataCell} implementation that represents a geometric object. This is
- * the most generic geometric cell which can hold any geometric
- * type.GeoMultiPointCell.java
+ * {@link DataCell} implementation that represents a geometric collection which
+ * can contain any mixture of other geometric objects e.g. points, lines and
+ * polygons.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
-public class GeoCell extends AbstractGeoCell {
+public class GeoCollectionCell extends AbstractGeoCell implements GeoCollectionValue {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * The {@link DataType} of this {@link DataCell} implementation.
 	 */
-	public static final DataType TYPE = DataType.getType(GeoCell.class);
+	public static final DataType TYPE = DataType.getType(GeoCollectionCell.class);
 
-	protected GeoCell(final byte[] wkb, final GeoReferenceSystem refCoord) {
+	protected GeoCollectionCell(final byte[] wkb, final GeoReferenceSystem refCoord) {
 		super(wkb, refCoord);
 	}
 
@@ -77,12 +78,12 @@ public class GeoCell extends AbstractGeoCell {
 	 *
 	 * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
 	 */
-	public static final class CellSerializer extends AbstractGeoCellSerializer<GeoCell> {
+	public static final class CellSerializer extends AbstractGeoCellSerializer<GeoCollectionCell> {
 		/**
 		 * Constructor for class CellSerializer that is used in the extension point.
 		 */
 		public CellSerializer() {
-			super(GeoCell::new);
+			super(GeoCollectionCell::new);
 		}
 	}
 
@@ -92,13 +93,13 @@ public class GeoCell extends AbstractGeoCell {
 	 *
 	 * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
 	 */
-	public static class ValueFactory extends AbstractGeoValueFactory<GeoCell> {
+	public static class ValueFactory extends AbstractGeoValueFactory<GeoCollectionCell> {
 		/**
 		 * Constructor for class ValueFactory that is used in the extension
 		 * point.
 		 */
 		public ValueFactory() {
-			super(GeoCell::new);
+			super(GeoCollectionCell::new);
 		}
 
 	}

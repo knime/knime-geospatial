@@ -93,6 +93,17 @@ implements ValueFactory<StructReadAccess, StructWriteAccess> {
 		return new StructDataSpec(DataSpec.varBinarySpec(), DataSpec.stringSpec());
 	}
 
+	// TODO: Enable dict encoding for the reference system which should be mostly
+	// the same
+	//    @Override
+	//    public DataTraits getTraits() {
+	//        return DefaultStructDataTraits.builder()//
+	//            .addInnerTraits(new DictEncodingTrait(KeyType.INT_KEY))//
+	//            .addInnerTraits(new DictEncodingTrait(KeyType.LONG_KEY))//
+	//            .addInnerTraits(new DictEncodingTrait(KeyType.LONG_KEY))//
+	//            .build();
+	//    }
+
 	/**
 	 * {@link ReadValue} for {@link GeoValue}.
 	 *
@@ -103,14 +114,14 @@ implements ValueFactory<StructReadAccess, StructWriteAccess> {
 
 		private final VarBinaryReadAccess m_wkb;
 
-		private final StringReadAccess m_refCoord;
+		private final StringReadAccess m_refSystem;
 
 		private final CellFactory<G> m_factory;
 
 		GeoReadValue(final CellFactory<G> factory, final StructReadAccess structAccess) {
 			m_factory = factory;
 			m_wkb = structAccess.getAccess(0);
-			m_refCoord = structAccess.getAccess(1);
+			m_refSystem = structAccess.getAccess(1);
 		}
 
 		@Override
@@ -132,7 +143,7 @@ implements ValueFactory<StructReadAccess, StructWriteAccess> {
 		@Override
 		public GeoReferenceSystem getReferenceSystem() {
 			try {
-				return GeoReferenceSystemFactory.create(m_refCoord.getStringValue());
+				return GeoReferenceSystemFactory.create(m_refSystem.getStringValue());
 			} catch (final IOException e) {
 				// this should not happen since the GeoReferenceSystem was already create via
 				// the factory before

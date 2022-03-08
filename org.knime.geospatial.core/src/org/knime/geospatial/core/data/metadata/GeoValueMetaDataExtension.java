@@ -52,7 +52,8 @@ import org.knime.geospatial.core.data.GeoValue;
 
 /**
  * {@link DataColumnMetaDataExtension} for {@link GeoValueMetaDataCreator}
- * objects.
+ * objects that are attached to each {@link GeoValue} columns including its sub
+ * classes.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  * @noreference non-public API
