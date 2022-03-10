@@ -55,6 +55,7 @@ import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  * @param <G> the concrete implementation of the {@link AbstractGeoCell} class
  */
+@FunctionalInterface
 public interface CellFactory<G extends AbstractGeoCell> {
 	/**
 	 * Returns the concrete {@link AbstractGeoCell} implementation for the given
