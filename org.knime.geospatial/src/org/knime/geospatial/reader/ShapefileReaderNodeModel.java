@@ -46,6 +46,7 @@ import org.knime.filehandling.core.node.portobject.reader.PortObjectFromPathRead
 import org.knime.filehandling.core.node.portobject.reader.PortObjectReaderNodeConfig;
 import org.knime.geospatial.core.data.cell.GeoCell;
 import org.knime.geospatial.core.data.cell.GeoCellFactory;
+import org.knime.geospatial.core.data.metadata.GeoValueMetaData;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.WKTWriter;
 import org.opengis.feature.Feature;
@@ -130,7 +131,7 @@ final class ShapefileReaderNodeModel extends PortObjectFromPathReaderNodeModel<P
 			creator.addColumns(new DataColumnSpecCreator(propName, StringCell.TYPE).createSpec());
 		}
 		final DataTableSpec resultSpec = creator.createSpec();
-		final BufferedDataContainer props = exec.createDataContainer(resultSpec);
+		final BufferedDataContainer cont = exec.createDataContainer(resultSpec);
 
 		// second pass: build table
 		final Set<DataType> cellTypes = new HashSet<>();
@@ -169,19 +170,18 @@ final class ShapefileReaderNodeModel extends PortObjectFromPathReaderNodeModel<P
 						cells[j] = DataType.getMissingCell();
 					}
 				}
-				props.addRowToTable(new BlobSupportDataRow(new RowKey(String.format("Row%d", i++)), cells));
+				cont.addRowToTable(new BlobSupportDataRow(new RowKey(String.format("Row%d", i++)), cells));
 			}
 		}
-		props.close();
+		cont.close();
 
 		final BufferedDataTable resultTable;
-		if (cellTypes.size() > 1) {
-			resultTable = props.getTable();
+		if (cellTypes.size() == 1) {
+			final DataTableSpec alteredTableSpec = GeoValueMetaData.replaceDataType(cont.getTableSpec(),
+					cellTypes.iterator().next(), 1);
+			resultTable = exec.createSpecReplacerTable(cont.getTable(), alteredTableSpec);
 		} else {
-			final DataTableSpecCreator specCreator = new DataTableSpecCreator(resultSpec);
-			specCreator.replaceColumn(1,
-					new DataColumnSpecCreator(GEO_COL_NAME, cellTypes.iterator().next()).createSpec());
-			resultTable = exec.createSpecReplacerTable(props.getTable(), specCreator.createSpec());
+			resultTable = cont.getTable();
 		}
 		return new PortObject[] { resultTable };
 	}

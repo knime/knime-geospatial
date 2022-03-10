@@ -16,4 +16,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Export-Package: org.knime.geospatial.core.data,
  org.knime.geospatial.core.data.cell,
+ org.knime.geospatial.core.data.metadata,
  org.knime.geospatial.core.data.reference
