@@ -56,7 +56,7 @@ import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
  * @param <G> the concrete implementation of the {@link AbstractGeoCell} class
  */
 @FunctionalInterface
-public interface CellFactory<G extends AbstractGeoCell> {
+interface InternalGeoCellFactory<G extends AbstractGeoCell> {
 	/**
 	 * Returns the concrete {@link AbstractGeoCell} implementation for the given
 	 * Well Known Binary (wkb).

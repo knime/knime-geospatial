@@ -75,9 +75,9 @@ import org.knime.geospatial.core.data.reference.GeoReferenceSystemFactory;
 public class AbstractGeoValueFactory<G extends AbstractGeoCell>
 implements ValueFactory<StructReadAccess, StructWriteAccess> {
 
-	private final CellFactory<G> m_factory;
+	private final InternalGeoCellFactory<G> m_factory;
 
-	protected AbstractGeoValueFactory(final CellFactory<G> factory) {
+	protected AbstractGeoValueFactory(final InternalGeoCellFactory<G> factory) {
 		m_factory = factory;
 	}
 
@@ -115,6 +115,7 @@ implements ValueFactory<StructReadAccess, StructWriteAccess> {
 	 */
 	public static class GeoReadValue<G extends AbstractGeoCell> implements ReadValue, GeoValue {
 		private static final ObjectDeserializer<byte[]> DESERIALIZER = in -> {
+			//TODO: Optimize (see AP-17643)
 			try (final ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
 				final byte[] cache = new byte[1024];
 				int n;
@@ -132,9 +133,9 @@ implements ValueFactory<StructReadAccess, StructWriteAccess> {
 
 		private final StringReadAccess m_refSystem;
 
-		private final CellFactory<G> m_factory;
+		private final InternalGeoCellFactory<G> m_factory;
 
-		GeoReadValue(final CellFactory<G> factory, final StructReadAccess structAccess) {
+		GeoReadValue(final InternalGeoCellFactory<G> factory, final StructReadAccess structAccess) {
 			m_factory = factory;
 			m_wkb = structAccess.getAccess(0);
 			m_refSystem = structAccess.getAccess(1);

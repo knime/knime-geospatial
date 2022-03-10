@@ -62,9 +62,9 @@ import org.knime.geospatial.core.data.reference.GeoReferenceSystemFactory;
  */
 public abstract class AbstractGeoCellSerializer<G extends AbstractGeoCell> implements DataCellSerializer<G> {
 
-	private final CellFactory<G> m_factory;
+	private final InternalGeoCellFactory<G> m_factory;
 
-	protected AbstractGeoCellSerializer(final CellFactory<G> factory) {
+	protected AbstractGeoCellSerializer(final InternalGeoCellFactory<G> factory) {
 		m_factory = factory;
 	}
 
