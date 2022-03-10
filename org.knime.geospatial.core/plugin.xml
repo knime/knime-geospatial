@@ -1,117 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension
-         point="org.knime.core.DataType">
-      <DataType
-            cellClass="org.knime.geospatial.core.data.cell.GeoCell">
+   <extension point="org.knime.core.DataType">
+<!-- Data Types including data cell serializer and value factories -->
+      <DataType cellClass="org.knime.geospatial.core.data.cell.GeoCell">
          <serializer
                cellClass="org.knime.geospatial.core.data.cell.GeoCell"
                serializerClass="org.knime.geospatial.core.data.cell.GeoCell$CellSerializer">
          </serializer>
-         <!--
          <ValueFactory
                deprecated="false"
                valueFactoryClass="org.knime.geospatial.core.data.cell.GeoCell$ValueFactory">
-         </ValueFactory> 
-         -->
+         </ValueFactory>      
       </DataType>
-      <DataType
-            cellClass="org.knime.geospatial.core.data.cell.GeoLineCell">
+      
+      <DataType cellClass="org.knime.geospatial.core.data.cell.GeoLineCell">
          <serializer
                cellClass="org.knime.geospatial.core.data.cell.GeoLineCell"
                serializerClass="org.knime.geospatial.core.data.cell.GeoLineCell$CellSerializer">
          </serializer>
-         <!--
          <ValueFactory
                deprecated="false"
                valueFactoryClass="org.knime.geospatial.core.data.cell.GeoLineCell$ValueFactory">
-         </ValueFactory> 
-         -->
+         </ValueFactory>
       </DataType>
-      <DataType
-            cellClass="org.knime.geospatial.core.data.cell.GeoPointCell">
+      
+      <DataType cellClass="org.knime.geospatial.core.data.cell.GeoPointCell">
          <serializer
                cellClass="org.knime.geospatial.core.data.cell.GeoPointCell"
                serializerClass="org.knime.geospatial.core.data.cell.GeoPointCell$CellSerializer">
          </serializer>
-         <!--         
          <ValueFactory
                deprecated="false"
                valueFactoryClass="org.knime.geospatial.core.data.cell.GeoPointCell$ValueFactory">
-         </ValueFactory> 
-         -->
+         </ValueFactory>
       </DataType>
-      <DataType
-            cellClass="org.knime.geospatial.core.data.cell.GeoPolygonCell">
+      
+      <DataType cellClass="org.knime.geospatial.core.data.cell.GeoPolygonCell">
          <serializer
                cellClass="org.knime.geospatial.core.data.cell.GeoPolygonCell"
                serializerClass="org.knime.geospatial.core.data.cell.GeoPolygonCell$CellSerializer">
          </serializer>
-         <!--
          <ValueFactory
                deprecated="false"
                valueFactoryClass="org.knime.geospatial.core.data.cell.GeoPolygonCell$ValueFactory">
-         </ValueFactory> 
-         -->
+         </ValueFactory>
       </DataType>
-      <DataType
-            cellClass="org.knime.geospatial.core.data.cell.GeoCollectionCell">
+      
+      <DataType cellClass="org.knime.geospatial.core.data.cell.GeoCollectionCell">
          <serializer
                cellClass="org.knime.geospatial.core.data.cell.GeoCollectionCell"
                serializerClass="org.knime.geospatial.core.data.cell.GeoCollectionCell$CellSerializer">
          </serializer>
-         <!--
          <ValueFactory
                deprecated="false"
                valueFactoryClass="org.knime.geospatial.core.data.cell.GeoCollectionCell$ValueFactory">
-         </ValueFactory> 
-         -->
+         </ValueFactory>
       </DataType>
-      <DataType
-            cellClass="org.knime.geospatial.core.data.cell.GeoMultiLineCell">
+      
+      <DataType cellClass="org.knime.geospatial.core.data.cell.GeoMultiLineCell">
          <serializer
                cellClass="org.knime.geospatial.core.data.cell.GeoMultiLineCell"
                serializerClass="org.knime.geospatial.core.data.cell.GeoMultiLineCell$CellSerializer">
          </serializer>
-         <!--
          <ValueFactory
                deprecated="false"
                valueFactoryClass="org.knime.geospatial.core.data.cell.GeoMultiLineCell$ValueFactory">
-         </ValueFactory> 
-         -->
+         </ValueFactory>
       </DataType>
-      <DataType
-            cellClass="org.knime.geospatial.core.data.cell.GeoMultiPointCell">
+      
+      <DataType cellClass="org.knime.geospatial.core.data.cell.GeoMultiPointCell">
          <serializer
                cellClass="org.knime.geospatial.core.data.cell.GeoMultiPointCell"
                serializerClass="org.knime.geospatial.core.data.cell.GeoMultiPointCell$CellSerializer">
          </serializer>
-         <!--
          <ValueFactory
                deprecated="false"
                valueFactoryClass="org.knime.geospatial.core.data.cell.GeoMultiPointCell$ValueFactory">
-         </ValueFactory> 
-         -->
+         </ValueFactory>
       </DataType>
-      <DataType
-            cellClass="org.knime.geospatial.core.data.cell.GeoMultiPolygonCell">
+      
+      <DataType cellClass="org.knime.geospatial.core.data.cell.GeoMultiPolygonCell">
          <serializer
                cellClass="org.knime.geospatial.core.data.cell.GeoMultiPolygonCell"
                serializerClass="org.knime.geospatial.core.data.cell.GeoMultiPolygonCell$CellSerializer">
          </serializer>
-         <!--
          <ValueFactory
                deprecated="false"
                valueFactoryClass="org.knime.geospatial.core.data.cell.GeoMultiPolygonCell$ValueFactory">
          </ValueFactory> 
-         -->
+         
       </DataType>
    </extension>
-   <extension
-         point="org.knime.core.DataValueRenderer">
-      <dataValue
-            valueClass="org.knime.geospatial.core.data.GeoValue">
+   
+<!-- Data Cell Renderer-->
+   <extension point="org.knime.core.DataValueRenderer">
+      <dataValue valueClass="org.knime.geospatial.core.data.GeoValue">
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueWKTRenderer$Factory"
                suggestAsDefault="true">
@@ -121,8 +105,8 @@
                suggestAsDefault="false">
          </renderer>
       </dataValue>
-      <dataValue
-            valueClass="org.knime.geospatial.core.data.GeoLineValue">
+      
+      <dataValue valueClass="org.knime.geospatial.core.data.GeoLineValue">
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueWKTRenderer$Factory"
                suggestAsDefault="true">
@@ -132,8 +116,8 @@
                suggestAsDefault="false">
          </renderer>
       </dataValue>
-      <dataValue
-            valueClass="org.knime.geospatial.core.data.GeoPointValue">
+      
+      <dataValue valueClass="org.knime.geospatial.core.data.GeoPointValue">
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueWKTRenderer$Factory"
                suggestAsDefault="true">
@@ -143,8 +127,8 @@
                suggestAsDefault="false">
          </renderer>
       </dataValue>
-      <dataValue
-            valueClass="org.knime.geospatial.core.data.GeoPolygonValue">
+      
+      <dataValue valueClass="org.knime.geospatial.core.data.GeoPolygonValue">
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueWKTRenderer$Factory"
                suggestAsDefault="true">
@@ -154,8 +138,8 @@
                suggestAsDefault="false">
          </renderer>
       </dataValue>
-      <dataValue
-            valueClass="org.knime.geospatial.core.data.GeoCollectionValue">
+      
+      <dataValue valueClass="org.knime.geospatial.core.data.GeoCollectionValue">
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueWKTRenderer$Factory"
                suggestAsDefault="true">
@@ -165,8 +149,8 @@
                suggestAsDefault="false">
          </renderer>
       </dataValue>
-      <dataValue
-            valueClass="org.knime.geospatial.core.data.GeoMultiLineValue">
+      
+      <dataValue valueClass="org.knime.geospatial.core.data.GeoMultiLineValue">
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueWKTRenderer$Factory"
                suggestAsDefault="true">
@@ -176,8 +160,8 @@
                suggestAsDefault="false">
          </renderer>
       </dataValue>
-      <dataValue
-            valueClass="org.knime.geospatial.core.data.GeoMultiPointValue">
+      
+      <dataValue valueClass="org.knime.geospatial.core.data.GeoMultiPointValue">
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueWKTRenderer$Factory"
                suggestAsDefault="true">
@@ -187,8 +171,8 @@
                suggestAsDefault="false">
          </renderer>
       </dataValue>
-      <dataValue
-            valueClass="org.knime.geospatial.core.data.GeoMultiPolygonValue">
+      
+      <dataValue valueClass="org.knime.geospatial.core.data.GeoMultiPolygonValue">
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueWKTRenderer$Factory"
                suggestAsDefault="true">
@@ -200,10 +184,11 @@
       </dataValue>
    </extension>
    
-   <extension
-         point="org.knime.core.DataColumnMetaDataType">
+<!-- Column Meta Data -->   
+   <extension point="org.knime.core.DataColumnMetaDataType">
       <DataColumnMetaData
             dataColumnMetaDataExtension="org.knime.geospatial.core.data.metadata.GeoValueMetaDataExtension">
       </DataColumnMetaData>
    </extension>
+   
 </plugin>
