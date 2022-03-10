@@ -101,14 +101,22 @@ public final class GeoValueMetaData implements DataColumnMetaData {
 	}
 
 	/**
-	 * Creates a {@link GeoValueMetaData} instance.
+	 * Replaces the {@link DataType} of the column with the given index in the given
+	 * {@link DataTableSpec}
 	 *
-	 * @param refSystem coordinate reference system
-	 *
+	 * @param resultSpec the {@link DataTableSpec} to alter
+	 * @param cellType   the new {@link DataType} to use for the cell
+	 * @param colIdx     the index of the column to replace
+	 * @return the altered {@link DataTableSpec}
 	 */
-	public GeoValueMetaData(final GeoReferenceSystem refSystem) {
-		m_refSystem = new HashSet<>();
-		m_refSystem.add(refSystem);
+	public static DataTableSpec replaceDataType(final DataTableSpec resultSpec, final DataType cellType,
+			final int colIdx) {
+		final DataColumnSpec origSpec = resultSpec.getColumnSpec(colIdx);
+		final DataTableSpecCreator specCreator = new DataTableSpecCreator(resultSpec);
+		final DataColumnSpecCreator newSpecCreator = new DataColumnSpecCreator(origSpec);
+		newSpecCreator.setType(cellType);
+		specCreator.replaceColumn(colIdx, newSpecCreator.createSpec());
+		return specCreator.createSpec();
 	}
 
 	/**
@@ -116,7 +124,7 @@ public final class GeoValueMetaData implements DataColumnMetaData {
 	 *
 	 * @param refCoords the set of reference coordinate systems
 	 */
-	public GeoValueMetaData(final Set<GeoReferenceSystem> refCoords) {
+	GeoValueMetaData(final Set<GeoReferenceSystem> refCoords) {
 		m_refSystem = new HashSet<>(refCoords);
 	}
 
@@ -145,25 +153,6 @@ public final class GeoValueMetaData implements DataColumnMetaData {
 	@Override
 	public int hashCode() {
 		return m_refSystem.hashCode();
-	}
-
-	/**
-	 * Replaces the {@link DataType} of the column with the given index in the given
-	 * {@link DataTableSpec}
-	 *
-	 * @param resultSpec the {@link DataTableSpec} to alter
-	 * @param cellType   the new {@link DataType} to use for the cell
-	 * @param colIdx     the index of the column to replace
-	 * @return the altered {@link DataTableSpec}
-	 */
-	public static DataTableSpec replaceDataType(final DataTableSpec resultSpec, final DataType cellType,
-			final int colIdx) {
-		final DataColumnSpec origSpec = resultSpec.getColumnSpec(colIdx);
-		final DataTableSpecCreator specCreator = new DataTableSpecCreator(resultSpec);
-		final DataColumnSpecCreator newSpecCreator = new DataColumnSpecCreator(origSpec);
-		newSpecCreator.setType(cellType);
-		specCreator.replaceColumn(colIdx, newSpecCreator.createSpec());
-		return specCreator.createSpec();
 	}
 
 	/**
