@@ -103,7 +103,7 @@ public abstract class AbstractGeoCell extends DataCell implements GeoValue, Stri
 
 	@Override
 	protected boolean equalsDataCell(final DataCell dc) {
-		final GeoCell other = (GeoCell) dc;
+		final AbstractGeoCell other = (AbstractGeoCell) dc;
 		return Objects.equals(m_refSystem, other.m_refSystem) && Arrays.equals(m_wkb, other.m_wkb);
 	}
 
