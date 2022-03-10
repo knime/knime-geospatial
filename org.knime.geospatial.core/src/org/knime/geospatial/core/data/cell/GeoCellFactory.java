@@ -49,7 +49,6 @@ import java.io.IOException;
 
 import org.knime.core.node.NodeLogger;
 import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
-import org.knime.geospatial.core.data.reference.GeoReferenceSystemFactory;
 
 import mil.nga.sf.Geometry;
 import mil.nga.sf.GeometryType;
@@ -77,10 +76,8 @@ public class GeoCellFactory {
 	 * Creates the concrete {@link AbstractGeoCell} instance for the given geometric
 	 * object.
 	 *
-	 * @param wktVal       Well Known Text representation of the geometric object
-	 *                     (WKT)
-	 * @param refSystemVal the Well Known Text text representation of the coordinate
-	 *                     reference system (WKT-CRS)
+	 * @param wktVal    Well Known Text representation of the geometric object (WKT)
+	 * @param refSystem the {@link GeoReferenceSystem}
 	 * @return the
 	 * @throws IOException if the wktVal or the refSystemVal are no valid WKT
 	 * @see <a href=
@@ -89,11 +86,10 @@ public class GeoCellFactory {
 	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_coordinate_reference_systems">WKT_CRS</a>
 	 */
 	@SuppressWarnings("unchecked")
-	public static <C extends AbstractGeoCell> C create(final String wktVal, final String refSystemVal)
+	public static <C extends AbstractGeoCell> C create(final String wktVal, final GeoReferenceSystem refSystem)
 			throws IOException {
 		final Geometry geo = GeoConverter.wkt2Geo(wktVal);
 		final GeometryType geometryType = geo.getGeometryType();
-		final GeoReferenceSystem refSystem = GeoReferenceSystemFactory.create(refSystemVal);
 		final byte[] wkb = GeoConverter.geo2wkb(geo);
 
 		return (C) create(geometryType, wkb, refSystem);
