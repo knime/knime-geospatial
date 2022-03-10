@@ -47,6 +47,8 @@ import org.knime.filehandling.core.node.portobject.reader.PortObjectReaderNodeCo
 import org.knime.geospatial.core.data.cell.GeoCell;
 import org.knime.geospatial.core.data.cell.GeoCellFactory;
 import org.knime.geospatial.core.data.metadata.GeoValueMetaData;
+import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
+import org.knime.geospatial.core.data.reference.GeoReferenceSystemFactory;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.WKTWriter;
 import org.opengis.feature.Feature;
@@ -78,7 +80,7 @@ final class ShapefileReaderNodeModel extends PortObjectFromPathReaderNodeModel<P
 				.getDataStore(Collections.singletonMap("url", URLs.fileToUrl(inputPath.toFile())));
 		final String inputTypeName = inputDataStore.getTypeNames()[0];
 
-		final CoordinateReferenceSystem crs = getCRS(inputPath);
+		final GeoReferenceSystem refSystem = getRefSystem(inputPath);
 		final SimpleFeatureType inputType = inputDataStore.getSchema(inputTypeName);
 		final FeatureSource<SimpleFeatureType, SimpleFeature> source = inputDataStore.getFeatureSource(inputTypeName);
 		final FeatureCollection<SimpleFeatureType, SimpleFeature> inputFeatureCollection = source.getFeatures();
@@ -157,7 +159,7 @@ final class ShapefileReaderNodeModel extends PortObjectFromPathReaderNodeModel<P
 
 				final WKTWriter writer = new WKTWriter();
 				final String wkt = writer.write(the_geom);
-				final DataCell geoCell = GeoCellFactory.create(wkt, crs.toWKT());
+				final DataCell geoCell = GeoCellFactory.create(wkt, refSystem);
 				cellTypes.add(geoCell.getType());
 				cells[1] = geoCell;
 
@@ -186,7 +188,7 @@ final class ShapefileReaderNodeModel extends PortObjectFromPathReaderNodeModel<P
 		return new PortObject[] { resultTable };
 	}
 
-	private static CoordinateReferenceSystem getCRS(final Path inputPath)
+	private static GeoReferenceSystem getRefSystem(final Path inputPath)
 			throws IOException, FileNotFoundException, FactoryException {
 		final String pathString = inputPath.toString();
 		final String prjFileString = FilenameUtils.removeExtension(pathString) + PROJECTION_FILE_EXTENSION;
@@ -204,7 +206,7 @@ final class ShapefileReaderNodeModel extends PortObjectFromPathReaderNodeModel<P
 			crs = DefaultEngineeringCRS.GENERIC_2D;
 
 		}
-		return crs;
+		return GeoReferenceSystemFactory.create(crs.toWKT());
 	}
 
 }

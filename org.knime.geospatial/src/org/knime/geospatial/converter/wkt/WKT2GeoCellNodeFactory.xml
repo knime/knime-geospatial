@@ -6,20 +6,34 @@
 	<name>WKT To Geo Data Cell</name>
 
 	<shortDescription>
-        
+		Converts a string column with a valid Well-known text (WKT) string into the corresponding geospatial cell.        
     </shortDescription>
 
 	<fullDescription>
 		<intro>
-
+		Converts a string column with a valid 
+		<a href="https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry">Well-known text (WKT)</a> 
+		string into the corresponding geospatial cell.
 		</intro>
-		
+		<tab name="Options">
+			<option name="WKT column">
+				String column with a valid 
+				<a href="https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry">Well-known text (WKT)</a> 
+				string that should be converted into a geospatial cell.
+			</option>
+			<option name="Coordinate reference system">
+				The coordinate reference system to use in <a href="
+				https://en.wikipedia.org/wiki/Well-known_text_representation_of_coordinate_reference_systems">WKT-CRS format</a>.
+			</option>
+		</tab>
 	</fullDescription>
 
 	<ports>
-		<inPort index="0" name="Table with WKT string column"> 
+		<inPort index="0" name="Table with WKT string column">
+			Table with WKT string column
 		</inPort>
-		<outPort index="0" name="Table with Geo data type"> 
+		<outPort index="0" name="Table with Geo data type">
+			Table with Geo data type 
 		</outPort>
 	</ports>
 </knimeNode>
