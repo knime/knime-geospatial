@@ -50,6 +50,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.knime.core.data.DataColumnSpec;
+import org.knime.core.data.DataColumnSpecCreator;
+import org.knime.core.data.DataTableSpec;
+import org.knime.core.data.DataTableSpecCreator;
 import org.knime.core.data.DataType;
 import org.knime.core.data.meta.DataColumnMetaData;
 import org.knime.core.data.meta.DataColumnMetaDataSerializer;
@@ -142,6 +145,25 @@ public final class GeoValueMetaData implements DataColumnMetaData {
 	@Override
 	public int hashCode() {
 		return m_refSystem.hashCode();
+	}
+
+	/**
+	 * Replaces the {@link DataType} of the column with the given index in the given
+	 * {@link DataTableSpec}
+	 *
+	 * @param resultSpec the {@link DataTableSpec} to alter
+	 * @param cellType   the new {@link DataType} to use for the cell
+	 * @param colIdx     the index of the column to replace
+	 * @return the altered {@link DataTableSpec}
+	 */
+	public static DataTableSpec replaceDataType(final DataTableSpec resultSpec, final DataType cellType,
+			final int colIdx) {
+		final DataColumnSpec origSpec = resultSpec.getColumnSpec(colIdx);
+		final DataTableSpecCreator specCreator = new DataTableSpecCreator(resultSpec);
+		final DataColumnSpecCreator newSpecCreator = new DataColumnSpecCreator(origSpec);
+		newSpecCreator.setType(cellType);
+		specCreator.replaceColumn(colIdx, newSpecCreator.createSpec());
+		return specCreator.createSpec();
 	}
 
 	/**
