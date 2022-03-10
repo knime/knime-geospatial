@@ -45,6 +45,7 @@
 
 package org.knime.geospatial.core.data.cell;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import org.knime.core.data.DataCell;
@@ -59,6 +60,8 @@ import org.knime.core.table.access.VarBinaryAccess.VarBinaryReadAccess;
 import org.knime.core.table.access.VarBinaryAccess.VarBinaryWriteAccess;
 import org.knime.core.table.schema.DataSpec;
 import org.knime.core.table.schema.StructDataSpec;
+import org.knime.core.table.schema.VarBinaryDataSpec.ObjectDeserializer;
+import org.knime.core.table.schema.VarBinaryDataSpec.ObjectSerializer;
 import org.knime.geospatial.core.data.GeoValue;
 import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
 import org.knime.geospatial.core.data.reference.GeoReferenceSystemFactory;
@@ -95,14 +98,14 @@ implements ValueFactory<StructReadAccess, StructWriteAccess> {
 
 	// TODO: Enable dict encoding for the reference system which should be mostly
 	// the same
-	//    @Override
-	//    public DataTraits getTraits() {
-	//        return DefaultStructDataTraits.builder()//
-	//            .addInnerTraits(new DictEncodingTrait(KeyType.INT_KEY))//
-	//            .addInnerTraits(new DictEncodingTrait(KeyType.LONG_KEY))//
-	//            .addInnerTraits(new DictEncodingTrait(KeyType.LONG_KEY))//
-	//            .build();
-	//    }
+	// @Override
+	// public DataTraits getTraits() {
+	// return DefaultStructDataTraits.builder()//
+	// .addInnerTraits(new DictEncodingTrait(KeyType.INT_KEY))//
+	// .addInnerTraits(new DictEncodingTrait(KeyType.LONG_KEY))//
+	// .addInnerTraits(new DictEncodingTrait(KeyType.LONG_KEY))//
+	// .build();
+	// }
 
 	/**
 	 * {@link ReadValue} for {@link GeoValue}.
@@ -111,6 +114,19 @@ implements ValueFactory<StructReadAccess, StructWriteAccess> {
 	 * @param <G> the concrete implementation of the {@link AbstractGeoCell} class
 	 */
 	public static class GeoReadValue<G extends AbstractGeoCell> implements ReadValue, GeoValue {
+		private static final ObjectDeserializer<byte[]> DESERIALIZER = in -> {
+			try (final ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+				final byte[] cache = new byte[1024];
+				int n;
+				while ((n = in.read(cache, 0, cache.length)) != -1) {
+					buffer.write(cache, 0, n);
+					if (n < cache.length) {
+						break;
+					}
+				}
+				return buffer.toByteArray();
+			}
+		};
 
 		private final VarBinaryReadAccess m_wkb;
 
@@ -137,7 +153,7 @@ implements ValueFactory<StructReadAccess, StructWriteAccess> {
 
 		@Override
 		public byte[] getWKB() {
-			return m_wkb.getByteArray();
+			return m_wkb.getObject(DESERIALIZER);
 		}
 
 		@Override
@@ -169,7 +185,9 @@ implements ValueFactory<StructReadAccess, StructWriteAccess> {
 	 * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
 	 */
 	public static final class GeoWriteValue implements WriteValue<GeoValue> {
-
+		private static final ObjectSerializer<byte[]> SERIALIZER = (out, data) -> {
+			out.write(data);
+		};
 		private final VarBinaryWriteAccess m_wkb;
 
 		private final StringWriteAccess m_refCoord;
@@ -181,7 +199,7 @@ implements ValueFactory<StructReadAccess, StructWriteAccess> {
 
 		@Override
 		public void setValue(final GeoValue value) {
-			m_wkb.setByteArray(value.getWKB());
+			m_wkb.setObject(value.getWKB(), SERIALIZER);
 			m_refCoord.setStringValue(value.getReferenceSystem().getWKTCRS());
 		}
 	}
