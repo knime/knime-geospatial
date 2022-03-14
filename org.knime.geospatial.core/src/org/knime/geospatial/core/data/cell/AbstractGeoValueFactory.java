@@ -62,6 +62,11 @@ import org.knime.core.table.schema.DataSpec;
 import org.knime.core.table.schema.StructDataSpec;
 import org.knime.core.table.schema.VarBinaryDataSpec.ObjectDeserializer;
 import org.knime.core.table.schema.VarBinaryDataSpec.ObjectSerializer;
+import org.knime.core.table.schema.traits.DataTrait.DictEncodingTrait;
+import org.knime.core.table.schema.traits.DataTrait.DictEncodingTrait.KeyType;
+import org.knime.core.table.schema.traits.DataTraits;
+import org.knime.core.table.schema.traits.DefaultDataTraits;
+import org.knime.core.table.schema.traits.DefaultStructDataTraits;
 import org.knime.geospatial.core.data.GeoValue;
 import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
 import org.knime.geospatial.core.data.reference.GeoReferenceSystemFactory;
@@ -96,16 +101,13 @@ implements ValueFactory<StructReadAccess, StructWriteAccess> {
 		return new StructDataSpec(DataSpec.varBinarySpec(), DataSpec.stringSpec());
 	}
 
-	// TODO: Enable dict encoding for the reference system which should be mostly
-	// the same
-	// @Override
-	// public DataTraits getTraits() {
-	// return DefaultStructDataTraits.builder()//
-	// .addInnerTraits(new DictEncodingTrait(KeyType.INT_KEY))//
-	// .addInnerTraits(new DictEncodingTrait(KeyType.LONG_KEY))//
-	// .addInnerTraits(new DictEncodingTrait(KeyType.LONG_KEY))//
-	// .build();
-	// }
+	@Override
+	public DataTraits getTraits() {
+		return DefaultStructDataTraits.builder()//
+				.addInnerTraits(DefaultDataTraits.EMPTY)//
+				.addInnerTraits(new DictEncodingTrait(KeyType.BYTE_KEY))//
+				.build();
+	}
 
 	/**
 	 * {@link ReadValue} for {@link GeoValue}.
