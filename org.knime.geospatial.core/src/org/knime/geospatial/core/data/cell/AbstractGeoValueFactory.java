@@ -105,7 +105,7 @@ implements ValueFactory<StructReadAccess, StructWriteAccess> {
 	public DataTraits getTraits() {
 		return DefaultStructDataTraits.builder()//
 				.addInnerTraits(DefaultDataTraits.EMPTY)//
-				.addInnerTraits(new DictEncodingTrait(KeyType.BYTE_KEY))//
+				.addInnerTraits(DefaultDataTraits.EMPTY) //
 				.build();
 	}
 
