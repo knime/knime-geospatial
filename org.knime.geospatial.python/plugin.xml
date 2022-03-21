@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.knime.python3.PythonValueFactory">
+      <Module
+            modulePath="src/main/python/geospatial_types.py">
+         <PythonValueFactory
+               PythonClassName="GeoValueFactory"
+               ValueFactory="org.knime.geospatial.core.data.cell.GeoCell$ValueFactory">
+         </PythonValueFactory>
+         <PythonValueFactory
+               PythonClassName="GeoValueFactory"
+               ValueFactory="org.knime.geospatial.core.data.cell.GeoPointCell$ValueFactory">
+         </PythonValueFactory>
+         <PythonValueFactory
+               PythonClassName="GeoValueFactory"
+               ValueFactory="org.knime.geospatial.core.data.cell.GeoLineCell$ValueFactory">
+         </PythonValueFactory>
+         <PythonValueFactory
+               PythonClassName="GeoValueFactory"
+               ValueFactory="org.knime.geospatial.core.data.cell.GeoPolygonCell$ValueFactory">
+         </PythonValueFactory>
+         <PythonValueFactory
+               PythonClassName="GeoValueFactory"
+               ValueFactory="org.knime.geospatial.core.data.cell.GeoMultiPointCell$ValueFactory">
+         </PythonValueFactory>
+         <PythonValueFactory
+               PythonClassName="GeoValueFactory"
+               ValueFactory="org.knime.geospatial.core.data.cell.GeoMultiLineCell$ValueFactory">
+         </PythonValueFactory>
+         <PythonValueFactory
+               PythonClassName="GeoValueFactory"
+               ValueFactory="org.knime.geospatial.core.data.cell.GeoMultiPolygonCell$ValueFactory">
+         </PythonValueFactory>
+      </Module>
+   </extension>
+
+</plugin>
