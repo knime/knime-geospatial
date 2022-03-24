@@ -49,8 +49,6 @@ PythonValueFactory implementations for geospatial KNIME types.
 @author Jonas Klotz, KNIME GmbH, Berlin, Germany
 """
 import knime_types as kt
-import geopandas
-from shapely import wkb
 
 
 class GeoValue:
@@ -66,9 +64,13 @@ class GeoValue:
 
     def to_shapely(self):
         """Return the Shapely geometry, but ignore the crs"""
+        from shapely import wkb
+
         return wkb.loads(self.wkb)
 
     def __str__(self):
+        from shapely import wkb
+
         return f"GeoValue(wkb={wkb.loads(self.wkb)}, crs={self.crs})"
 
 
@@ -85,3 +87,106 @@ class GeoValueFactory(kt.PythonValueFactory):
         if value is None:
             return None
         return {"0": value.wkb, "1": value.crs}
+
+
+def _knime_value_factory(name):
+    return '{"value_factory_class":"' + name + '"}'
+
+
+_geo_logical_types = [
+    _knime_value_factory("org.knime.geospatial.core.GeoCellValueFactory"),
+    _knime_value_factory(
+        "org.knime.geospatial.core.data.cell.GeoPointCell$ValueFactory"
+    ),
+    _knime_value_factory(
+        "org.knime.geospatial.core.data.cell.GeoLineCell$ValueFactory"
+    ),
+    _knime_value_factory(
+        "org.knime.geospatial.core.data.cell.GeoPolygonCell$ValueFactory"
+    ),
+    _knime_value_factory(
+        "org.knime.geospatial.core.data.cell.GeoMultiPointCell$ValueFactory"
+    ),
+    _knime_value_factory(
+        "org.knime.geospatial.core.data.cell.GeoMultiLineCell$ValueFactory"
+    ),
+    _knime_value_factory(
+        "org.knime.geospatial.core.data.cell.GeoMultiPolygonCell$ValueFactory"
+    ),
+]
+
+
+class FromGeoPandasColumnConverter(kt.FromPandasColumnConverter):
+    def can_convert(self, dtype) -> bool:
+        return hasattr(dtype, "name") and dtype.name == "geometry"
+
+    def convert_column(self, column: "pandas.Series") -> "pandas.Series":
+        import pandas as pd
+        import geopandas
+        import geospatial_types as gt
+        import pyarrow as pa
+        import knime_arrow_pandas as kap
+
+        geo_column = geopandas.GeoSeries(column)
+
+        crs = None if geo_column is None else str(geo_column.crs)
+        wkbs = geo_column.to_wkb()
+
+        # extract the most specific type from the data and decide which value factory to use
+        most_specific_value_factory = (
+            "org.knime.geospatial.core.data.cell.GeoCellValueFactory"
+        )
+        geom_types = set(geo_column.geom_type)
+        if len(geom_types) == 1:
+            geom_type = geom_types.pop()
+            geom_to_value_factory = {
+                "Point": "org.knime.geospatial.core.data.cell.GeoPointCell$ValueFactory",
+                "Line": "org.knime.geospatial.core.data.cell.GeoLineCell$ValueFactory",
+                "Polygon": "org.knime.geospatial.core.data.cell.GeoPolygonCell$ValueFactory",
+                "MultiPoint": "org.knime.geospatial.core.data.cell.GeoMultiPointCell$ValueFactory",
+                "MultiLine": "org.knime.geospatial.core.data.cell.GeoMultiLineCell$ValueFactory",
+                "MultiPolygon": "org.knime.geospatial.core.data.cell.GeoMultiPolygonCell$ValueFactory",
+                # There are more types in shapely like LineString, LinearRing, GeometryCollection, MultiLineString etc.
+                # If we want to support these, we need corresponding ValueFactories on the Java side.
+            }
+            most_specific_value_factory = geom_to_value_factory[geom_type]
+
+        # how do we get the data into pandas/pyarrow from wkb???
+        dtype = kap.PandasLogicalTypeExtensionType(
+            storage_type=pa.struct([("0", pa.large_binary()), ("1", pa.string())]),
+            logical_type=_knime_value_factory(most_specific_value_factory),
+            converter=gt.GeoValueFactory(),
+        )
+
+        return pd.Series(
+            [gt.GeoValue(w, crs) for w in wkbs], dtype=dtype, index=column.index
+        )
+
+
+class ToGeoPandasColumnConverter(kt.ToPandasColumnConverter):
+    def can_convert(self, dtype):
+        import knime_arrow_types as kat
+
+        return (
+            isinstance(dtype, kat.LogicalTypeExtensionType)
+            and dtype.logical_type in _geo_logical_types
+        )
+
+    def convert_column(self, column):
+        import geopandas
+
+        # TODO: handle missing values
+        crss = set([value.crs for value in column if value is not None])
+        if len(crss) != 1:
+            raise ValueError(
+                f"Can only work with exactly one reference frame in one column, but got {crss}"
+            )
+        crs = crss.pop()
+
+        return geopandas.GeoSeries.from_wkb(
+            [value.wkb if value is not None else None for value in column], crs=crs,
+        )
+
+
+kt._from_pandas_column_converters.append(FromGeoPandasColumnConverter())
+kt._to_pandas_column_converters.append(ToGeoPandasColumnConverter())
