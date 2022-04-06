@@ -115,6 +115,17 @@ _geo_logical_types = [
     ),
 ]
 
+_shapely_type_to_value_factory = {
+    "Point": "org.knime.geospatial.core.data.cell.GeoPointCell$ValueFactory",
+    "LineString": "org.knime.geospatial.core.data.cell.GeoLineCell$ValueFactory",
+    "Polygon": "org.knime.geospatial.core.data.cell.GeoPolygonCell$ValueFactory",
+    "MultiPoint": "org.knime.geospatial.core.data.cell.GeoMultiPointCell$ValueFactory",
+    "MultiLineString": "org.knime.geospatial.core.data.cell.GeoMultiLineCell$ValueFactory",
+    "MultiPolygon": "org.knime.geospatial.core.data.cell.GeoMultiPolygonCell$ValueFactory",
+    # There are more types in shapely like LinearRing, GeometryCollection, etc.
+    # If we want to support these, we need corresponding ValueFactories on the Java side.
+}
+
 
 @kt.register_from_pandas_column_converter
 class FromGeoPandasColumnConverter(kt.FromPandasColumnConverter):
@@ -140,17 +151,8 @@ class FromGeoPandasColumnConverter(kt.FromPandasColumnConverter):
         geom_types = set(geo_column.geom_type)
         if len(geom_types) == 1:
             geom_type = geom_types.pop()
-            geom_to_value_factory = {
-                "Point": "org.knime.geospatial.core.data.cell.GeoPointCell$ValueFactory",
-                "Line": "org.knime.geospatial.core.data.cell.GeoLineCell$ValueFactory",
-                "Polygon": "org.knime.geospatial.core.data.cell.GeoPolygonCell$ValueFactory",
-                "MultiPoint": "org.knime.geospatial.core.data.cell.GeoMultiPointCell$ValueFactory",
-                "MultiLine": "org.knime.geospatial.core.data.cell.GeoMultiLineCell$ValueFactory",
-                "MultiPolygon": "org.knime.geospatial.core.data.cell.GeoMultiPolygonCell$ValueFactory",
-                # There are more types in shapely like LineString, LinearRing, GeometryCollection, MultiLineString etc.
-                # If we want to support these, we need corresponding ValueFactories on the Java side.
-            }
-            most_specific_value_factory = geom_to_value_factory[geom_type]
+
+            most_specific_value_factory = _shapely_type_to_value_factory[geom_type]
 
         # how do we get the data into pandas/pyarrow from wkb???
         dtype = kap.PandasLogicalTypeExtensionType(
