@@ -116,6 +116,7 @@ _geo_logical_types = [
 ]
 
 
+@kt.register_from_pandas_column_converter
 class FromGeoPandasColumnConverter(kt.FromPandasColumnConverter):
     def can_convert(self, dtype) -> bool:
         return hasattr(dtype, "name") and dtype.name == "geometry"
@@ -163,6 +164,7 @@ class FromGeoPandasColumnConverter(kt.FromPandasColumnConverter):
         )
 
 
+@kt.register_to_pandas_column_converter
 class ToGeoPandasColumnConverter(kt.ToPandasColumnConverter):
     def can_convert(self, dtype):
         import knime_arrow_types as kat
@@ -186,7 +188,3 @@ class ToGeoPandasColumnConverter(kt.ToPandasColumnConverter):
         return geopandas.GeoSeries.from_wkb(
             [value.wkb if value is not None else None for value in column], crs=crs,
         )
-
-
-kt._from_pandas_column_converters.append(FromGeoPandasColumnConverter())
-kt._to_pandas_column_converters.append(ToGeoPandasColumnConverter())
