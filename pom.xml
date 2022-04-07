@@ -28,6 +28,7 @@
         <module>org.knime.geospatial.core</module>
 <!-- <module>org.knime.geospatial/lib/fetch_jars</module> -->
 		<module>org.knime.geospatial</module>
+		<module>org.knime.geospatial.python</module>
 		<module>org.knime.features.geospatial</module>
 		<module>org.knime.update.geospatial</module>
 	</modules>
@@ -77,6 +78,16 @@
 			<id>p2-knime-javasnippet</id>
 			<layout>p2</layout>
 			<url>${knime.javasnippet.p2}</url>
+		</repository>
+		<repository>
+		<id>p2-knime-python</id>
+			<layout>p2</layout>
+			<url>${knime.python.p2}</url>
+		</repository>
+		<repository>
+			<id>p2-knime-conda</id>
+			<layout>p2</layout>
+			<url>${knime.conda.p2}</url>
 		</repository>
 		<repository>
 			<id>p2-knime-shared</id>
