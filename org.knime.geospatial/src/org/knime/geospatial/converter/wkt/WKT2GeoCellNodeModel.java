@@ -147,7 +147,11 @@ final class WKT2GeoCellNodeModel extends NodeModel {
 
 		@Override
 		public DataCell getCell(final DataRow row) {
-			final String wktVal = ((StringValue) row.getCell(m_wktIndex)).getStringValue();
+			final DataCell cell = row.getCell(m_wktIndex);
+			if (cell.isMissing()) {
+				return cell;
+			}
+			final String wktVal = ((StringValue) cell).getStringValue();
 			DataCell geoCell;
 			try {
 				geoCell = GeoCellFactory.create(wktVal, m_refSystem);
