@@ -59,10 +59,13 @@ import org.eclipse.core.runtime.Platform;
 import org.knime.core.data.DataValue;
 import org.knime.core.data.DataValueComparator;
 import org.knime.core.data.ExtensibleUtilityFactory;
+import org.knime.core.node.NodeLogger;
 import org.knime.geospatial.core.data.GeoValue;
 
 /** Implementations of the meta information of this value class. */
 public class GeoUtilityFactory extends ExtensibleUtilityFactory {
+
+	private static final NodeLogger LOGGER = NodeLogger.getLogger(GeoUtilityFactory.class);
 
 	/** Singleton icon to be used to display this cell type. */
 	private static final LazyInitializer<Icon> ICON;
@@ -78,12 +81,12 @@ public class GeoUtilityFactory extends ExtensibleUtilityFactory {
 				try {
 					final URL url = FileLocator.find(Platform.getBundle("org.knime.geospatial.core"), new Path(path));
 					if (url == null) {
-						System.out.println("Icon at path " + path + " could not be found.");
+						LOGGER.debug("Icon at path " + path + " could not be found.");
 						return new ImageIcon();
 					}
 					return new ImageIcon(url);
 				} catch (final Exception e) {
-					System.out.println("Exception retrieving icon at path " + path + " :" + e.getMessage());
+					LOGGER.debug("Exception retrieving icon at path " + path, e);
 					return new ImageIcon();
 				}
 			}
