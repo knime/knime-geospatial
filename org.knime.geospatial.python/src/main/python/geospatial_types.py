@@ -146,7 +146,7 @@ class FromGeoPandasColumnConverter(kt.FromPandasColumnConverter):
 
         # extract the most specific type from the data and decide which value factory to use
         most_specific_value_factory = (
-            "org.knime.geospatial.core.data.cell.GeoCellValueFactory"
+            "org.knime.geospatial.core.data.cell.GeoCell$ValueFactory"
         )
         geom_types = set(geo_column.geom_type)
         if len(geom_types) == 1:
