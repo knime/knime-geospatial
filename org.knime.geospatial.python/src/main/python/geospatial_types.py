@@ -94,7 +94,8 @@ def _knime_value_factory(name):
 
 
 _geo_logical_types = [
-    _knime_value_factory("org.knime.geospatial.core.GeoCellValueFactory"),
+    _knime_value_factory("org.knime.geospatial.core.data.cell.GeoCell$ValueFactory"),
+
     _knime_value_factory(
         "org.knime.geospatial.core.data.cell.GeoPointCell$ValueFactory"
     ),
