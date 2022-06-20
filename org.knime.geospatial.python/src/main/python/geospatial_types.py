@@ -133,16 +133,22 @@ class FromGeoPandasColumnConverter(kt.FromPandasColumnConverter):
     def can_convert(self, dtype) -> bool:
         return hasattr(dtype, "name") and dtype.name == "geometry"
 
-    def convert_column(self, column: "pandas.Series") -> "pandas.Series":
+    def convert_column(self, data_frame: "pandas.dataframe", column_name: str) -> "pandas.Series":
         import pandas as pd
         import geopandas
         import geospatial_types as gt
         import pyarrow as pa
         import knime_arrow_pandas as kap
 
+        column = data_frame[column_name]
         geo_column = geopandas.GeoSeries(column)
 
-        crs = None if geo_column is None else str(geo_column.crs)
+        crs = None
+        if geo_column.crs: # highest crs level
+            crs = str(geo_column.crs)
+        elif data_frame.crs: # else second-highest crs level
+            crs = str(data_frame.crs)
+
         wkbs = geo_column.to_wkb()
 
         # extract the most specific type from the data and decide which value factory to use
@@ -179,7 +185,6 @@ class ToGeoPandasColumnConverter(kt.ToPandasColumnConverter):
 
     def convert_column(self, column):
         import geopandas
-
         # TODO: handle missing values
         crss = set([value.crs for value in column if value is not None])
         if len(crss) != 1:
