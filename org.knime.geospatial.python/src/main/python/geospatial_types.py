@@ -95,7 +95,6 @@ def _knime_value_factory(name):
 
 _geo_logical_types = [
     _knime_value_factory("org.knime.geospatial.core.data.cell.GeoCell$ValueFactory"),
-
     _knime_value_factory(
         "org.knime.geospatial.core.data.cell.GeoPointCell$ValueFactory"
     ),
@@ -133,7 +132,9 @@ class FromGeoPandasColumnConverter(kt.FromPandasColumnConverter):
     def can_convert(self, dtype) -> bool:
         return hasattr(dtype, "name") and dtype.name == "geometry"
 
-    def convert_column(self, data_frame: "pandas.dataframe", column_name: str) -> "pandas.Series":
+    def convert_column(
+        self, data_frame: "pandas.dataframe", column_name: str
+    ) -> "pandas.Series":
         import pandas as pd
         import geopandas
         import geospatial_types as gt
@@ -144,9 +145,9 @@ class FromGeoPandasColumnConverter(kt.FromPandasColumnConverter):
         geo_column = geopandas.GeoSeries(column)
 
         crs = None
-        if geo_column.crs: # highest crs level
+        if geo_column.crs:  # highest crs level
             crs = str(geo_column.crs)
-        elif data_frame.crs: # else second-highest crs level
+        elif data_frame.crs:  # else second-highest crs level
             crs = str(data_frame.crs)
 
         wkbs = geo_column.to_wkb()
@@ -183,8 +184,12 @@ class ToGeoPandasColumnConverter(kt.ToPandasColumnConverter):
             and dtype.logical_type in _geo_logical_types
         )
 
-    def convert_column(self, column):
+    def convert_column(
+        self, data_frame: "pandas.dataframe", column_name: str
+    ) -> "pandas.Series":
         import geopandas
+
+        column = data_frame[column_name]
         # TODO: handle missing values
         crss = set([value.crs for value in column if value is not None])
         if len(crss) != 1:
