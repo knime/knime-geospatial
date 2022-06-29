@@ -28,7 +28,7 @@ try {
             // 'knime-js-core','knime-svg', 'knime-product'
             //
             // All features (not plug-ins!) in the specified repositories will be installed.
-            repositories: ['knime-geospatial']
+            repositories: ['knime-geospatial', 'knime-python']
         ],
         // this is optional and defaults to false
         withAssertions: true,
