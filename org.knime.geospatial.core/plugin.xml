@@ -96,9 +96,13 @@
 <!-- Data Cell Renderer-->
    <extension point="org.knime.core.DataValueRenderer">
       <dataValue valueClass="org.knime.geospatial.core.data.GeoValue">
+         <renderer 
+               rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueDefaultRenderer$Factory"
+               suggestAsDefault="true">
+         </renderer>
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueWKTRenderer$Factory"
-               suggestAsDefault="true">
+               suggestAsDefault="false">
          </renderer>
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueCRSRenderer$Factory"
@@ -107,9 +111,13 @@
       </dataValue>
       
       <dataValue valueClass="org.knime.geospatial.core.data.GeoLineValue">
+         <renderer 
+               rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueDefaultRenderer$Factory"
+               suggestAsDefault="true">
+         </renderer>
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueWKTRenderer$Factory"
-               suggestAsDefault="true">
+               suggestAsDefault="false">
          </renderer>
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueCRSRenderer$Factory"
@@ -118,9 +126,13 @@
       </dataValue>
       
       <dataValue valueClass="org.knime.geospatial.core.data.GeoPointValue">
+         <renderer 
+               rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueDefaultRenderer$Factory"
+               suggestAsDefault="true">
+         </renderer>
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueWKTRenderer$Factory"
-               suggestAsDefault="true">
+               suggestAsDefault="false">
          </renderer>
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueCRSRenderer$Factory"
@@ -129,9 +141,13 @@
       </dataValue>
       
       <dataValue valueClass="org.knime.geospatial.core.data.GeoPolygonValue">
+         <renderer 
+               rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueDefaultRenderer$Factory"
+               suggestAsDefault="true">
+         </renderer>
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueWKTRenderer$Factory"
-               suggestAsDefault="true">
+               suggestAsDefault="false">
          </renderer>
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueCRSRenderer$Factory"
@@ -140,9 +156,13 @@
       </dataValue>
       
       <dataValue valueClass="org.knime.geospatial.core.data.GeoCollectionValue">
+         <renderer 
+               rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueDefaultRenderer$Factory"
+               suggestAsDefault="true">
+         </renderer>
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueWKTRenderer$Factory"
-               suggestAsDefault="true">
+               suggestAsDefault="false">
          </renderer>
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueCRSRenderer$Factory"
@@ -151,9 +171,13 @@
       </dataValue>
       
       <dataValue valueClass="org.knime.geospatial.core.data.GeoMultiLineValue">
+         <renderer 
+               rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueDefaultRenderer$Factory"
+               suggestAsDefault="true">
+         </renderer>
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueWKTRenderer$Factory"
-               suggestAsDefault="true">
+               suggestAsDefault="false">
          </renderer>
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueCRSRenderer$Factory"
@@ -162,9 +186,13 @@
       </dataValue>
       
       <dataValue valueClass="org.knime.geospatial.core.data.GeoMultiPointValue">
+         <renderer 
+               rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueDefaultRenderer$Factory"
+               suggestAsDefault="true">
+         </renderer>
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueWKTRenderer$Factory"
-               suggestAsDefault="true">
+               suggestAsDefault="false">
          </renderer>
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueCRSRenderer$Factory"
@@ -173,9 +201,13 @@
       </dataValue>
       
       <dataValue valueClass="org.knime.geospatial.core.data.GeoMultiPolygonValue">
+         <renderer 
+               rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueDefaultRenderer$Factory"
+               suggestAsDefault="true">
+         </renderer>
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueWKTRenderer$Factory"
-               suggestAsDefault="true">
+               suggestAsDefault="false">
          </renderer>
          <renderer
                rendererFactoryClass="org.knime.geospatial.core.data.util.GeoValueCRSRenderer$Factory"
