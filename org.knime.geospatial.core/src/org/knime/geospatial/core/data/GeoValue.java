@@ -66,6 +66,13 @@ public interface GeoValue extends DataValue {
 	UtilityFactory UTILITY = new GeoUtilityFactory(GeoValue.class, null);
 
 	/**
+	 * Returns the geospatial type of this cell.
+	 *
+	 * @return the geospatial type of this cell
+	 */
+	String getGeometryType();
+
+	/**
 	 * Returns a {@link String} with the Well Known Text (WKT) representation of
 	 * this geometric object.
 	 *

@@ -61,7 +61,7 @@ public final class GeoValueDefaultRenderer extends DefaultDataValueRenderer {
 	/** */
 	private static final long serialVersionUID = 1L;
 
-	private static final String DESCRIPTION = "Geo type and CRS";
+	private static final String DESCRIPTION = "WKT type and CRS";
 
 	private GeoValueDefaultRenderer(final DataColumnSpec colSpec) {
 		super(colSpec);
@@ -78,9 +78,8 @@ public final class GeoValueDefaultRenderer extends DefaultDataValueRenderer {
 	@Override
 	protected void setValue(final Object value) {
 		if (value instanceof GeoValue) {
-			final String className = value.getClass().getSimpleName();
-			final String geoName = className.substring(3, className.length() - 4);
-			super.setValue("Type: " + geoName + " CRS: " + ((GeoValue) value).getReferenceSystem().getWKTCRS());
+			final GeoValue geoVal = (GeoValue) value;
+			super.setValue(geoVal.getGeometryType() + " - " + geoVal.getReferenceSystem().getWKTCRS());
 		} else {
 			super.setValue(value);
 		}

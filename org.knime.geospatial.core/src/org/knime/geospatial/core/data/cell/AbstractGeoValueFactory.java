@@ -62,8 +62,6 @@ import org.knime.core.table.schema.DataSpec;
 import org.knime.core.table.schema.StructDataSpec;
 import org.knime.core.table.schema.VarBinaryDataSpec.ObjectDeserializer;
 import org.knime.core.table.schema.VarBinaryDataSpec.ObjectSerializer;
-import org.knime.core.table.schema.traits.DataTrait.DictEncodingTrait;
-import org.knime.core.table.schema.traits.DataTrait.DictEncodingTrait.KeyType;
 import org.knime.core.table.schema.traits.DataTraits;
 import org.knime.core.table.schema.traits.DefaultDataTraits;
 import org.knime.core.table.schema.traits.DefaultStructDataTraits;
@@ -141,6 +139,15 @@ implements ValueFactory<StructReadAccess, StructWriteAccess> {
 			m_factory = factory;
 			m_wkb = structAccess.getAccess(0);
 			m_refSystem = structAccess.getAccess(1);
+		}
+
+		@Override
+		public String getGeometryType() {
+			try {
+				return GeoConverter.wkb2GeometryType(getWKB()).getName();
+			} catch (final IOException e) {
+				throw new IllegalArgumentException("Exception converting WKB to geometry for details see log file", e);
+			}
 		}
 
 		@Override

@@ -64,7 +64,7 @@ public final class GeoValueWKTRenderer extends DefaultDataValueRenderer {
 	/** */
 	private static final long serialVersionUID = 1L;
 
-	private static final String DESCRIPTION_WKT = "Well Known Text";
+	private static final String DESCRIPTION_WKT = "Full Well Known Text";
 
 	private GeoValueWKTRenderer(final DataColumnSpec colSpec) {
 		super(colSpec);

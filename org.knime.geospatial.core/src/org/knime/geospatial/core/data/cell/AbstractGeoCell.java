@@ -72,6 +72,15 @@ public abstract class AbstractGeoCell extends DataCell implements GeoValue, Stri
 	}
 
 	@Override
+	public String getGeometryType() {
+		try {
+			return GeoConverter.wkb2GeometryType(getWKB()).getName();
+		} catch (final IOException e) {
+			throw new IllegalArgumentException("Exception converting WKB to geometry for details see log file", e);
+		}
+	}
+
+	@Override
 	public String getWKT() {
 		try {
 			return GeoConverter.wkb2wkt(getWKB());

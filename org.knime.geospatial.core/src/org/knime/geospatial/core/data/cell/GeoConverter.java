@@ -48,7 +48,9 @@ package org.knime.geospatial.core.data.cell;
 import java.io.IOException;
 
 import mil.nga.sf.Geometry;
+import mil.nga.sf.GeometryType;
 import mil.nga.sf.wkb.GeometryReader;
+import mil.nga.sf.wkb.GeometryTypeInfo;
 import mil.nga.sf.wkt.GeometryWriter;
 
 /**
@@ -88,6 +90,19 @@ final class GeoConverter {
 	public static Geometry wkb2Geo(final byte[] wkb) throws IOException {
 		final Geometry geo = mil.nga.sf.wkb.GeometryReader.readGeometry(wkb);
 		return geo;
+	}
+
+	public static GeometryType wkb2GeometryType(final byte[] wkb) throws IOException {
+		GeometryReader reader = null;
+		try {
+			reader = new GeometryReader(wkb);
+			final GeometryTypeInfo geo = reader.readGeometryType();
+			return geo.getGeometryType();
+		} finally {
+			if (reader != null) {
+				reader.close();
+			}
+		}
 	}
 
 }
