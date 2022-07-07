@@ -31,6 +31,9 @@ try {
                         'knime-filehandling',
                         'knime-core-columnar',
                         'knime-core-arrow'
+                    ],
+                    ius: [
+                        'org.knime.features.core.columnar.feature.group'
                     ]
                 ],
                 extraNodeLabel: 'python-all'
