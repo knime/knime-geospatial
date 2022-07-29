@@ -3,7 +3,9 @@
 <plugin>
    <extension point="org.knime.core.DataType">
 <!-- Data Types including data cell serializer and value factories -->
-      <DataType cellClass="org.knime.geospatial.core.data.cell.GeoCell">
+      <DataType
+            cellClass="org.knime.geospatial.core.data.cell.GeoCell"
+            factoryClass="org.knime.geospatial.core.data.cell.GeoCell$CellFactory">
          <serializer
                cellClass="org.knime.geospatial.core.data.cell.GeoCell"
                serializerClass="org.knime.geospatial.core.data.cell.GeoCell$CellSerializer">
@@ -14,7 +16,9 @@
          </ValueFactory>      
       </DataType>
       
-      <DataType cellClass="org.knime.geospatial.core.data.cell.GeoLineCell">
+      <DataType
+            cellClass="org.knime.geospatial.core.data.cell.GeoLineCell"
+            factoryClass="org.knime.geospatial.core.data.cell.GeoLineCell$CellFactory">
          <serializer
                cellClass="org.knime.geospatial.core.data.cell.GeoLineCell"
                serializerClass="org.knime.geospatial.core.data.cell.GeoLineCell$CellSerializer">
@@ -25,7 +29,9 @@
          </ValueFactory>
       </DataType>
       
-      <DataType cellClass="org.knime.geospatial.core.data.cell.GeoPointCell">
+      <DataType
+            cellClass="org.knime.geospatial.core.data.cell.GeoPointCell"
+            factoryClass="org.knime.geospatial.core.data.cell.GeoPointCell$CellFactory">
          <serializer
                cellClass="org.knime.geospatial.core.data.cell.GeoPointCell"
                serializerClass="org.knime.geospatial.core.data.cell.GeoPointCell$CellSerializer">
@@ -36,7 +42,9 @@
          </ValueFactory>
       </DataType>
       
-      <DataType cellClass="org.knime.geospatial.core.data.cell.GeoPolygonCell">
+      <DataType
+            cellClass="org.knime.geospatial.core.data.cell.GeoPolygonCell"
+            factoryClass="org.knime.geospatial.core.data.cell.GeoPolygonCell$CellFactory">
          <serializer
                cellClass="org.knime.geospatial.core.data.cell.GeoPolygonCell"
                serializerClass="org.knime.geospatial.core.data.cell.GeoPolygonCell$CellSerializer">
@@ -47,7 +55,9 @@
          </ValueFactory>
       </DataType>
       
-      <DataType cellClass="org.knime.geospatial.core.data.cell.GeoCollectionCell">
+      <DataType
+            cellClass="org.knime.geospatial.core.data.cell.GeoCollectionCell"
+            factoryClass="org.knime.geospatial.core.data.cell.GeoCollectionCell$CellFactory">
          <serializer
                cellClass="org.knime.geospatial.core.data.cell.GeoCollectionCell"
                serializerClass="org.knime.geospatial.core.data.cell.GeoCollectionCell$CellSerializer">
@@ -58,7 +68,9 @@
          </ValueFactory>
       </DataType>
       
-      <DataType cellClass="org.knime.geospatial.core.data.cell.GeoMultiLineCell">
+      <DataType
+            cellClass="org.knime.geospatial.core.data.cell.GeoMultiLineCell"
+            factoryClass="org.knime.geospatial.core.data.cell.GeoMultiLineCell$CellFactory">
          <serializer
                cellClass="org.knime.geospatial.core.data.cell.GeoMultiLineCell"
                serializerClass="org.knime.geospatial.core.data.cell.GeoMultiLineCell$CellSerializer">
@@ -69,7 +81,9 @@
          </ValueFactory>
       </DataType>
       
-      <DataType cellClass="org.knime.geospatial.core.data.cell.GeoMultiPointCell">
+      <DataType
+            cellClass="org.knime.geospatial.core.data.cell.GeoMultiPointCell"
+            factoryClass="org.knime.geospatial.core.data.cell.GeoMultiPointCell$CellFactory">
          <serializer
                cellClass="org.knime.geospatial.core.data.cell.GeoMultiPointCell"
                serializerClass="org.knime.geospatial.core.data.cell.GeoMultiPointCell$CellSerializer">
@@ -80,7 +94,9 @@
          </ValueFactory>
       </DataType>
       
-      <DataType cellClass="org.knime.geospatial.core.data.cell.GeoMultiPolygonCell">
+      <DataType
+            cellClass="org.knime.geospatial.core.data.cell.GeoMultiPolygonCell"
+            factoryClass="org.knime.geospatial.core.data.cell.GeoMultiPolygonCell$CellFactory">
          <serializer
                cellClass="org.knime.geospatial.core.data.cell.GeoMultiPolygonCell"
                serializerClass="org.knime.geospatial.core.data.cell.GeoMultiPolygonCell$CellSerializer">

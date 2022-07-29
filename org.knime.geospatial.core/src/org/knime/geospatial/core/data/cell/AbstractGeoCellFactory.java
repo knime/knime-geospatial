@@ -45,91 +45,52 @@
 
 package org.knime.geospatial.core.data.cell;
 
+import java.io.IOException;
+
 import org.knime.core.data.DataCell;
-import org.knime.core.data.DataCellSerializer;
+import org.knime.core.data.DataCellFactory;
+import org.knime.core.data.DataCellFactory.FromComplexString;
+import org.knime.core.data.DataCellFactory.FromSimpleString;
 import org.knime.core.data.DataType;
-import org.knime.core.data.convert.DataCellFactoryMethod;
-import org.knime.geospatial.core.data.GeoCollectionValue;
 import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
 
-
 /**
- * {@link DataCell} implementation that represents a geometric collection which
- * can contain any mixture of other geometric objects e.g. points, lines and
- * polygons.
+ * {@link DataCellFactory} implementation for {@link AbstractGeoCell}
+ * implementations.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
+ * @param <G> the {@link AbstractGeoCell} implementation
  */
-public class GeoCollectionCell extends AbstractGeoCell implements GeoCollectionValue {
+public class AbstractGeoCellFactory<G extends AbstractGeoCell> implements FromSimpleString, FromComplexString {
 
-	private static final long serialVersionUID = 1L;
+	private final DataType m_type;
 
-	/**
-	 * The {@link DataType} of this {@link DataCell} implementation.
-	 */
-	public static final DataType TYPE = DataType.getType(GeoCollectionCell.class);
+	private final InternalGeoCellFactory<G> m_factory;
 
-	protected GeoCollectionCell(final byte[] wkb, final GeoReferenceSystem refCoord) {
-		super(wkb, refCoord);
+	protected AbstractGeoCellFactory(final DataType type, final InternalGeoCellFactory<G> factory) {
+		m_type = type;
+		m_factory = factory;
 	}
 
-	/**
-	 * Factory for {@link GeoCollectionCell}s.
-	 *
-	 * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
-	 */
-	public static final class CellFactory extends AbstractGeoCellFactory<GeoCollectionCell> {
-
-		private static final CellFactory INSTANCE = new CellFactory();
-
-		/**
-		 * Constructor for class CellFactory.
-		 */
-		public CellFactory() {
-			super(TYPE, GeoCollectionCell::new);
+	@Override
+	public DataCell createCell(final String s) {
+		if (s == null) {
+			return DataType.getMissingCell();
 		}
-
-		/**
-		 * Creates a new GeoCell by parsing the given string as WKT.
-		 *
-		 * @param s a string
-		 * @return a new cell instance
-		 */
-		@DataCellFactoryMethod(name = "WKT (EPSG:4326)")
-		public static DataCell create(final String s) {
-			return INSTANCE.createCell(s);
+		final String trimmed = s.trim();
+		if (trimmed.isEmpty()) {
+			return DataType.getMissingCell();
+		}
+		try {
+			final byte[] wkb = GeoConverter.wkt2wkb(trimmed);
+			return m_factory.createGeoCell(wkb, GeoReferenceSystem.DEFAULT);
+		} catch (final IOException e) {
+			throw new RuntimeException(e);
 		}
 	}
-
-	/**
-	 * {@link DataCellSerializer} implementation of this {@link DataCell}
-	 * implementation.
-	 *
-	 * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
-	 */
-	public static final class CellSerializer extends AbstractGeoCellSerializer<GeoCollectionCell> {
-		/**
-		 * Constructor for class CellSerializer that is used in the extension point.
-		 */
-		public CellSerializer() {
-			super(GeoCollectionCell::new);
-		}
+	@Override
+	public DataType getDataType() {
+		return m_type;
 	}
 
-	/**
-	 * {@link AbstractGeoValueFactory} implementation of this {@link DataCell}
-	 * implementation.
-	 *
-	 * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
-	 */
-	public static class ValueFactory extends AbstractGeoValueFactory<GeoCollectionCell> {
-		/**
-		 * Constructor for class ValueFactory that is used in the extension
-		 * point.
-		 */
-		public ValueFactory() {
-			super(GeoCollectionCell::new);
-		}
-
-	}
 }

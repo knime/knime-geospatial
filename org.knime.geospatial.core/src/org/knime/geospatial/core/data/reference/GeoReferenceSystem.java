@@ -54,6 +54,13 @@ package org.knime.geospatial.core.data.reference;
 public interface GeoReferenceSystem {
 
 	/**
+	 * The default {@link GeoReferenceSystem} (EPSG:4326) that is used if no
+	 * reference system is available.
+	 *
+	 */
+	GeoReferenceSystem DEFAULT = new DefaultGeoReferenceSystem("EPSG:4326");
+
+	/**
 	 * Returns the Well Known Text representation of the coordinate reference system
 	 * (WKT-CRS).
 	 *

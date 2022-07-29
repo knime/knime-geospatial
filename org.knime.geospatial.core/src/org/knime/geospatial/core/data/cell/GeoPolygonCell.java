@@ -48,6 +48,7 @@ package org.knime.geospatial.core.data.cell;
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataCellSerializer;
 import org.knime.core.data.DataType;
+import org.knime.core.data.convert.DataCellFactoryMethod;
 import org.knime.geospatial.core.data.GeoPolygonValue;
 import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
 
@@ -67,6 +68,34 @@ public class GeoPolygonCell extends AbstractGeoCell implements GeoPolygonValue {
 
 	protected GeoPolygonCell(final byte[] wkb, final GeoReferenceSystem refCoord) {
 		super(wkb, refCoord);
+	}
+
+	/**
+	 * Factory for {@link GeoPolygonCell}s.
+	 *
+	 * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
+	 */
+	public static final class CellFactory extends AbstractGeoCellFactory<GeoPolygonCell> {
+
+		private static final CellFactory INSTANCE = new CellFactory();
+
+		/**
+		 * Constructor for class CellFactory.
+		 */
+		public CellFactory() {
+			super(TYPE, GeoPolygonCell::new);
+		}
+
+		/**
+		 * Creates a new GeoCell by parsing the given string as WKT.
+		 *
+		 * @param s a string
+		 * @return a new cell instance
+		 */
+		@DataCellFactoryMethod(name = "WKT (EPSG:4326)")
+		public static DataCell create(final String s) {
+			return INSTANCE.createCell(s);
+		}
 	}
 
 	/**
