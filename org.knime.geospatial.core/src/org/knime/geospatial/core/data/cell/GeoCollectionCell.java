@@ -117,19 +117,11 @@ public class GeoCollectionCell extends AbstractGeoCell implements GeoCollectionV
 	}
 
 	/**
-	 * {@link AbstractGeoValueFactory} implementation of this {@link DataCell}
-	 * implementation.
+	 * {@link ValueFactory} implementation of this {@link DataCell} implementation.
 	 *
 	 * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
 	 */
-	public static class ValueFactory extends AbstractGeoValueFactory<GeoCollectionCell> {
-		/**
-		 * Constructor for class ValueFactory that is used in the extension
-		 * point.
-		 */
-		public ValueFactory() {
-			super(GeoCollectionCell::new);
-		}
-
+	public static class ValueFactory extends GeoValueFactory<GeoCollectionCell> {
+		// no data cell specific implementation needed
 	}
 }

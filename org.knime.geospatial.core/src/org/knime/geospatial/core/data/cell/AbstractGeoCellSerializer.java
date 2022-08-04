@@ -47,6 +47,7 @@ package org.knime.geospatial.core.data.cell;
 
 import java.io.IOException;
 
+import org.knime.core.data.DataCell;
 import org.knime.core.data.DataCellDataInput;
 import org.knime.core.data.DataCellDataOutput;
 import org.knime.core.data.DataCellSerializer;
@@ -55,12 +56,12 @@ import org.knime.geospatial.core.data.reference.GeoReferenceSystemFactory;
 
 /**
  * {@link DataCellSerializer} implementation that is used by all the different
- * {@link AbstractGeoCell} implementations.
+ * {@link DataCell} implementations.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
- * @param <G> the concrete implementation of the {@link AbstractGeoCell} class
+ * @param <G> the concrete implementation of the {@link DataCell} class
  */
-public abstract class AbstractGeoCellSerializer<G extends AbstractGeoCell> implements DataCellSerializer<G> {
+abstract class AbstractGeoCellSerializer<G extends AbstractGeoCell> implements DataCellSerializer<G> {
 
 	private final InternalGeoCellFactory<G> m_factory;
 

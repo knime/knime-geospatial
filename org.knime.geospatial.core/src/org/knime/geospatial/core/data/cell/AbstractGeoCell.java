@@ -59,7 +59,7 @@ import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
-public abstract class AbstractGeoCell extends DataCell implements GeoValue, StringValue {
+abstract class AbstractGeoCell extends DataCell implements GeoValue, StringValue {
 
 	private static final long serialVersionUID = 1L;
 

@@ -47,6 +47,7 @@ package org.knime.geospatial.core.data.cell;
 
 import java.io.IOException;
 
+import org.knime.core.data.DataCell;
 import org.knime.core.node.NodeLogger;
 import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
 
@@ -54,10 +55,9 @@ import mil.nga.sf.Geometry;
 import mil.nga.sf.GeometryType;
 
 /**
- * Factory class that create new instances of the different
- * {@link AbstractGeoCell} implementations. The class is also doing input
- * validation e.g. if the given WKT or WKB is valid and the geometric type
- * supported.
+ * Factory class that create new instances of the different {@link DataCell}
+ * implementations. The class is also doing input validation e.g. if the given
+ * WKT or WKB is valid and the geometric type supported.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  *
@@ -73,7 +73,7 @@ public class GeoCellFactory {
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(GeoCellFactory.class);
 
 	/**
-	 * Creates the concrete {@link AbstractGeoCell} instance for the given geometric
+	 * Creates the concrete {@link DataCell} instance for the given geometric
 	 * object.
 	 *
 	 * @param wktVal    Well Known Text representation of the geometric object (WKT)
@@ -96,7 +96,7 @@ public class GeoCellFactory {
 	}
 
 	/**
-	 * Creates the concrete {@link AbstractGeoCell} instance for the given geometric
+	 * Creates the concrete {@link DataCell} instance for the given geometric
 	 * object.
 	 *
 	 * @param wkb       Well Known Binary representation of the geometric object

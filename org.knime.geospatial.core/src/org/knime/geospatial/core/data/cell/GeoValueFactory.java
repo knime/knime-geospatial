@@ -73,16 +73,11 @@ import org.knime.geospatial.core.data.reference.GeoReferenceSystemFactory;
  * {@link ValueFactory} implementation of this {@link DataCell} implementation.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
- * @param <G> the concrete implementation of the {@link AbstractGeoCell} class
+ * @param <G> the concrete implementation of the {@link DataCell} class
  */
-public class AbstractGeoValueFactory<G extends AbstractGeoCell>
+class GeoValueFactory<G extends AbstractGeoCell>
 implements ValueFactory<StructReadAccess, StructWriteAccess> {
 
-	private final InternalGeoCellFactory<G> m_factory;
-
-	protected AbstractGeoValueFactory(final InternalGeoCellFactory<G> factory) {
-		m_factory = factory;
-	}
 
 	@Override
 	public GeoWriteValue createWriteValue(final StructWriteAccess access) {
@@ -91,7 +86,7 @@ implements ValueFactory<StructReadAccess, StructWriteAccess> {
 
 	@Override
 	public GeoReadValue<G> createReadValue(final StructReadAccess access) {
-		return new GeoReadValue<>(m_factory, access);
+		return new GeoReadValue<>(access);
 	}
 
 	@Override
@@ -111,7 +106,7 @@ implements ValueFactory<StructReadAccess, StructWriteAccess> {
 	 * {@link ReadValue} for {@link GeoValue}.
 	 *
 	 * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
-	 * @param <G> the concrete implementation of the {@link AbstractGeoCell} class
+	 * @param <G> the concrete implementation of the {@link DataCell} class
 	 */
 	public static class GeoReadValue<G extends AbstractGeoCell> implements ReadValue, GeoValue {
 		private static final ObjectDeserializer<byte[]> DESERIALIZER = in -> {
@@ -133,10 +128,7 @@ implements ValueFactory<StructReadAccess, StructWriteAccess> {
 
 		private final StringReadAccess m_refSystem;
 
-		private final InternalGeoCellFactory<G> m_factory;
-
-		GeoReadValue(final InternalGeoCellFactory<G> factory, final StructReadAccess structAccess) {
-			m_factory = factory;
+		GeoReadValue(final StructReadAccess structAccess) {
 			m_wkb = structAccess.getAccess(0);
 			m_refSystem = structAccess.getAccess(1);
 		}
@@ -180,7 +172,8 @@ implements ValueFactory<StructReadAccess, StructWriteAccess> {
 		@Override
 		public DataCell getDataCell() {
 			try {
-				return m_factory.createGeoCell(getWKB(), getReferenceSystem());
+				//				return m_factory.createGeoCell(getWKB(), getReferenceSystem());
+				return GeoCellFactory.create(getWKB(), getReferenceSystem());
 			} catch (final IOException e) {
 				// this should not happen since the GeoCell was already create via the factory
 				// before

@@ -47,25 +47,26 @@ package org.knime.geospatial.core.data.cell;
 
 import java.io.IOException;
 
+import org.knime.core.data.DataCell;
 import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
 
 /**
- * Interface that has a method to create a {@link AbstractGeoCell} instance.
+ * Interface that has a method to create a {@link DataCell} instance.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
- * @param <G> the concrete implementation of the {@link AbstractGeoCell} class
+ * @param <G> the concrete implementation of the {@link DataCell} class
  */
 @FunctionalInterface
 interface InternalGeoCellFactory<G extends AbstractGeoCell> {
 	/**
-	 * Returns the concrete {@link AbstractGeoCell} implementation for the given
-	 * Well Known Binary (wkb).
+	 * Returns the concrete {@link DataCell} implementation for the given Well Known
+	 * Binary (wkb).
 	 *
 	 * @param wkb                          Well Known Binary representation of the
 	 *                                     geometric object
 	 * @param geoCoordinateReferenceSystem the {@link GeoReferenceSystem} of the
 	 *                                     geometric object
-	 * @return concrete {@link AbstractGeoCell} implementation of the given wkb
+	 * @return concrete {@link DataCell} implementation of the given wkb
 	 * @throws IOException if the wkb is invalid
 	 */
 	G createGeoCell(byte[] wkb, GeoReferenceSystem geoCoordinateReferenceSystem) throws IOException;

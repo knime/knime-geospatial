@@ -114,19 +114,11 @@ public class GeoLineCell extends AbstractGeoCell implements GeoLineValue {
 	}
 
 	/**
-	 * {@link AbstractGeoValueFactory} implementation of this {@link DataCell}
-	 * implementation.
+	 * {@link ValueFactory} implementation of this {@link DataCell} implementation.
 	 *
 	 * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
 	 */
-	public static class ValueFactory extends AbstractGeoValueFactory<GeoLineCell> {
-		/**
-		 * Constructor for class ValueFactory that is used in the extension
-		 * point.
-		 */
-		public ValueFactory() {
-			super(GeoLineCell::new);
-		}
-
+	public static class ValueFactory extends GeoValueFactory<GeoLineCell> {
+		// no data cell specific implementation needed
 	}
 }

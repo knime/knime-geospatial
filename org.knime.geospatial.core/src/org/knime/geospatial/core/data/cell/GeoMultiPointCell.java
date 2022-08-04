@@ -114,18 +114,11 @@ public class GeoMultiPointCell extends AbstractGeoCell implements GeoMultiPointV
 	}
 
 	/**
-	 * {@link AbstractGeoValueFactory} implementation of this {@link DataCell}
-	 * implementation.
+	 * {@link ValueFactory} implementation of this {@link DataCell} implementation.
 	 *
 	 * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
 	 */
-	public static class ValueFactory extends AbstractGeoValueFactory<GeoMultiPointCell> {
-		/**
-		 * Constructor for class ValueFactory that is used in the extension
-		 * point.
-		 */
-		public ValueFactory() {
-			super(GeoMultiPointCell::new);
-		}
+	public static class ValueFactory extends GeoValueFactory<GeoMultiPointCell> {
+		// no data cell specific implementation needed
 	}
 }

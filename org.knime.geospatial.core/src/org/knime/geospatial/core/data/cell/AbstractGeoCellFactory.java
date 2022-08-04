@@ -55,13 +55,12 @@ import org.knime.core.data.DataType;
 import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
 
 /**
- * {@link DataCellFactory} implementation for {@link AbstractGeoCell}
- * implementations.
+ * {@link DataCellFactory} implementation for {@link DataCell} implementations.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
- * @param <G> the {@link AbstractGeoCell} implementation
+ * @param <G> the {@link DataCell} implementation
  */
-public class AbstractGeoCellFactory<G extends AbstractGeoCell> implements FromSimpleString, FromComplexString {
+class AbstractGeoCellFactory<G extends AbstractGeoCell> implements FromSimpleString, FromComplexString {
 
 	private final DataType m_type;
 
