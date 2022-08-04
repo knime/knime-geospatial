@@ -2,8 +2,6 @@ package org.knime.geospatial.converter.wkt;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
@@ -37,6 +35,8 @@ final class WKT2GeoCellNodeModel extends NodeModel {
 
 	private static final String GEO_COL_NAME = "geometry";
 
+	private static final DataType GEO_TYPE = GeoCell.TYPE;
+
 	static SettingsModelString createWKTSelectionModel() {
 		return new SettingsModelString("wkt-selection", "");
 	}
@@ -52,7 +52,7 @@ final class WKT2GeoCellNodeModel extends NodeModel {
 
 
 	static DataColumnSpec createGeoSpec() {
-		return new DataColumnSpecCreator(GEO_COL_NAME, GeoCell.TYPE).createSpec();
+		return new DataColumnSpecCreator(GEO_COL_NAME, GEO_TYPE).createSpec();
 	}
 
 	//	static DataTableSpec createOutSpec(final DataTableSpec inSpec) {
@@ -68,6 +68,8 @@ final class WKT2GeoCellNodeModel extends NodeModel {
 			throw new InvalidSettingsException(
 					"Column :" + m_wktSelection.getStringValue() + " not found in input table");
 		}
+		// we cannot create an output spec because we do not know the GeoDataType that
+		// will be returned
 		return null;
 	}
 
@@ -78,13 +80,18 @@ final class WKT2GeoCellNodeModel extends NodeModel {
 		final ColumnRearranger r = createColumnRearranger(in.getDataTableSpec());
 		final BufferedDataTable out = exec.createColumnRearrangeTable(in, r, exec);
 		final BufferedDataTable resultTable;
-		if (m_cellFactory.getCellTypes().size() == 1) {
-			final DataTableSpec resultSpec = out.getDataTableSpec();
-			final DataTableSpec alteredTableSpec = GeoValueMetaData.replaceDataType(resultSpec,
-					m_cellFactory.getCellTypes().iterator().next(), resultSpec.getNumColumns() - 1);
-			resultTable = exec.createSpecReplacerTable(out, alteredTableSpec);
-		} else {
+		if (GEO_TYPE.equals(m_cellFactory.getCommonDataType())) {
 			resultTable = out;
+		} else {
+			//we can not use the spec replacer to change the type so we have to create a new column
+			//			final DataTableSpec resultSpec = out.getDataTableSpec();
+			//			final DataTableSpec alteredTableSpec = GeoValueMetaData.replaceDataType(resultSpec,
+			// m_cellFactory.getCommonDataType(), resultSpec.getNumColumns() - 1);
+			//			resultTable = exec.createSpecReplacerTable(out, alteredTableSpec);
+			exec.setMessage("Need to process table once more to adapt output data type");
+			final ColumnRearranger rp = createReplacerColumnRearranger(out.getDataTableSpec(),
+					m_cellFactory.getCommonDataType());
+			resultTable = exec.createColumnRearrangeTable(out, rp, exec);
 		}
 
 		return new BufferedDataTable[] { resultTable };
@@ -128,19 +135,32 @@ final class WKT2GeoCellNodeModel extends NodeModel {
 
 	private ColumnRearranger createColumnRearranger(final DataTableSpec spec) throws IOException {
 		final ColumnRearranger rearranger = new ColumnRearranger(spec);
-		m_cellFactory = new GeoCellCreator(m_wktIndex, m_refSystem.getStringValue());
+		m_cellFactory = new GeoCellCreator(m_wktIndex, m_refSystem.getStringValue(), createGeoSpec());
 		rearranger.append(m_cellFactory);
+		return rearranger;
+	}
+
+	private ColumnRearranger createReplacerColumnRearranger(final DataTableSpec origSpec, final DataType dataType)
+			throws IOException {
+		final int lastColIdx = origSpec.getNumColumns() - 1;
+		final DataColumnSpec alteredColSpec = GeoValueMetaData.replaceColumnDataType(origSpec.getColumnSpec(lastColIdx),
+				dataType);
+		final ColumnRearranger rearranger = new ColumnRearranger(origSpec);
+		m_cellFactory = new GeoCellCreator(m_wktIndex, m_refSystem.getStringValue(), alteredColSpec);
+		rearranger.replace(m_cellFactory, lastColIdx);
 		return rearranger;
 	}
 
 	private static final class GeoCellCreator extends SingleCellFactory {
 
-		private final Set<DataType> m_cellTypes = new HashSet<>();
+		private DataType m_commonSuperType = null;
 		private final int m_wktIndex;
 		private final GeoReferenceSystem m_refSystem;
 
-		public GeoCellCreator(final int wktIndex, final String refSystem) throws IOException {
-			super(createGeoSpec());
+
+		public GeoCellCreator(final int wktIndex, final String refSystem, final DataColumnSpec colSpec)
+				throws IOException {
+			super(colSpec);
 			m_wktIndex = wktIndex;
 			m_refSystem = GeoReferenceSystemFactory.create(refSystem);
 		}
@@ -158,15 +178,16 @@ final class WKT2GeoCellNodeModel extends NodeModel {
 			} catch (final IOException e) {
 				throw new IllegalArgumentException(e);
 			}
-			m_cellTypes.add(geoCell.getType());
+			if (m_commonSuperType != null) {
+				m_commonSuperType = DataType.getCommonSuperType(m_commonSuperType, geoCell.getType());
+			} else {
+				m_commonSuperType = geoCell.getType();
+			}
 			return geoCell;
 		}
 
-		/**
-		 * @return the cellTypes
-		 */
-		public Set<DataType> getCellTypes() {
-			return m_cellTypes;
+		private DataType getCommonDataType() {
+			return m_commonSuperType;
 		}
 
 	}

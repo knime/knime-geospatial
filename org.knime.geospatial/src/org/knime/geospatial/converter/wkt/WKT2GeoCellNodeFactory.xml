@@ -33,7 +33,7 @@
 			Table with WKT string column
 		</inPort>
 		<outPort index="0" name="Table with Geo data type">
-			Table with Geo data type 
+			Table with appended Geo data type column 
 		</outPort>
 	</ports>
 </knimeNode>

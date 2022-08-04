@@ -111,12 +111,25 @@ public final class GeoValueMetaData implements DataColumnMetaData {
 	 */
 	public static DataTableSpec replaceDataType(final DataTableSpec resultSpec, final DataType cellType,
 			final int colIdx) {
-		final DataColumnSpec origSpec = resultSpec.getColumnSpec(colIdx);
+		final DataColumnSpec newColSpec = replaceColumnDataType(resultSpec.getColumnSpec(colIdx), cellType);
 		final DataTableSpecCreator specCreator = new DataTableSpecCreator(resultSpec);
+		specCreator.replaceColumn(colIdx, newColSpec);
+		return specCreator.createSpec();
+	}
+
+	/**
+	 * Replaces the {@link DataType} of the column with the given index in the given
+	 * {@link DataColumnSpec}
+	 *
+	 * @param origSpec the {@link DataColumnSpec} to alter
+	 * @param cellType the new {@link DataType} to use for the cell
+	 * @return the altered {@link DataTableSpec}
+	 */
+	public static DataColumnSpec replaceColumnDataType(final DataColumnSpec origSpec, final DataType cellType) {
 		final DataColumnSpecCreator newSpecCreator = new DataColumnSpecCreator(origSpec);
 		newSpecCreator.setType(cellType);
-		specCreator.replaceColumn(colIdx, newSpecCreator.createSpec());
-		return specCreator.createSpec();
+		final DataColumnSpec newColSpec = newSpecCreator.createSpec();
+		return newColSpec;
 	}
 
 	/**
