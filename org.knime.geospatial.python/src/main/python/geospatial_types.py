@@ -129,6 +129,9 @@ _shapely_type_to_value_factory = {
 
 @kt.register_from_pandas_column_converter
 class FromGeoPandasColumnConverter(kt.FromPandasColumnConverter):
+    # these warnings will be suppressed by the warning manager
+    warnings_to_suppress = ["Geometry column does not contain geometry."]
+
     def can_convert(self, dtype) -> bool:
         return hasattr(dtype, "name") and dtype.name == "geometry"
 
