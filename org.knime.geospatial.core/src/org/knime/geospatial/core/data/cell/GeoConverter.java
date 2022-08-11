@@ -49,6 +49,7 @@ import java.io.IOException;
 
 import mil.nga.sf.Geometry;
 import mil.nga.sf.GeometryType;
+import mil.nga.sf.util.SFException;
 import mil.nga.sf.wkb.GeometryReader;
 import mil.nga.sf.wkb.GeometryTypeInfo;
 import mil.nga.sf.wkt.GeometryWriter;
@@ -66,30 +67,50 @@ final class GeoConverter {
 	}
 
 	public static String wkb2wkt(final byte[] wkb) throws IOException {
-		final Geometry geo = GeometryReader.readGeometry(wkb);
-		final String wkt = GeometryWriter.writeGeometry(geo);
-		return wkt;
+		try {
+			final Geometry geo = GeometryReader.readGeometry(wkb);
+			final String wkt = GeometryWriter.writeGeometry(geo);
+			return wkt;
+		} catch (final SFException e) {
+			throw new IOException(e);
+		}
 	}
 
 	public static byte[] wkt2wkb(final String wkt) throws IOException {
-		final Geometry geo = mil.nga.sf.wkt.GeometryReader.readGeometry(wkt);
-		final byte[] wkb = geo2wkb(geo);
-		return wkb;
+		try {
+			final Geometry geo = mil.nga.sf.wkt.GeometryReader.readGeometry(wkt);
+			final byte[] wkb = geo2wkb(geo);
+			return wkb;
+		} catch (final SFException e) {
+			throw new IOException(e);
+		}
 	}
 
 	public static byte[] geo2wkb(final Geometry geo) throws IOException {
-		final byte[] wkb = mil.nga.sf.wkb.GeometryWriter.writeGeometry(geo);
-		return wkb;
+		try {
+			final byte[] wkb = mil.nga.sf.wkb.GeometryWriter.writeGeometry(geo);
+			return wkb;
+		} catch (final SFException e) {
+			throw new IOException(e);
+		}
 	}
 
 	public static Geometry wkt2Geo(final String wkt) throws IOException {
-		final Geometry geo = mil.nga.sf.wkt.GeometryReader.readGeometry(wkt);
-		return geo;
+		try {
+			final Geometry geo = mil.nga.sf.wkt.GeometryReader.readGeometry(wkt);
+			return geo;
+		} catch (final SFException e) {
+			throw new IOException(e);
+		}
 	}
 
 	public static Geometry wkb2Geo(final byte[] wkb) throws IOException {
-		final Geometry geo = mil.nga.sf.wkb.GeometryReader.readGeometry(wkb);
-		return geo;
+		try {
+			final Geometry geo = mil.nga.sf.wkb.GeometryReader.readGeometry(wkb);
+			return geo;
+		} catch (final SFException e) {
+			throw new IOException(e);
+		}
 	}
 
 	public static GeometryType wkb2GeometryType(final byte[] wkb) throws IOException {
@@ -98,6 +119,9 @@ final class GeoConverter {
 			reader = new GeometryReader(wkb);
 			final GeometryTypeInfo geo = reader.readGeometryType();
 			return geo.getGeometryType();
+
+		} catch (final SFException e) {
+			throw new IOException(e);
 		} finally {
 			if (reader != null) {
 				reader.close();
