@@ -53,6 +53,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import org.junit.Test;
+import org.knime.core.data.DataType;
 
 /**
  * Tests the different {@link GeoCell} implementations.
@@ -134,6 +135,24 @@ public class GeoCellTest {
 	@Test(expected = IOException.class)
 	public void whenInvalidWKT_throwException() throws IOException {
         GeoCellFactory.create("no valid wkt", DEFAULT);
+	}
+
+	/**
+	 * Test the hierarchy of the GeoCell types.
+	 */
+	@Test
+	public void cellTypeHierarchy() {
+		DataType superType = DataType.getCommonSuperType(GeoPointCell.TYPE, GeoPointCell.TYPE);
+		assertEquals(GeoPointCell.TYPE, superType);
+
+		superType = DataType.getCommonSuperType(GeoPointCell.TYPE, GeoLineCell.TYPE);
+		assertEquals(GeoCell.TYPE, superType);
+
+		superType = DataType.getCommonSuperType(GeoMultiPointCell.TYPE, GeoMultiLineCell.TYPE);
+		assertEquals(GeoCollectionCell.TYPE, superType);
+
+		superType = DataType.getCommonSuperType(GeoMultiPointCell.TYPE, GeoPointCell.TYPE);
+		assertEquals(GeoCell.TYPE, superType);
 	}
 
 }
