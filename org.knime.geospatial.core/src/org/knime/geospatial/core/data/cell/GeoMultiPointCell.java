@@ -92,7 +92,7 @@ public class GeoMultiPointCell extends AbstractGeoCell implements GeoMultiPointV
 		 * @param s a string
 		 * @return a new cell instance
 		 */
-		@DataCellFactoryMethod(name = "WKT (EPSG:4326)")
+		@DataCellFactoryMethod(name = "String (WKT EPSG:4326)")
 		public static DataCell create(final String s) {
 			return INSTANCE.createCell(s);
 		}
