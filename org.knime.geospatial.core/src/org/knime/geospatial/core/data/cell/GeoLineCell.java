@@ -45,6 +45,9 @@
 
 package org.knime.geospatial.core.data.cell;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataCellSerializer;
 import org.knime.core.data.DataType;
@@ -66,7 +69,13 @@ public class GeoLineCell extends AbstractGeoCell implements GeoLineValue {
 	 */
 	public static final DataType TYPE = DataType.getType(GeoLineCell.class);
 
-	protected GeoLineCell(final byte[] wkb, final GeoReferenceSystem refCoord) {
+    /**
+     * Creates a new instance.
+     *
+     * @param wkb the WKB
+     * @param refCoord the Geo Reference System
+     */
+	GeoLineCell(final byte[] wkb, final GeoReferenceSystem refCoord) {
 		super(wkb, refCoord);
 	}
 
@@ -96,6 +105,18 @@ public class GeoLineCell extends AbstractGeoCell implements GeoLineValue {
 		public static DataCell create(final String s) {
 			return INSTANCE.createCell(s);
 		}
+
+        /**
+         * Creates a new GeoCell by parsing the given InputStream as WKB.
+         *
+         * @param s the InputStream
+         * @return a new cell instance
+         * @throws IOException if the InputStream can not be read
+         */
+        @DataCellFactoryMethod(name = "InputStream (WKT EPSG:4326)")
+        public static DataCell create(final InputStream s) throws IOException {
+            return INSTANCE.createCell(s);
+        }
 	}
 
 	/**

@@ -46,10 +46,13 @@
 package org.knime.geospatial.core.data.cell;
 
 import java.io.IOException;
+import java.io.InputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataCellFactory;
 import org.knime.core.data.DataCellFactory.FromComplexString;
+import org.knime.core.data.DataCellFactory.FromInputStream;
 import org.knime.core.data.DataCellFactory.FromSimpleString;
 import org.knime.core.data.DataType;
 import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
@@ -60,7 +63,7 @@ import org.knime.geospatial.core.data.reference.GeoReferenceSystem;
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  * @param <G> the {@link DataCell} implementation
  */
-class AbstractGeoCellFactory<G extends AbstractGeoCell> implements FromSimpleString, FromComplexString {
+class AbstractGeoCellFactory<G extends AbstractGeoCell> implements FromSimpleString, FromComplexString, FromInputStream {
 
 	private final DataType m_type;
 
@@ -88,6 +91,14 @@ class AbstractGeoCellFactory<G extends AbstractGeoCell> implements FromSimpleStr
 		}
 	}
 	@Override
+    public DataCell createCell(final InputStream s) throws IOException {
+        if (s == null) {
+            return DataType.getMissingCell();
+        }
+        return m_factory.createGeoCell(IOUtils.toByteArray(s), GeoReferenceSystem.DEFAULT);
+    }
+
+    @Override
 	public DataType getDataType() {
 		return m_type;
 	}
