@@ -54,8 +54,8 @@ package org.knime.geospatial.core.data.reference;
 public interface GeoReferenceSystem {
 
 	/**
-	 * The default {@link GeoReferenceSystem} (EPSG:4326) that is used if no
-	 * reference system is available.
+	 * The default {@link GeoReferenceSystem} <a href="https://epsg.org/crs_4326/WGS-84.html">WGS 84 (EPSG:4326)</a>
+	 * that is used if no reference system is available.
 	 *
 	 */
 	GeoReferenceSystem DEFAULT = new DefaultGeoReferenceSystem("EPSG:4326");

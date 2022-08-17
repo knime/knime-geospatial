@@ -42,7 +42,7 @@ final class WKT2GeoCellNodeModel extends NodeModel {
 	}
 
 	static SettingsModelString createRefSystemModel() {
-		return new SettingsModelString("reference-system", "");
+		return new SettingsModelString("reference-system", GeoReferenceSystem.DEFAULT.getWKTCRS());
 	}
 
 	private final SettingsModelString m_wktSelection = createWKTSelectionModel();
