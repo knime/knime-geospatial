@@ -116,7 +116,7 @@ public class GeoCollectionCell extends AbstractGeoCell implements GeoCollectionV
          * @return a new cell instance
          * @throws IOException if the InputStream can not be read
          */
-        @DataCellFactoryMethod(name = "InputStream (WKT EPSG:4326)")
+        @DataCellFactoryMethod(name = "InputStream (WKB EPSG:4326)")
         public static DataCell create(final InputStream s) throws IOException {
             return INSTANCE.createCell(s);
         }
