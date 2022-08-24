@@ -33,6 +33,10 @@
                PythonClassName="GeoValueFactory"
                ValueFactory="org.knime.geospatial.core.data.cell.GeoMultiPolygonCell$ValueFactory">
          </PythonValueFactory>
+         <PythonValueFactory
+               PythonClassName="GeoValueFactory"
+               ValueFactory="org.knime.geospatial.core.data.cell.GeoCollectionCell$ValueFactory">
+         </PythonValueFactory>
       </Module>
    </extension>
 

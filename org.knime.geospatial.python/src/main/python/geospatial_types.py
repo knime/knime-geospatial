@@ -113,6 +113,9 @@ _geo_logical_types = [
     _knime_value_factory(
         "org.knime.geospatial.core.data.cell.GeoMultiPolygonCell$ValueFactory"
     ),
+    _knime_value_factory(
+            "org.knime.geospatial.core.data.cell.GeoCollectionCell$ValueFactory"
+        ),
 ]
 
 _shapely_type_to_value_factory = {
@@ -122,7 +125,8 @@ _shapely_type_to_value_factory = {
     "MultiPoint": "org.knime.geospatial.core.data.cell.GeoMultiPointCell$ValueFactory",
     "MultiLineString": "org.knime.geospatial.core.data.cell.GeoMultiLineCell$ValueFactory",
     "MultiPolygon": "org.knime.geospatial.core.data.cell.GeoMultiPolygonCell$ValueFactory",
-    # There are more types in shapely like LinearRing, GeometryCollection, etc.
+    "GeometryCollection": "org.knime.geospatial.core.data.cell.GeoCollectionCell$ValueFactory"
+    # There are more types in shapely like LinearRing, etc.
     # If we want to support these, we need corresponding ValueFactories on the Java side.
 }
 
