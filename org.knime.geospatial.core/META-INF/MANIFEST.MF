@@ -4,9 +4,9 @@ Bundle-Name: KNIME Geospatial core plugin that among other things defines geospa
 Bundle-SymbolicName: org.knime.geospatial.core;singleton:=true
 Bundle-Version: 4.7.0.qualifier
 Bundle-ClassPath: knime-geospatial-core.jar,
- lib/sf-2.0.5.jar,
- lib/sf-wkb-2.0.5.jar,
- lib/sf-wkt-1.0.2.jar
+ lib/sf-2.1.0.jar,
+ lib/sf-wkb-2.1.0.jar,
+ lib/sf-wkt-1.1.0.jar
 Bundle-Vendor: KNIME AG, Zurich, Switzerland
 Require-Bundle: org.knime.core;bundle-version="[4.0.0,5.0.0)",
  org.knime.filehandling.core;bundle-version="[4.1.0,5.0.0)",
