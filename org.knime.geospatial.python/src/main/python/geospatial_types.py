@@ -198,13 +198,20 @@ class ToGeoPandasColumnConverter(kt.ToPandasColumnConverter):
 
         column = data_frame[column_name]
         # TODO: handle missing values
-        crss = set([value.crs for value in column if value is not None])
-        if len(crss) != 1:
-            raise ValueError(
-                f"Can only work with exactly one reference frame in one column, but got {crss}"
-            )
-        crs = crss.pop()
+        crs_set = set()
+        wkb_lst = []
+        for value in column:
+            if value is not None:
+                crs_set.add(value.crs)
+                wkb_lst.append(value.wkb)
+                if len(crs_set) != 1:
+                    raise ValueError(
+                        f"Can only work with exactly one reference frame in one column, but got {crs_set}"
+                    )
+            else:
+                wkb_lst.append(None)
+        crs = crs_set.pop()
 
         return geopandas.GeoSeries.from_wkb(
-            [value.wkb if value is not None else None for value in column], crs=crs,
+            wkb_lst, crs=crs,
         )
