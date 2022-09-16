@@ -231,7 +231,7 @@ public final class GeoValueMetaData implements DataColumnMetaData {
 		private static GeoReferenceSystem loadRefSystem(final ConfigRO config) throws InvalidSettingsException {
 			try {
 				final String refSystem = config.getString(CFG_REF_SYSTEM);
-				return GeoReferenceSystemFactory.create(refSystem);
+				return GeoReferenceSystemFactory.createUnsafe(refSystem);
 			} catch (final IOException e) {
 				// this should not happen since the GeoReferenceSystem was already create via
 				// the factory before

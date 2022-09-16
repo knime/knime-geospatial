@@ -107,7 +107,12 @@ final class WKT2GeoCellNodeModel extends NodeModel {
 	@Override
 	protected void validateSettings(final NodeSettingsRO settings) throws InvalidSettingsException {
 		m_wktSelection.validateSettings(settings);
-		m_refSystem.validateSettings(settings);
+		final String refSystem = ((SettingsModelString) m_refSystem.createCloneWithValidatedValue(settings))
+				.getStringValue();
+		if (!GeoReferenceSystemFactory.valid(refSystem)) {
+			throw new InvalidSettingsException("Invalid coordinate reference system:\n" + refSystem);
+		}
+
 	}
 
 	@Override

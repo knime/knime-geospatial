@@ -58,7 +58,8 @@ public interface GeoReferenceSystem {
 	 * that is used if no reference system is available.
 	 *
 	 */
-	GeoReferenceSystem DEFAULT = new DefaultGeoReferenceSystem("EPSG:4326");
+	GeoReferenceSystem DEFAULT = DefaultGeoReferenceSystem.getDefault();
+
 
 	/**
 	 * Returns the Well Known Text representation of the coordinate reference system

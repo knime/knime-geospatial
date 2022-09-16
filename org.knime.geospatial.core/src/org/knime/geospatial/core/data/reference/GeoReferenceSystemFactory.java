@@ -47,6 +47,9 @@ package org.knime.geospatial.core.data.reference;
 
 import java.io.IOException;
 
+import mil.nga.crs.wkt.CRSReader;
+import mil.nga.proj.ProjectionFactory;
+
 /**
  * Factory class that create new instances of the different
  * {@link GeoReferenceSystem}. The class is also doing input validation e.g. if
@@ -65,10 +68,10 @@ public final class GeoReferenceSystemFactory {
 
 	/**
 	 * Returns the {@link GeoReferenceSystem} implementation for the given Well
-	 * Known Text representation of the coordinate reference system (WKT-CRS).
+	 * Known Text representation or projection name of the coordinate reference system (WKT-CRS).
 	 *
 	 * @param wktCRS Well Known Text representation of the coordinate reference
-	 *               system (WKT-CRS)
+	 *               system (WKT-CRS) or projection name e.g. 'authority:code'
 	 *
 	 * @return {@link GeoReferenceSystem} instance
 	 * @throws IOException if the given wktCRS is invalid
@@ -76,7 +79,47 @@ public final class GeoReferenceSystemFactory {
 	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_coordinate_reference_systems">WKT-CRS</a>
 	 */
 	public static GeoReferenceSystem create(final String wktCRS) throws IOException {
-		return new DefaultGeoReferenceSystem(wktCRS);
+	    if (!valid(wktCRS)) {
+	        throw new IOException("Invalid coordinate reference system:\n" + wktCRS);
+	    }
+		return createUnsafe(wktCRS);
+	}
+
+    /**
+     * Returns the {@link GeoReferenceSystem} implementation for the given Well
+     * Known Text representation or projection name of the coordinate reference system (WKT-CRS).
+     *
+     * @param wktCRS Well Known Text representation of the coordinate reference
+     *               system (WKT-CRS) or projection name e.g. 'authority:code'
+     *
+     * @return {@link GeoReferenceSystem} instance
+     * @throws IOException if the given wktCRS is invalid
+     * @see <a href=
+     *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_coordinate_reference_systems">WKT-CRS</a>
+     */
+    public static GeoReferenceSystem createUnsafe(final String wktCRS) throws IOException {
+        return new DefaultGeoReferenceSystem(wktCRS);
+    }
+
+	/**
+	 * Validates the input parameter if it is a valid Well Known Text representation or projection name of the
+	 * coordinate reference system (WKT-CRS).
+	 *
+	 * @param wktCRS Well Known Text representation of the coordinate reference
+     *               system (WKT-CRS) or projection name e.g. 'authority:code'
+	 * @return <code>true</code> if the string is valid
+	 */
+	public static boolean valid(final String wktCRS) {
+	    try {
+            CRSReader.read(wktCRS);
+        } catch (Exception e) {
+            try {
+                ProjectionFactory.getProjection(wktCRS);
+            } catch (Exception ex) {
+                return false;
+            }
+        }
+	    return true;
 	}
 
 }

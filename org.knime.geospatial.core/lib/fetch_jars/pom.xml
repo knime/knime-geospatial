@@ -43,7 +43,7 @@
 	  Pro: Works well for dependencies that themselves have a lot of transitive dependencies.
 	  Contra: Alters the maven dependency tree, which may be confusing.
 	 -->
-	<dependencies>
+    <dependencies>
         <dependency>
             <groupId>mil.nga.sf</groupId>
             <artifactId>sf-wkt</artifactId>
@@ -53,6 +53,16 @@
             <groupId>mil.nga.sf</groupId>
             <artifactId>sf-wkb</artifactId>
             <version>2.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>mil.nga</groupId>
+            <artifactId>crs</artifactId>
+            <version>1.1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>mil.nga</groupId>
+            <artifactId>proj</artifactId>
+            <version>1.1.2</version>
         </dependency>
     </dependencies>
 

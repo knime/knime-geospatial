@@ -45,7 +45,11 @@
 
 package org.knime.geospatial.core.data.reference;
 
+import java.io.IOException;
+
 import org.apache.commons.lang3.StringUtils;
+
+import mil.nga.crs.wkt.CRSWriter;
 
 /**
  * Default implementation of the {@link GeoReferenceSystem} interface.
@@ -56,16 +60,20 @@ class DefaultGeoReferenceSystem implements GeoReferenceSystem {
 
 	private final String m_refSystem;
 
-	DefaultGeoReferenceSystem(final String refSystem) {
+	DefaultGeoReferenceSystem(final String refSystem) throws IOException {
 		if (StringUtils.isEmpty(refSystem)) {
 			throw new IllegalArgumentException("refSystem must not be empty");
 		}
 		m_refSystem = refSystem;
 	}
 
-	@Override
+    @Override
 	public String getWKTCRS() {
-		return m_refSystem;
+		try {
+            return CRSWriter.writePretty(m_refSystem);
+        } catch (IOException ex) {
+            throw new IllegalStateException("Exception converting CRS to WKT format: " + ex.getMessage(), ex);
+        }
 	}
 
 	@Override
@@ -87,5 +95,18 @@ class DefaultGeoReferenceSystem implements GeoReferenceSystem {
 		final DefaultGeoReferenceSystem other = (DefaultGeoReferenceSystem) obj;
 		return m_refSystem.equals(other.m_refSystem);
 	}
+
+    /**
+     * Returns the default reference system.
+     *
+     * @return the default {@link GeoReferenceSystem}
+     */
+    static GeoReferenceSystem getDefault() {
+        try {
+            return new DefaultGeoReferenceSystem("EPSG:4326");
+        } catch (IOException ex) {
+            throw new IllegalStateException("Can not create default geo reference system" + ex);
+        }
+    }
 
 }

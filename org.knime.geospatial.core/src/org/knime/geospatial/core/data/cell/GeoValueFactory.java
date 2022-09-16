@@ -161,7 +161,7 @@ implements ValueFactory<StructReadAccess, StructWriteAccess> {
 		@Override
 		public GeoReferenceSystem getReferenceSystem() {
 			try {
-				return GeoReferenceSystemFactory.create(m_refSystem.getStringValue());
+				return GeoReferenceSystemFactory.createUnsafe(m_refSystem.getStringValue());
 			} catch (final IOException e) {
 				// this should not happen since the GeoReferenceSystem was already create via
 				// the factory before

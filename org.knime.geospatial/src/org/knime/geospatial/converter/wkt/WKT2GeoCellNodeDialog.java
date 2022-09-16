@@ -24,7 +24,7 @@ public class WKT2GeoCellNodeDialog extends NodeDialogPane {
 		m_wktSelection = new DialogComponentColumnNameSelection(WKT2GeoCellNodeModel.createWKTSelectionModel(),
 				"WKT column", 0, new DataValueColumnFilter(StringValue.class));
 		m_refSystem = new DialogComponentMultiLineString(WKT2GeoCellNodeModel.createRefSystemModel(),
-				"Coordinate reference system", true, 30, 5);
+				"Coordinate reference system", true, 50, 10);
 		final JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.add(m_wktSelection.getComponentPanel());

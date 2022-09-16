@@ -82,6 +82,6 @@ abstract class AbstractGeoCellSerializer<G extends AbstractGeoCell> implements D
 		final byte[] wkb = new byte[length];
 		input.readFully(wkb);
 		final String refCoord = input.readUTF();
-		return m_factory.createGeoCell(wkb, GeoReferenceSystemFactory.create(refCoord));
+		return m_factory.createGeoCell(wkb, GeoReferenceSystemFactory.createUnsafe(refCoord));
 	}
 }
