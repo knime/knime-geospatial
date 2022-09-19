@@ -180,8 +180,9 @@ final class WKT2GeoCellNodeModel extends NodeModel {
 			DataCell geoCell;
 			try {
 				geoCell = GeoCellFactory.create(wktVal, m_refSystem);
-			} catch (final IOException e) {
-				throw new IllegalArgumentException(e);
+			} catch (final Exception e) {
+				throw new IllegalArgumentException("Exception in row " + row.getKey() + " for value: '" + wktVal
+						+ "' exception: " + e.getMessage(), e);
 			}
 			if (m_commonSuperType != null) {
 				m_commonSuperType = DataType.getCommonSuperType(m_commonSuperType, geoCell.getType());
