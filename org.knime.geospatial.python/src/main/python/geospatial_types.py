@@ -114,8 +114,8 @@ _geo_logical_types = [
         "org.knime.geospatial.core.data.cell.GeoMultiPolygonCell$ValueFactory"
     ),
     _knime_value_factory(
-            "org.knime.geospatial.core.data.cell.GeoCollectionCell$ValueFactory"
-        ),
+        "org.knime.geospatial.core.data.cell.GeoCollectionCell$ValueFactory"
+    ),
 ]
 
 _shapely_type_to_value_factory = {
@@ -201,7 +201,7 @@ class ToGeoPandasColumnConverter(kt.ToPandasColumnConverter):
         crs_set = set()
         wkb_lst = []
         for value in column:
-            if value is not None:
+            if value is not None and not (value.crs is None and value.wkb is None):
                 crs_set.add(value.crs)
                 wkb_lst.append(value.wkb)
                 if len(crs_set) != 1:
@@ -213,5 +213,6 @@ class ToGeoPandasColumnConverter(kt.ToPandasColumnConverter):
         crs = crs_set.pop()
 
         return geopandas.GeoSeries.from_wkb(
-            wkb_lst, crs=crs,
+            wkb_lst,
+            crs=crs,
         )
