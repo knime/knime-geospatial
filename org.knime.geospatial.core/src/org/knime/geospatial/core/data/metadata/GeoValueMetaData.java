@@ -197,7 +197,7 @@ public final class GeoValueMetaData implements DataColumnMetaData {
 			int idx = 0;
 			for (final GeoReferenceSystem spec : geoValueMetaData.getReferenceSystem()) {
 				final Config subConfig = config.addConfig(CFG_ENTRY + idx);
-				subConfig.addString(CFG_REF_SYSTEM, spec.getWKTCRS());
+				subConfig.addString(CFG_REF_SYSTEM, spec.getCRS());
 				idx++;
 			}
 		}
@@ -231,7 +231,7 @@ public final class GeoValueMetaData implements DataColumnMetaData {
 		private static GeoReferenceSystem loadRefSystem(final ConfigRO config) throws InvalidSettingsException {
 			try {
 				final String refSystem = config.getString(CFG_REF_SYSTEM);
-				return GeoReferenceSystemFactory.createUnsafe(refSystem);
+				return GeoReferenceSystemFactory.create(refSystem);
 			} catch (final IOException e) {
 				// this should not happen since the GeoReferenceSystem was already create via
 				// the factory before

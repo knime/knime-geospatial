@@ -73,7 +73,7 @@ abstract class AbstractGeoCellSerializer<G extends AbstractGeoCell> implements D
 	public void serialize(final AbstractGeoCell cell, final DataCellDataOutput output) throws IOException {
 		output.writeInt(cell.getWKB().length);
 		output.write(cell.getWKB());
-		output.writeUTF(cell.getReferenceSystem().getWKTCRS());
+		output.writeUTF(cell.getReferenceSystem().getCRS());
 	}
 
 	@Override
@@ -82,6 +82,6 @@ abstract class AbstractGeoCellSerializer<G extends AbstractGeoCell> implements D
 		final byte[] wkb = new byte[length];
 		input.readFully(wkb);
 		final String refCoord = input.readUTF();
-		return m_factory.createGeoCell(wkb, GeoReferenceSystemFactory.createUnsafe(refCoord));
+		return m_factory.createGeoCell(wkb, GeoReferenceSystemFactory.create(refCoord));
 	}
 }

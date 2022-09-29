@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="lib" path="lib/proj-1.1.2.jar" sourcepath="lib/proj-1.1.2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/crs-1.1.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/proj4j-1.1.5.jar" sourcepath="lib/proj4j-1.1.5-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/crs-1.1.4.jar" sourcepath="lib/crs-1.1.4-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11">
 		<attributes>
 			<attribute name="module" value="true"/>

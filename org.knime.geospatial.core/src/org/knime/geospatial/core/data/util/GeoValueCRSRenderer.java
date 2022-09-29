@@ -82,7 +82,7 @@ public final class GeoValueCRSRenderer extends DefaultDataValueRenderer {
 	@Override
 	protected void setValue(final Object value) {
 		if (value instanceof GeoValue) {
-			super.setValue(((GeoValue) value).getReferenceSystem().getWKTCRS());
+			super.setValue(((GeoValue) value).getReferenceSystem().getCRS());
 		} else {
 			super.setValue(value);
 		}

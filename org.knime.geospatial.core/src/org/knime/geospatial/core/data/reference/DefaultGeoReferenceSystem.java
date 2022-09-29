@@ -46,10 +46,18 @@
 package org.knime.geospatial.core.data.reference;
 
 import java.io.IOException;
+import java.lang.ref.SoftReference;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.knime.core.node.NodeLogger;
+import org.locationtech.proj4j.CRSFactory;
+import org.locationtech.proj4j.CoordinateReferenceSystem;
 
-import mil.nga.crs.wkt.CRSWriter;
+import mil.nga.crs.CRS;
+import mil.nga.crs.util.proj.ProjParser;
+import mil.nga.crs.wkt.CRSReader;
 
 /**
  * Default implementation of the {@link GeoReferenceSystem} interface.
@@ -58,43 +66,124 @@ import mil.nga.crs.wkt.CRSWriter;
  */
 class DefaultGeoReferenceSystem implements GeoReferenceSystem {
 
-	private final String m_refSystem;
+    private static final NodeLogger LOGGER = NodeLogger.getLogger(GeoReferenceSystemFactory.class);
 
-	DefaultGeoReferenceSystem(final String refSystem) throws IOException {
-		if (StringUtils.isEmpty(refSystem)) {
-			throw new IllegalArgumentException("refSystem must not be empty");
-		}
-		m_refSystem = refSystem;
-	}
+    private static final CRSFactory CRS_FACTORY = new CRSFactory();
+
+    private static final Map<String, SoftReference<CoordinateReferenceSystem>> CACHE = new LinkedHashMap<>();
+
+    private final String m_refSystem;
+
+    //We need the ReferenceSystem only internally for equals comparison which is why we use a soft reference
+    private SoftReference<CoordinateReferenceSystem> m_referenceSystem =
+        new SoftReference<CoordinateReferenceSystem>(null);
+
+    DefaultGeoReferenceSystem(final String refSystem) throws IOException {
+        if (StringUtils.isEmpty(refSystem)) {
+            throw new IllegalArgumentException("refSystem must not be empty");
+        }
+        //convert to upper case and trim all spaces to "normalize" the input
+        m_refSystem = normalize(refSystem);
+    }
+
+    private static String normalize(final String refSystem) {
+        if (refSystem == null) {
+            return refSystem;
+        }
+        return refSystem.toUpperCase().trim();
+    }
 
     @Override
-	public String getWKTCRS() {
-		try {
-            return CRSWriter.writePretty(m_refSystem);
-        } catch (IOException ex) {
-            throw new IllegalStateException("Exception converting CRS to WKT format: " + ex.getMessage(), ex);
+    public String getCRS() {
+        return m_refSystem;
+    }
+
+    private static CoordinateReferenceSystem parseCRS(final String crsString) throws Exception {
+        final String input = normalize(crsString);
+        CoordinateReferenceSystem rs;
+        final SoftReference<CoordinateReferenceSystem> ref = CACHE.get(input);
+        rs = ref != null ? ref.get() : null;
+        if (rs != null) {
+            return rs;
         }
-	}
+        final String errorMsg = "Exception parsing coordinate reference system: " + crsString;
+        try {
+            rs = CRS_FACTORY.createFromName(input);
+        } catch (Exception e) {
+            //Maybe it is WKT-CRS
+            try {
+                final CRS crs = CRSReader.read(input);
+                final String params = ProjParser.paramsText(crs);
+                if (params != null) {
+                    rs = CRS_FACTORY.createFromParameters(crs.getName(), params);
+                } else {
+                    throw new IOException(errorMsg, e);
+                }
+            } catch (IOException ex) {
+                throw new IllegalArgumentException(errorMsg, e);
+            }
+        }
+        if (rs == null) {
+            throw new IllegalArgumentException(errorMsg);
+        }
+        CACHE.put(input, new SoftReference<>(rs));
+        return rs;
+    }
 
-	@Override
-	public int hashCode() {
-		return m_refSystem.hashCode();
-	}
+    /**
+     * Validates the input parameter if it is a valid Well Known Text representation or projection name of the
+     * coordinate reference system (WKT-CRS).
+     *
+     * @param crsString well known name representation of the coordinate reference e.g. 'authority:code'
+     * @return <code>true</code> if the string is valid
+     */
+    public static boolean valid(final String crsString) {
+        try {
+            parseCRS(crsString);
+        } catch (Exception ex) {
+            LOGGER.debug("Invalid coordinate reference system: " + crsString, ex);
+            return false;
+        }
+        return true;
+    }
 
-	@Override
-	public boolean equals(final Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		final DefaultGeoReferenceSystem other = (DefaultGeoReferenceSystem) obj;
-		return m_refSystem.equals(other.m_refSystem);
-	}
+    private CoordinateReferenceSystem getReferenceSystem() {
+        CoordinateReferenceSystem rs = m_referenceSystem.get();
+        if (rs == null) {
+            try {
+                rs = parseCRS(m_refSystem);
+                m_referenceSystem = new SoftReference<>(rs);
+            } catch (Exception e) {
+                throw new IllegalArgumentException(
+                    "Exception parsing coordinate reference system for details see log file", e);
+            }
+        }
+        return rs;
+    }
+
+    @Override
+    public int hashCode() {
+        return getReferenceSystem().hashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        return getReferenceSystem().equals(((DefaultGeoReferenceSystem)obj).getReferenceSystem());
+    }
+
+    @Override
+    public String toString() {
+        return m_refSystem;
+    }
 
     /**
      * Returns the default reference system.

@@ -47,79 +47,46 @@ package org.knime.geospatial.core.data.reference;
 
 import java.io.IOException;
 
-import mil.nga.crs.wkt.CRSReader;
-import mil.nga.proj.ProjectionFactory;
-
 /**
  * Factory class that create new instances of the different
  * {@link GeoReferenceSystem}. The class is also doing input validation e.g. if
- * the given WKT-CRS is valid.
+ * the given CRS is valid.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  *
- * @see <a href=
- *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_coordinate_reference_systems">WKT_CRS</a>
  */
 public final class GeoReferenceSystemFactory {
 
-	private GeoReferenceSystemFactory() {
+    private GeoReferenceSystemFactory() {
 		// prevent object creation
 	}
 
 	/**
-	 * Returns the {@link GeoReferenceSystem} implementation for the given Well
-	 * Known Text representation or projection name of the coordinate reference system (WKT-CRS).
+	 * Returns the {@link GeoReferenceSystem} implementation for the given well known name representation
+	 * of the coordinate reference system.
 	 *
-	 * @param wktCRS Well Known Text representation of the coordinate reference
-	 *               system (WKT-CRS) or projection name e.g. 'authority:code'
+	 * @param crsString well known name representation of the coordinate reference e.g. 'authority:code'
 	 *
 	 * @return {@link GeoReferenceSystem} instance
-	 * @throws IOException if the given wktCRS is invalid
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_coordinate_reference_systems">WKT-CRS</a>
+	 * @throws IOException if the given CRS is invalid
 	 */
-	public static GeoReferenceSystem create(final String wktCRS) throws IOException {
-	    if (!valid(wktCRS)) {
-	        throw new IOException("Invalid coordinate reference system:\n" + wktCRS);
-	    }
-		return createUnsafe(wktCRS);
+	public static GeoReferenceSystem create(final String crsString) throws IOException {
+	    try {
+	        return new DefaultGeoReferenceSystem(crsString);
+	    } catch (Exception ex) {
+	        throw new IOException("Invalid coordinate reference system:\n" + crsString);
+        }
 	}
 
     /**
-     * Returns the {@link GeoReferenceSystem} implementation for the given Well
-     * Known Text representation or projection name of the coordinate reference system (WKT-CRS).
+     * Validates the input parameter if it is a valid Well Known Text representation or projection name of the
+     * coordinate reference system (WKT-CRS).
      *
-     * @param wktCRS Well Known Text representation of the coordinate reference
-     *               system (WKT-CRS) or projection name e.g. 'authority:code'
-     *
-     * @return {@link GeoReferenceSystem} instance
-     * @throws IOException if the given wktCRS is invalid
-     * @see <a href=
-     *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_coordinate_reference_systems">WKT-CRS</a>
+     * @param crsString well known name representation of the coordinate reference e.g. 'authority:code'
+     * @return <code>true</code> if the string is valid
      */
-    public static GeoReferenceSystem createUnsafe(final String wktCRS) throws IOException {
-        return new DefaultGeoReferenceSystem(wktCRS);
+    public static boolean valid(final String crsString) {
+        return DefaultGeoReferenceSystem.valid(crsString);
     }
-
-	/**
-	 * Validates the input parameter if it is a valid Well Known Text representation or projection name of the
-	 * coordinate reference system (WKT-CRS).
-	 *
-	 * @param wktCRS Well Known Text representation of the coordinate reference
-     *               system (WKT-CRS) or projection name e.g. 'authority:code'
-	 * @return <code>true</code> if the string is valid
-	 */
-	public static boolean valid(final String wktCRS) {
-	    try {
-            CRSReader.read(wktCRS);
-        } catch (Exception e) {
-            try {
-                ProjectionFactory.getProjection(wktCRS);
-            } catch (Exception ex) {
-                return false;
-            }
-        }
-	    return true;
-	}
 
 }

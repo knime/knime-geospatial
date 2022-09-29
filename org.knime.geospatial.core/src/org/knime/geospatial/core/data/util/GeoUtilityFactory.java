@@ -137,7 +137,7 @@ public class GeoUtilityFactory extends ExtensibleUtilityFactory {
 			final GeoValue g1 = (GeoValue) v1;
 			final GeoValue g2 = (GeoValue) v2;
 			// Sort by reference system first
-			final int compareTo = g1.getReferenceSystem().getWKTCRS().compareTo(g2.getReferenceSystem().getWKTCRS());
+			final int compareTo = g1.getReferenceSystem().getCRS().compareTo(g2.getReferenceSystem().getCRS());
 			if (compareTo != 0) {
 				return compareTo;
 			}

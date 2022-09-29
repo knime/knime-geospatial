@@ -62,13 +62,10 @@ public interface GeoReferenceSystem {
 
 
 	/**
-	 * Returns the Well Known Text representation of the coordinate reference system
-	 * (WKT-CRS).
+	 * Returns the string representation of the CRS.
 	 *
-	 * @return String with the WKT-CRS
-	 * @see <a href=
-	 *      "https://en.wikipedia.org/wiki/Well-known_text_representation_of_coordinate_reference_systems">WKT-CRS</a>
+	 * @return String with the CRS
 	 */
-	String getWKTCRS();
+	String getCRS();
 
 }

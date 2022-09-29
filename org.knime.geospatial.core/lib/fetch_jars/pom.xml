@@ -60,9 +60,9 @@
             <version>1.1.4</version>
         </dependency>
         <dependency>
-            <groupId>mil.nga</groupId>
-            <artifactId>proj</artifactId>
-            <version>1.1.2</version>
+            <groupId>org.locationtech.proj4j</groupId>
+            <artifactId>proj4j</artifactId>
+            <version>1.1.5</version>
         </dependency>
     </dependencies>
 
