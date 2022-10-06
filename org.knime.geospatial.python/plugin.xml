@@ -4,7 +4,7 @@
    <extension
          point="org.knime.python3.types.PythonValueFactory">
       <Module
-            modulePath="src/main/python/geospatial_types.py">
+            modulePath="src/main/python" moduleName="knime.types.geospatial">
          <PythonValueFactory
                PythonClassName="GeoValueFactory"
                ValueFactory="org.knime.geospatial.core.data.cell.GeoCell$ValueFactory">
