@@ -33,7 +33,8 @@ try {
                         'knime-core-arrow'
                     ],
                     ius: [
-                        'org.knime.features.core.columnar.feature.group'
+                        'org.knime.features.core.columnar.feature.group',
+                        'org.knime.features.geospatial.feature.group'
                     ]
                 ],
                 extraNodeLabel: 'python-all'
