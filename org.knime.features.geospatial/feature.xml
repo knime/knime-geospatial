@@ -6,7 +6,7 @@
       provider-name="KNIME AG, Zurich, Switzerland">
 
    <description>
-      Preview of the goespatial extension that includes types and nodes
+      Preview of the goespatial extension that includes data types 
 for geospatial processing analytics.
 Notice: This feature is still under active development and is
 most definitely not production quality code. 
@@ -735,13 +735,6 @@ interoperation with KNIME.  The owner of a Node may freely choose the
 license terms applicable to such Node, including when such Node is
 propagated with or for interoperation with KNIME.
    </license>
-
-   <plugin
-         id="org.knime.geospatial"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
 
    <plugin
          id="org.knime.geospatial.core"
