@@ -144,7 +144,6 @@ class FromGeoPandasColumnConverter(kt.FromPandasColumnConverter):
     ) -> "pandas.Series":
         import pandas as pd
         import geopandas
-        import geospatial_types as gt
         import pyarrow as pa
         import knime_arrow_pandas as kap
 
@@ -173,11 +172,11 @@ class FromGeoPandasColumnConverter(kt.FromPandasColumnConverter):
         dtype = kap.PandasLogicalTypeExtensionType(
             storage_type=pa.struct([("0", pa.large_binary()), ("1", pa.string())]),
             logical_type=_knime_value_factory(most_specific_value_factory),
-            converter=gt.GeoValueFactory(),
+            converter=GeoValueFactory(),
         )
 
         return pd.Series(
-            [gt.GeoValue(w, crs) for w in wkbs], dtype=dtype, index=column.index
+            [GeoValue(w, crs) for w in wkbs], dtype=dtype, index=column.index
         )
 
 
