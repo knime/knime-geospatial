@@ -7,36 +7,80 @@
             modulePath="src/main/python" moduleName="knime.types.geospatial">
          <PythonValueFactory
                PythonClassName="GeoValueFactory"
+               ValueFactory="org.knime.geospatial.core.data.cell.GeoCell$ValueFactory"
+               ValueTypeName="knime.types.geospatial.GeoValue">
+         </PythonValueFactory>
+         <PythonValueFactory
+               PythonClassName="GeoValueFactory"
+               ValueFactory="org.knime.geospatial.core.data.cell.GeoPointCell$ValueFactory"
+               ValueTypeName="shapely.geometry.point.Point">
+         </PythonValueFactory>
+         <PythonValueFactory
+               PythonClassName="GeoValueFactory"
+               ValueFactory="org.knime.geospatial.core.data.cell.GeoLineCell$ValueFactory"
+               ValueTypeName="shapely.geometry.linestring.LineString">
+         </PythonValueFactory>
+         <PythonValueFactory
+               PythonClassName="GeoValueFactory"
+               ValueFactory="org.knime.geospatial.core.data.cell.GeoPolygonCell$ValueFactory"
+               ValueTypeName="shapely.geometry.polygon.Polygon">
+         </PythonValueFactory>
+         <PythonValueFactory
+               PythonClassName="GeoValueFactory"
+               ValueFactory="org.knime.geospatial.core.data.cell.GeoMultiPointCell$ValueFactory"
+               ValueTypeName="shapely.geometry.multipoint.MultiPoint">
+         </PythonValueFactory>
+         <PythonValueFactory
+               PythonClassName="GeoValueFactory"
+               ValueFactory="org.knime.geospatial.core.data.cell.GeoMultiLineCell$ValueFactory"
+               ValueTypeName="shapely.geometry.multilinestring.MultiLineString">
+         </PythonValueFactory>
+         <PythonValueFactory
+               PythonClassName="GeoValueFactory"
+               ValueFactory="org.knime.geospatial.core.data.cell.GeoMultiPolygonCell$ValueFactory"
+               ValueTypeName="shapely.geometry.multipolygon.MultiPolygon">
+         </PythonValueFactory>
+         <PythonValueFactory
+               PythonClassName="GeoValueFactory"
+               ValueFactory="org.knime.geospatial.core.data.cell.GeoCollectionCell$ValueFactory"
+               ValueTypeName="shapely.geometry.collection.GeometryCollection">
+         </PythonValueFactory>
+         <FromPandasColumnConverter
+               PythonClassName="FromGeoPandasColumnConverter"
+               ValueTypeName="geopandas.array.GeometryDtype">
+         </FromPandasColumnConverter>
+         <ToPandasColumnConverter
+               PythonClassName="ToGeoPandasColumnConverter"
                ValueFactory="org.knime.geospatial.core.data.cell.GeoCell$ValueFactory">
-         </PythonValueFactory>
-         <PythonValueFactory
-               PythonClassName="GeoValueFactory"
+         </ToPandasColumnConverter>
+         <ToPandasColumnConverter
+               PythonClassName="ToGeoPandasColumnConverter"
                ValueFactory="org.knime.geospatial.core.data.cell.GeoPointCell$ValueFactory">
-         </PythonValueFactory>
-         <PythonValueFactory
-               PythonClassName="GeoValueFactory"
+         </ToPandasColumnConverter>
+         <ToPandasColumnConverter
+               PythonClassName="ToGeoPandasColumnConverter"
                ValueFactory="org.knime.geospatial.core.data.cell.GeoLineCell$ValueFactory">
-         </PythonValueFactory>
-         <PythonValueFactory
-               PythonClassName="GeoValueFactory"
+         </ToPandasColumnConverter>
+         <ToPandasColumnConverter
+               PythonClassName="ToGeoPandasColumnConverter"
                ValueFactory="org.knime.geospatial.core.data.cell.GeoPolygonCell$ValueFactory">
-         </PythonValueFactory>
-         <PythonValueFactory
-               PythonClassName="GeoValueFactory"
+         </ToPandasColumnConverter>
+         <ToPandasColumnConverter
+               PythonClassName="ToGeoPandasColumnConverter"
                ValueFactory="org.knime.geospatial.core.data.cell.GeoMultiPointCell$ValueFactory">
-         </PythonValueFactory>
-         <PythonValueFactory
-               PythonClassName="GeoValueFactory"
+         </ToPandasColumnConverter>
+         <ToPandasColumnConverter
+               PythonClassName="ToGeoPandasColumnConverter"
                ValueFactory="org.knime.geospatial.core.data.cell.GeoMultiLineCell$ValueFactory">
-         </PythonValueFactory>
-         <PythonValueFactory
-               PythonClassName="GeoValueFactory"
+         </ToPandasColumnConverter>
+         <ToPandasColumnConverter
+               PythonClassName="ToGeoPandasColumnConverter"
                ValueFactory="org.knime.geospatial.core.data.cell.GeoMultiPolygonCell$ValueFactory">
-         </PythonValueFactory>
-         <PythonValueFactory
-               PythonClassName="GeoValueFactory"
+         </ToPandasColumnConverter>
+         <ToPandasColumnConverter
+               PythonClassName="ToGeoPandasColumnConverter"
                ValueFactory="org.knime.geospatial.core.data.cell.GeoCollectionCell$ValueFactory">
-         </PythonValueFactory>
+         </ToPandasColumnConverter>
       </Module>
    </extension>
 

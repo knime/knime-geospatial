@@ -131,7 +131,6 @@ _shapely_type_to_value_factory = {
 }
 
 
-@kt.register_from_pandas_column_converter
 class FromGeoPandasColumnConverter(kt.FromPandasColumnConverter):
     # these warnings will be suppressed by the warning manager
     warnings_to_suppress = ["Geometry column does not contain geometry."]
@@ -180,7 +179,6 @@ class FromGeoPandasColumnConverter(kt.FromPandasColumnConverter):
         )
 
 
-@kt.register_to_pandas_column_converter
 class ToGeoPandasColumnConverter(kt.ToPandasColumnConverter):
     def can_convert(self, dtype):
         import knime_arrow_types as kat
