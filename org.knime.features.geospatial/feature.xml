@@ -6,16 +6,7 @@
       provider-name="KNIME AG, Zurich, Switzerland">
 
    <description>
-      Preview of the goespatial extension that includes data types 
-for geospatial processing analytics.
-Notice: This feature is still under active development and is
-most definitely not production quality code. 
-These feature is what we use internally to validate and test
-recent developments, so it is not tested as thoroughly as standard
-KNIME features. Furthermore new nodes or functionality may change
-substantially (or disappear entirely) from one build to the next.
-It’s even possible that workflows you edit or create with nightly
-builds stop being readable by future (or past) versions...
+      Extension that includes basic data types for Geospatial Analytics.
    </description>
 
    <copyright>
