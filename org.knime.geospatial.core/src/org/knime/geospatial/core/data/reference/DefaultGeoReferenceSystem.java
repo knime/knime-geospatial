@@ -120,7 +120,7 @@ class DefaultGeoReferenceSystem implements GeoReferenceSystem {
                     throw new IOException(errorMsg, e);
                 }
             } catch (IOException ex) {
-                throw new IllegalArgumentException(errorMsg, e);
+                throw new IllegalArgumentException(errorMsg, ex);
             }
         }
         if (rs == null) {
