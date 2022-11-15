@@ -144,7 +144,7 @@ class FromGeoPandasColumnConverter(kt.FromPandasColumnConverter):
         import pandas as pd
         import geopandas
         import pyarrow as pa
-        import knime_arrow_pandas as kap
+        import knime._arrow._pandas as kap
 
         column = data_frame[column_name]
         geo_column = geopandas.GeoSeries(column)
