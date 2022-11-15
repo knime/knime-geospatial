@@ -48,7 +48,7 @@ PythonValueFactory implementations for geospatial KNIME types.
 @author Carsten Haubold, KNIME GmbH, Konstanz, Germany
 @author Jonas Klotz, KNIME GmbH, Berlin, Germany
 """
-import knime_types as kt
+import knime.api.types as kt
 
 
 class GeoValue:
@@ -181,7 +181,7 @@ class FromGeoPandasColumnConverter(kt.FromPandasColumnConverter):
 
 class ToGeoPandasColumnConverter(kt.ToPandasColumnConverter):
     def can_convert(self, dtype):
-        import knime_arrow_types as kat
+        import knime._arrow._types as kat
 
         return (
             isinstance(dtype, kat.LogicalTypeExtensionType)
