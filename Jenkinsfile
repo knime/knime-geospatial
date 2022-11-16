@@ -10,6 +10,9 @@ static final String DEFAULT_PYTHON_VERSION = '39'
 library "knime-pipeline@$BN"
 
 properties([
+    pipelineTriggers([
+        upstream("knime-python/${BRANCH_NAME.replaceAll('/', '%2F')}")
+    ]),
     parameters(workflowTests.getConfigurationsAsParameters() + getPythonParameters()),
     buildDiscarder(logRotator(numToKeepStr: '5')),
     disableConcurrentBuilds()
