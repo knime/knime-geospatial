@@ -49,6 +49,38 @@
                PythonClassName="FromGeoPandasColumnConverter"
                ValueTypeName="geopandas.array.GeometryDtype">
          </FromPandasColumnConverter>
+         <FromPandasColumnConverter
+               PythonClassName="FromGeoPandasColumnConverter"
+               ValueTypeName="org.knime.geospatial.core.data.cell.GeoCell$ValueFactory">
+         </FromPandasColumnConverter>
+         <FromPandasColumnConverter
+               PythonClassName="FromGeoPandasColumnConverter"
+               ValueTypeName="org.knime.geospatial.core.data.cell.GeoPointCell$ValueFactory">
+         </FromPandasColumnConverter>
+         <FromPandasColumnConverter
+               PythonClassName="FromGeoPandasColumnConverter"
+               ValueTypeName="org.knime.geospatial.core.data.cell.GeoLineCell$ValueFactory">
+         </FromPandasColumnConverter>
+         <FromPandasColumnConverter
+               PythonClassName="FromGeoPandasColumnConverter"
+               ValueTypeName="org.knime.geospatial.core.data.cell.GeoPolygonCell$ValueFactory">
+         </FromPandasColumnConverter>
+         <FromPandasColumnConverter
+               PythonClassName="FromGeoPandasColumnConverter"
+               ValueTypeName="org.knime.geospatial.core.data.cell.GeoMultiPointCell$ValueFactory">
+         </FromPandasColumnConverter>
+         <FromPandasColumnConverter
+               PythonClassName="FromGeoPandasColumnConverter"
+               ValueTypeName="org.knime.geospatial.core.data.cell.GeoMultiLineCell$ValueFactory">
+         </FromPandasColumnConverter>
+         <FromPandasColumnConverter
+               PythonClassName="FromGeoPandasColumnConverter"
+               ValueTypeName="org.knime.geospatial.core.data.cell.GeoMultiPolygonCell$ValueFactory">
+         </FromPandasColumnConverter>
+         <FromPandasColumnConverter
+               PythonClassName="FromGeoPandasColumnConverter"
+               ValueTypeName="org.knime.geospatial.core.data.cell.GeoCollectionCell$ValueFactory">
+         </FromPandasColumnConverter>
          <ToPandasColumnConverter
                PythonClassName="ToGeoPandasColumnConverter"
                ValueFactory="org.knime.geospatial.core.data.cell.GeoCell$ValueFactory">

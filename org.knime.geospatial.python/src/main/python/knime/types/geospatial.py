@@ -146,14 +146,24 @@ class FromGeoPandasColumnConverter(kt.FromPandasColumnConverter):
         import pyarrow as pa
         import knime._arrow._pandas as kap
 
-        column = data_frame[column_name]
+        # convert all missing values to None, such that we can convert to a GeoSeries
+        column = data_frame[column_name].where(
+            pd.notnull(data_frame[column_name]), None
+        )
         geo_column = geopandas.GeoSeries(column)
 
         crs = None
-        if geo_column.crs:  # highest crs level
+        if hasattr(geo_column, "crs") and geo_column.crs:  # highest crs level
             crs = str(geo_column.crs)
-        elif data_frame.crs:  # else second-highest crs level
+        elif (
+            hasattr(data_frame, "crs") and data_frame.crs
+        ):  # else second-highest crs level
             crs = str(data_frame.crs)
+        if not crs:
+            raise ValueError(
+                f"No coordinate reference system(CRS) found, neither onGeoDataFrame nor GeoSeries  with"
+                f"name '{column_name}'. Please specify a CRS."
+            )
 
         wkbs = geo_column.to_wkb()
 
@@ -167,7 +177,6 @@ class FromGeoPandasColumnConverter(kt.FromPandasColumnConverter):
 
             most_specific_value_factory = _shapely_type_to_value_factory[geom_type]
 
-        # how do we get the data into pandas/pyarrow from wkb???
         dtype = kap.PandasLogicalTypeExtensionType(
             storage_type=pa.struct([("0", pa.large_binary()), ("1", pa.string())]),
             logical_type=_knime_value_factory(most_specific_value_factory),
@@ -175,7 +184,9 @@ class FromGeoPandasColumnConverter(kt.FromPandasColumnConverter):
         )
 
         return pd.Series(
-            [GeoValue(w, crs) for w in wkbs], dtype=dtype, index=column.index
+            [GeoValue(w, crs) if w else None for w in wkbs],
+            dtype=dtype,
+            index=column.index,
         )
 
 
@@ -198,7 +209,9 @@ class ToGeoPandasColumnConverter(kt.ToPandasColumnConverter):
         crs_set = set()
         wkb_lst = []
         for value in column:
-            if value is not None and not (value.crs is None and value.wkb is None):
+            if value is not None and not (
+                value.crs is None or value.wkb is None or value.wkb == b""
+            ):
                 crs_set.add(value.crs)
                 wkb_lst.append(value.wkb)
                 if len(crs_set) != 1:
