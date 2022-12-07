@@ -20,7 +20,7 @@ properties([
 
 try {
     // provide the name of the update site project
-    knimetools.defaultTychoBuild('org.knime.update.geospatial', 'maven && python3 && java11')
+    knimetools.defaultTychoBuild('org.knime.update.geospatial', 'maven && python3 && java17')
 
     withEnv([ "KNIME_WORKFLOWTEST_PYTHON_VERSION=39" ]) {
         stage("Workflowtests") {
