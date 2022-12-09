@@ -1,22 +1,32 @@
-# Template for Analytics Platform repositories
+# ![Image](https://www.knime.com/files/knime_logo_github_40x40_4layers.png) KNIME® - Geospatial Data Types
 
-In addition to plug-ins and features that are installed by user, every repository needs some additional files and folders:
+The KNIME Geospatial Data Types repository provides Geospatial data types for the KNIME Analytics Platform. These data types are available for node development in Java and Python. 
 
-* An update site project for specifying which artifacts should be built and published.
-  `org.knime.update.geospatial` is the template for this. Its `category.xml` contains a list of all features
-  (and optionally plug-ins/bundles), including potential source features (or bundles). The `pom.xml` must be adapted to
-  have the correct artifact ID.
-* Optional but required in many cases: A "testing" feature that is installed as part of the workflow tests and pulls in
-  everything that is required to run the test workflows. This includes the main feature in the repository, as well as
-  dedicated test plug-ins and features from other projects that provide nodes which are used in the test workflows.
-* Special files and configuration for test workflows in `workflow-tests`. Required VM arguments go into
-  `workflow-test/vmargs`, required Eclipse preferences go into `workflow-tests/preferences.epf`.
+The code is organized as follows:
 
-  If you need OS-specific preferences, put them into `workflow-tests/preferences-Linux.epf`,
-  `workflow-tests/preferences-Windows.epf`, or `workflow-tests/preferences-MacOSX.epf`, respectively. Only one
-  preference file will be loaded, with the OS-specific file taking precedence.
+* org.knime.features.geospatial: The feature that bundles the Java and Python type plugins.
+* org.knime.geospatial.core: The plugin that implements the Java type implementation.
+* org.knime.geospatial.core.tests: The plugin that contains the unit tests for the Java type implementation.
+* org.knime.geospatial.python: The plugin that contains the Python type implementation.
+* org.knime.geospatial: This feature contains **experimental** Java based KNIME nodes which are not published anywhere.
 
-  Any of those files can be deleted if they are not required.
-* `pom.xml`: It lists all modules/projects that should be processed during the build as well as all upstream
-  repositories that contain required dependencies.
-* `Jenkinsfile`: used by the build system only. Have a look into the file for instructions what parts must be adapted.
+
+## Geo Type Hierarchy
+
+The Geospatial types are based on the [Well-known text representation (WKT)](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry) and organized in a hierarchy. The following image depicts the hierarchy of the different types. Each node in the hierarchy has the name of the type as shown in the KNIME data table spec as well as the name of the corresponding class that implements the `DataValue` interface.
+
+![Image](geo_type_hierarchy.png)
+
+
+## Development
+
+For more information on how to get started with the Python based development for KNIME Analytics Platform check out the [Create a New Python based KNIME Extension guide](https://docs.knime.com/latest/pure_python_node_extensions_guide/index.html).
+Python code that uses the Geospatial data types can be found in the [Geospatial Analytics Extension for KNIME Git repository](https://github.com/spatial-data-lab/knime-geospatial-extension).
+
+For more information on how to get started with the Java development for KNIME Analytics Platform have a look at the [Create a New Java based KNIME Extension guide](https://docs.knime.com/latest/analytics_platform_new_node_quickstart_guide/index.html).
+Java based implementations that use the data types can be found in the `org.knime.geospatial` extension folder in this repository.
+
+
+## Join the Community
+
+* [KNIME Geospatial Forum](https://forum.knime.com/c/community-extensions/geospatial/)
