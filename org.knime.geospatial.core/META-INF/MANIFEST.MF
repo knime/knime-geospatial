@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: KNIME Geospatial core plugin that among other things defines geospatial data types.
 Bundle-SymbolicName: org.knime.geospatial.core;singleton:=true
-Bundle-Version: 5.0.0.qualifier
+Bundle-Version: 5.1.0.qualifier
 Bundle-ClassPath: knime-geospatial-core.jar,
  lib/sf-2.1.0.jar,
  lib/sf-wkb-2.1.0.jar,
