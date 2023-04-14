@@ -15,7 +15,7 @@
     <name>Aggregator POM for knime-core-geospatial</name>
 
 	<properties>
-		<revision>5.0.0</revision>
+		<revision>5.1.0</revision>
 		<changelist>-SNAPSHOT</changelist>
 		<feature-branch-extension.branchListProperty>git.branch</feature-branch-extension.branchListProperty>
 		<feature-branch-extension.appendArtifactoryProperties>false</feature-branch-extension.appendArtifactoryProperties>
