@@ -7,7 +7,7 @@ static final String[] PYTHON_VERSIONS = ['39']
 @groovy.transform.Field
 static final String DEFAULT_PYTHON_VERSION = '39'
 
-library "knime-pipeline@$BN"
+library "knime-pipeline@todo/AP-19554-fast-table-tests"
 
 properties([
     pipelineTriggers([
