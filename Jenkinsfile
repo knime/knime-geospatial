@@ -33,7 +33,6 @@ try {
                         'knime-conda',
                         'knime-filehandling',
                         'knime-core-columnar',
-                        'knime-core-arrow'
                     ],
                     ius: [
                         'org.knime.features.core.columnar.feature.group',
