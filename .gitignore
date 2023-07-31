@@ -2,8 +2,11 @@
 **/target/
 */build/
 *.jar
-*/.polyglot.build.properties 
 **/.flattened-pom.xml
 **/CHANGELOG.md
 **/__pycache__/
+
+**/.polyglot.build.properties
+**/.polyglot.feature.xml
+**/.polyglot.META-INF
 

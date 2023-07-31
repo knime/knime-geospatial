@@ -4,4 +4,4 @@ eclipse.preferences.version=1
 idePrefixKey=
 projectKey=KNIME_knime-geospatial
 serverId=SonarCloud
-sqPrefixKey=org.knime.geospatial.core.tests
+sqPrefixKey=org.knime.geospatial.core/lib/fetch_jars
