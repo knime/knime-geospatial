@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.knime.features.geospatial"
-      label="KNIME Geospatial Extension"
-      version="5.1.0.qualifier"
+      label="KNIME Geospatial Types"
+      version="5.1.1.qualifier"
       provider-name="KNIME AG, Zurich, Switzerland">
 
    <description>
-      Extension that includes basic data types for Geospatial Analytics.
+      This feature contains basic data types for Geospatial Analytics.
    </description>
 
    <copyright>
