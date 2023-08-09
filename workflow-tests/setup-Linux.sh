@@ -1,14 +1,16 @@
 #!/bin/bash
 
-# set python version if required
-if [[ -n $KNIME_WORKFLOWTEST_PYTHON_VERSION ]]; then
-	echo "Setting python version to: ${KNIME_WORKFLOWTEST_PYTHON_VERSION}"
+# Create the Python environment if required
+if [[ -n $KNIME_WORKFLOWTEST_PYTHON_ENVIRONMENT ]]; then
+	envPath="${WORKSPACE}/python_test_environment"
+	prefPath="${WORKSPACE}/workflow-tests/preferences-Linux.epf"
+	echo "Creating Conda environment for: ${KNIME_WORKFLOWTEST_PYTHON_ENVIRONMENT} at ${envPath}"
 
-	preferencesPath="${WORKSPACE}/workflow-tests/preferences-Linux.epf"
-	envPath="/home/jenkins/miniconda3/envs/knime_py${KNIME_WORKFLOWTEST_PYTHON_VERSION}"
-	py3EnvPrefKey='python3CondaEnvironmentDirectoryPath='
+	micromamba create \
+		-p ${envPath} \
+		-f ${WORKSPACE}/workflow-tests/${KNIME_WORKFLOWTEST_PYTHON_ENVIRONMENT}
+	micromamba list -p ${envPath}
 
-	sedi "s|${py3EnvPrefKey}.*|${py3EnvPrefKey}${envPath}|g" "${preferencesPath}"
-
-	cat "${preferencesPath}"
+	sedi "s|<placeholder_for_env_path>|${envPath}|g" "${prefPath}"
+	cat "${prefPath}"
 fi

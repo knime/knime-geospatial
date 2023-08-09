@@ -1,34 +1,33 @@
 #!groovy
 def BN = (BRANCH_NAME == 'master' || BRANCH_NAME.startsWith('releases/')) ? BRANCH_NAME : 'releases/2023-10'
 
-@groovy.transform.Field
-static final String[] PYTHON_VERSIONS = ['39']
-
-@groovy.transform.Field
-static final String DEFAULT_PYTHON_VERSION = '39'
-
 library "knime-pipeline@$BN"
+
+static final String DEFAULT_WF_TESTS_PYTHON_ENV = 'env_py39_kn47.yml'
 
 properties([
     pipelineTriggers([
         upstream("knime-python/${BRANCH_NAME.replaceAll('/', '%2F')}")
     ]),
-    parameters(workflowTests.getConfigurationsAsParameters() + getPythonParameters()),
+    parameters(workflowTests.getConfigurationsAsParameters()),
     buildDiscarder(logRotator(numToKeepStr: '5')),
     disableConcurrentBuilds()
 ])
 
 try {
     // provide the name of the update site project
-    knimetools.defaultTychoBuild('org.knime.update.geospatial', 'maven && python3 && java17')
+    knimetools.defaultTychoBuild('org.knime.update.geospatial', 'maven && workflow-tests && java17')
 
-    withEnv([ "KNIME_WORKFLOWTEST_PYTHON_VERSION=39" ]) {
-        stage("Workflowtests") {
+    String envYml = "${DEFAULT_WF_TESTS_PYTHON_ENV}"
+
+    withEnv([ "KNIME_WORKFLOWTEST_PYTHON_ENVIRONMENT=${envYml}" ]) {
+        stage("Workflowtests with Python ${envYml}") {
             workflowTests.runTests(
                 dependencies: [
                     repositories: [
                         'knime-geospatial',
                         'knime-python',
+                        'knime-scripting-editor',
                         'knime-python-legacy',
                         'knime-conda',
                         'knime-filehandling',
@@ -38,8 +37,7 @@ try {
                         'org.knime.features.core.columnar.feature.group',
                         'org.knime.features.geospatial.feature.group'
                     ]
-                ],
-                extraNodeLabel: 'python-all'
+                ]
             )
         }
     }
@@ -53,17 +51,6 @@ try {
     throw ex
 } finally {
     notifications.notifyBuild(currentBuild.result);
-}
-
-/**
-* Return parameters to select python version to run workflowtests with
-*/
-def getPythonParameters() {
-    def pythonParams = []
-    for (c in PYTHON_VERSIONS) {
-        pythonParams += booleanParam(defaultValue: c == DEFAULT_PYTHON_VERSION, description: "Run workflowtests with Python ${c}", name: c)
-    }
-    return pythonParams
 }
 
 /* vim: set shiftwidth=4 expandtab smarttab: */
