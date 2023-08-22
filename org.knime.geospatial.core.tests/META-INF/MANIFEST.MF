@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Testing
 Bundle-SymbolicName: org.knime.geospatial.core.tests;singleton:=true
-Bundle-Version: 5.1.0.qualifier
+Bundle-Version: 5.1.1.qualifier
 Fragment-Host: org.knime.geospatial.core;bundle-version="[5.0.0,6.0.0)"
 Automatic-Module-Name: org.knime.sap.theobald.testing
 Bundle-RequiredExecutionEnvironment: JavaSE-11
