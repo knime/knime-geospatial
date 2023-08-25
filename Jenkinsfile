@@ -25,13 +25,14 @@ try {
             workflowTests.runTests(
                 dependencies: [
                     repositories: [
+                        'knime-conda',
+                        'knime-core-columnar',
+                        'knime-filehandling',
                         'knime-geospatial',
                         'knime-python',
                         'knime-scripting-editor',
                         'knime-python-legacy',
-                        'knime-conda',
-                        'knime-filehandling',
-                        'knime-core-columnar',
+                        'knime-scripting-editor',
                     ],
                     ius: [
                         'org.knime.features.core.columnar.feature.group',
