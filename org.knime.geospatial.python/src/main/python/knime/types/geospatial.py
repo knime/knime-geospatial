@@ -172,8 +172,10 @@ class FromGeoPandasColumnConverter(kt.FromPandasColumnConverter):
             "org.knime.geospatial.core.data.cell.GeoCell$ValueFactory"
         )
         geom_types = set(geo_column.geom_type)
+        # geom_type is None for missing values so we remove it from the set
+        geom_types = [geom_type for geom_type in geom_types if geom_type != None]
         if len(geom_types) == 1:
-            geom_type = geom_types.pop()
+            geom_type = geom_types[0]
 
             most_specific_value_factory = _shapely_type_to_value_factory[geom_type]
 
@@ -220,7 +222,11 @@ class ToGeoPandasColumnConverter(kt.ToPandasColumnConverter):
                     )
             else:
                 wkb_lst.append(None)
-        crs = crs_set.pop()
+        if len(crs_set) == 0:
+            # if the column contains only missing values return the default crs
+            crs = "EPSG:4326"
+        else:
+            crs = crs_set.pop()
 
         return geopandas.GeoSeries.from_wkb(
             wkb_lst,
