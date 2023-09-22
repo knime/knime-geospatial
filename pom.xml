@@ -28,10 +28,12 @@
         <module>org.knime.geospatial.core/lib/fetch_jars</module>
         <module>org.knime.geospatial.core</module>
 		<module>org.knime.geospatial.core.tests</module>
+		<module>org.knime.geospatial.db</module>
 <!-- <module>org.knime.geospatial/lib/fetch_jars</module> -->
 <!--No nodes only data types in first release	<module>org.knime.geospatial</module> -->
 		<module>org.knime.geospatial.python</module>
 		<module>org.knime.features.geospatial</module>
+		<module>org.knime.features.geospatial.db</module>
 		<module>org.knime.update.geospatial</module>
 	</modules>
 

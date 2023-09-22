@@ -1,0 +1,4 @@
+*.jar
+*sources.jar
+*.zip
+*/target/

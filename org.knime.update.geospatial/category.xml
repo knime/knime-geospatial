@@ -6,7 +6,12 @@
    <feature id="org.knime.features.geospatial.source" version="0.0.0">
        <category name="knime-geospatial" />
    </feature>
-
+    <feature id="org.knime.features.geospatial.db" version="0.0.0">
+       <category name="knime-geospatial" />
+   </feature>
+   <feature id="org.knime.features.geospatial.db.source" version="0.0.0">
+       <category name="knime-geospatial" />
+   </feature>
    <category-def name="knime-geospatial" label="Build artifacts from knime-geospatial">
        <description>KNIME Geospatial Extension</description>
    </category-def>

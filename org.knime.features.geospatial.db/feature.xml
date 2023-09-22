@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.knime.features.geospatial"
-      label="KNIME Geospatial Types"
+      id="org.knime.features.geospatial.db"
+      label="KNIME Geospatial DB"
       version="5.2.0.qualifier"
       provider-name="KNIME AG, Zurich, Switzerland">
 
    <description>
-      This feature contains basic data types for Geospatial Analytics.
+      This feature contains nodes that allow push down of geospatial operations into supported databases.
    </description>
 
    <copyright>
@@ -727,14 +727,12 @@ license terms applicable to such Node, including when such Node is
 propagated with or for interoperation with KNIME.
    </license>
 
-   <plugin
-         id="org.knime.geospatial.core"
-         download-size="0"
-         install-size="0"
+   <includes
+         id="org.knime.features.geospatial"
          version="0.0.0"/>
 
    <plugin
-         id="org.knime.geospatial.python"
+         id="org.knime.geospatial.db"
          download-size="0"
          install-size="0"
          version="0.0.0"/>

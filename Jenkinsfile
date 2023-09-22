@@ -36,6 +36,7 @@ try {
                     ],
                     ius: [
                         'org.knime.features.core.columnar.feature.group',
+                        'org.knime.features.geospatial.feature.db.group',
                         'org.knime.features.geospatial.feature.group'
                     ]
                 ]
