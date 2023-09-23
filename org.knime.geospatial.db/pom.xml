@@ -9,7 +9,6 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-    <groupId>org.knime</groupId>
 	<artifactId>org.knime.geospatial.db</artifactId>
 	<packaging>${packaging.default}</packaging>
 </project>
