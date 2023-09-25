@@ -30,6 +30,7 @@ try {
                         'knime-database',
                         'knime-filehandling',
                         'knime-geospatial',
+                        'knime-kerberos',
                         'knime-python',
                         'knime-scripting-editor',
                         'knime-python-legacy',
