@@ -6,19 +6,10 @@
 	<classpathentry exported="true" kind="lib" path="lib/h2gis/h2-2.1.214.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/h2gis/h2gis-2.2.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/h2gis/h2gis-api-2.2.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/h2gis/h2gis-dist-2.2.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/h2gis/h2gis-network-2.2.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/h2gis/h2gis-osgi-2.2.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/h2gis/h2gis-utilities-2.2.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/h2gis/jackson-core-2.13.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/h2gis/java-network-analyzer-0.4.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/h2gis/jgrapht-core-1.0.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/h2gis/jts-core-1.19.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/h2gis/org.osgi.compendium-5.0.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/h2gis/org.osgi.core-6.0.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/h2gis/poly2tri-0.4.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/h2gis/postgis-jts-2.2.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/h2gis/postgis-jts-osgi-2.2.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/h2gis/slf4j-api-1.7.36.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11">
 		<attributes>

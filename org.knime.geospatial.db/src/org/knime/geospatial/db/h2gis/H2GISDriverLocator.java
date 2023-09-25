@@ -113,19 +113,10 @@ public class H2GISDriverLocator extends AbstractDriverLocator {
             "h2-2.1.214.jar",
             "h2gis-2.2.0.jar",
             "h2gis-api-2.2.0.jar",
-            "h2gis-dist-2.2.0.jar",
-            "h2gis-network-2.2.0.jar",
-            "h2gis-osgi-2.2.0.jar",
             "h2gis-utilities-2.2.0.jar",
             "jackson-core-2.13.2.jar",
-            "java-network-analyzer-0.4.0.jar",
-            "jgrapht-core-1.0.1.jar",
             "jts-core-1.19.0.jar",
-            "org.osgi.compendium-5.0.0.jar",
-            "org.osgi.core-6.0.0.jar",
             "poly2tri-0.4.0.jar",
-            "postgis-jts-2.2.0.jar",
-            "postgis-jts-osgi-2.2.0.jar",
             "slf4j-api-1.7.36.jar").map(s -> "lib/h2gis/" + s)
             .collect(Collectors.toCollection(HashSet::new));
     }
