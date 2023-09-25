@@ -27,10 +27,12 @@ try {
                     repositories: [
                         'knime-conda',
                         'knime-core-columnar',
+                        'knime-credentials-base',
                         'knime-database',
                         'knime-filehandling',
                         'knime-geospatial',
                         'knime-kerberos',
+                        'knime-office365',
                         'knime-python',
                         'knime-scripting-editor',
                         'knime-python-legacy',
