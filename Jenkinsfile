@@ -27,6 +27,7 @@ try {
                     repositories: [
                         'knime-conda',
                         'knime-core-columnar',
+                        'knime-database',
                         'knime-filehandling',
                         'knime-geospatial',
                         'knime-python',
