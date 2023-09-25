@@ -48,8 +48,6 @@ package org.knime.geospatial.db;
 import java.io.InputStream;
 import java.sql.JDBCType;
 import java.sql.SQLType;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -69,13 +67,9 @@ import org.osgi.service.prefs.BackingStoreException;
 /**
  * KNIME database extensions plug-in.
  *
- * @author Viktor Buria
+ * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
 public class GeoDBExtensionsPlugin extends Plugin {
-    private static final Calendar CALENDAR = Calendar.getInstance();
-
-    private static final DateTimeFormatter DATE_TIME_FORMATTER_MS_SQL_SERVER =
-        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSS ZZZZZ");
 
     private static final NodeLogger LOGGER = NodeLogger.getLogger(GeoDBExtensionsPlugin.class);
 
@@ -142,7 +136,7 @@ public class GeoDBExtensionsPlugin extends Plugin {
             InstanceScope.INSTANCE.getNode(getBundle().getSymbolicName()).flush();
         } catch (final BackingStoreException exception) {
             // The message is inspired by the built-in Eclipse message.
-            LOGGER.error("Problems saving the database plug-in preferences.", exception);
+            LOGGER.error("Problems saving the geo database plug-in preferences.", exception);
         } finally {
             super.stop(context);
         }
