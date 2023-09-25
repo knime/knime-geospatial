@@ -25,9 +25,9 @@
 	</properties>
 
 	<modules>
-        <module>org.knime.geospatial.core/lib/h2gis/fetch_jars</module>
         <module>org.knime.geospatial.core</module>
 		<module>org.knime.geospatial.core.tests</module>
+	    <module>org.knime.geospatial.db/lib/h2gis/fetch_jars</module>
 		<module>org.knime.geospatial.db</module>
 <!-- <module>org.knime.geospatial/lib/fetch_jars</module> -->
 <!--No nodes only data types in first release	<module>org.knime.geospatial</module> -->
