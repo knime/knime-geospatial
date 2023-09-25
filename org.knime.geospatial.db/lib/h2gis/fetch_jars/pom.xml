@@ -1,0 +1,69 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.knime.geospatial</groupId>
+    <artifactId>knime-geospatial-db-fetch-jars</artifactId>
+    <version>${revision}${changelist}</version>
+    <packaging>pom</packaging>
+
+    <name>Jar fetcher for GeoDBTools</name>
+    <description>Running the maven goal &quot;package&quot; on this maven
+        project will fetch all jars required for this plugin and put them into
+        the libs/ directory.</description>
+
+    <properties>
+        <revision>5.2.0</revision>
+        <changelist>-SNAPSHOT</changelist>
+        <feature-branch-extension.branchListProperty>git.branch</feature-branch-extension.branchListProperty>
+        <feature-branch-extension.appendArtifactoryProperties>false</feature-branch-extension.appendArtifactoryProperties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <geotools.version>25.0</geotools.version>
+        <changelog.skip>true</changelog.skip>
+    </properties>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>org.orbisgis</groupId>
+            <artifactId>h2gis</artifactId>
+            <version>2.2.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-sources</id>
+                        <configuration>
+                            <classifier>sources</classifier>
+                            <includeScope>runtime</includeScope>
+                            <outputDirectory>../</outputDirectory>
+                        </configuration>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <configuration>
+                            <includeScope>runtime</includeScope>
+                            <outputDirectory>../</outputDirectory>
+                        </configuration>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

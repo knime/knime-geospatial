@@ -1,12 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   
-<extension
-         point="org.knime.workbench.repository.nodes">
-      <node
-            factory-class="org.knime.geospatial.db.GeoDBNodeFactory"
-            category-path="/"/>
-</extension>
-   
+
+    <extension
+        point="org.knime.workbench.repository.nodes">
+        <node
+            factory-class="org.knime.geospatial.db.nodes.GeoDBNodeFactory"
+            category-path="/" />
+        <node
+              category-path="/"
+              deprecated="false"
+              factory-class="org.knime.geospatial.db.nodes.h2gis.H2GISDBConnectorNodeFactory"
+              hidden="false">
+        </node>
+    </extension>
+    <!-- Database Types -->
+    <extension point="org.knime.database.DBType">
+        <DBType id="h2-gis" name="H2GIS"
+            urlTemplateValidator="org.knime.database.node.connector.file.FileUrlTemplateValidator">
+            <UrlTemplateExamples>
+                <UrlTemplateExample
+                    template="jdbc:h2:[location=file?&lt;file&gt;][location=in-memory?mem:&lt;database&gt;]" />
+            </UrlTemplateExamples>
+        </DBType>
+    </extension>
+
+    <!-- Agents -->
+
+    <extension point="org.knime.database.Agent">
+        <!-- H2GIS -->
+        <Agent
+            dbTypes="h2-gis"
+            factory="org.knime.database.extension.h2.H2AgentFactory"
+            interface="org.knime.database.agent.joiner.DBJoiner" />
+    </extension>
+
+    <!-- Dialects -->
+
+    <extension point="org.knime.database.SQLDialect">
+        <SQLDialect dbTypes="h2-gis"
+            factory="org.knime.database.extension.h2.dialect.H2DBSQLDialect$Factory" />
+    </extension>
+
+    <!-- Drivers  -->
+
+    <extension point="org.knime.database.Driver">
+        <!-- H2GIS -->
+        <Driver locator="org.knime.geospatial.db.h2gis.H2GISDriverLocator" />
+    </extension>
+
+    <extension point="org.knime.database.DBTypeMappingService">
+        <!-- H2GIS -->
+        <DBTypeMappingService
+            dbTypeId="h2-gis"
+            supplier="org.knime.geospatial.db.h2gis.H2GISTypeMappingServiceSupplier" />
+    </extension>
+
 </plugin>

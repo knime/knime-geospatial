@@ -46,15 +46,42 @@
  * History
  *   22 Sep 2023 (Tobias): created
  */
-package org.knime.geospatial.db;
+package org.knime.geospatial.db.nodes;
 
-import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeSettings;
+import org.knime.core.webui.node.impl.WebUINodeConfiguration;
+import org.knime.core.webui.node.impl.WebUINodeFactory;
+import org.knime.database.port.DBDataPortObject;
 
 /**
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
 @SuppressWarnings("restriction")
-public class GeoDBSettings implements DefaultNodeSettings {
+public class GeoDBNodeFactory extends WebUINodeFactory<GeoDBNodeModel> {
+
+    private static final WebUINodeConfiguration CONFIG = WebUINodeConfiguration.builder()//
+            .name("Geo DB")//
+            .icon("./rename.png")//
+            .shortDescription("Test node.")//
+            .fullDescription("Test node.")//
+            .modelSettingsClass(GeoDBSettings.class)//
+            .addInputPort("DB Data", DBDataPortObject.TYPE, "The db data to query.")//
+            .addOutputPort("DB Data", DBDataPortObject.TYPE, "The result db data.")//
+            .keywords("Geospatial", "Geo", "DB", "Database")//
+            .sinceVersion(5, 2, 0)
+            .build();
+
+    /**
+     * Constructor.
+     */
+    public GeoDBNodeFactory() {
+        super(CONFIG);
+    }
+
+    @Override
+    public GeoDBNodeModel createNodeModel() {
+        return new GeoDBNodeModel(CONFIG);
+    }
+
 
 }

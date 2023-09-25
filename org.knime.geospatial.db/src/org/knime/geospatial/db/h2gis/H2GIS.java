@@ -1,6 +1,5 @@
 /*
  * ------------------------------------------------------------------------
- *
  *  Copyright by KNIME AG, Zurich, Switzerland
  *  Website: http://www.knime.com; Email: contact@knime.com
  *
@@ -41,53 +40,26 @@
  *  propagated with or for interoperation with KNIME.  The owner of a Node
  *  may freely choose the license terms applicable to such Node, including
  *  when such Node is propagated with or for interoperation with KNIME.
- * ---------------------------------------------------------------------
- *
- * History
- *   22 Sep 2023 (Tobias): created
+ * ------------------------------------------------------------------------
  */
-package org.knime.geospatial.db;
 
-import org.knime.core.node.ExecutionContext;
-import org.knime.core.node.InvalidSettingsException;
-import org.knime.core.node.port.PortObject;
-import org.knime.core.node.port.PortObjectSpec;
-import org.knime.core.webui.node.impl.WebUINodeConfiguration;
-import org.knime.core.webui.node.impl.WebUINodeModel;
+package org.knime.geospatial.db.h2gis;
+
+import org.knime.database.DBType;
+import org.knime.database.DBTypeRegistry;
 
 /**
+ * Database-specific convenience constants and methods.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
-@SuppressWarnings("restriction")
-public class GeoDBNodeModel extends WebUINodeModel<GeoDBSettings> {
-
+public final class H2GIS {
     /**
-     * Constructor.
-     * @param config
+     * The {@link DBType} object corresponding to the database.
      */
-    protected GeoDBNodeModel(final WebUINodeConfiguration config) {
-        //why do I need to specify the settings class here even though it is part of the config
-        super(config, GeoDBSettings.class);
-    }
+    public static final DBType DB_TYPE = DBTypeRegistry.getInstance().getRegisteredDBType("h2-gis").get();
 
-    @Override
-    protected void validateSettings(final GeoDBSettings settings) throws InvalidSettingsException {
-        super.validateSettings(settings);
+    private H2GIS() {
+        throw new UnsupportedOperationException();
     }
-
-    @Override
-    protected PortObjectSpec[] configure(final PortObjectSpec[] inSpecs, final GeoDBSettings modelSettings)
-        throws InvalidSettingsException {
-        // TK_TODO Auto-generated method stub
-        return super.configure(inSpecs, modelSettings);
-    }
-
-    @Override
-    protected PortObject[] execute(final PortObject[] inObjects, final ExecutionContext exec, final GeoDBSettings modelSettings)
-        throws Exception {
-        // TK_TODO Auto-generated method stub
-        return super.execute(inObjects, exec, modelSettings);
-    }
-
 }

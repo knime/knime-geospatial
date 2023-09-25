@@ -1,6 +1,5 @@
 /*
  * ------------------------------------------------------------------------
- *
  *  Copyright by KNIME AG, Zurich, Switzerland
  *  Website: http://www.knime.com; Email: contact@knime.com
  *
@@ -41,46 +40,28 @@
  *  propagated with or for interoperation with KNIME.  The owner of a Node
  *  may freely choose the license terms applicable to such Node, including
  *  when such Node is propagated with or for interoperation with KNIME.
- * ---------------------------------------------------------------------
- *
- * History
- *   22 Sep 2023 (Tobias): created
+ * ------------------------------------------------------------------------
  */
-package org.knime.geospatial.db;
 
-import org.knime.core.webui.node.impl.WebUINodeConfiguration;
-import org.knime.core.webui.node.impl.WebUINodeFactory;
+package org.knime.geospatial.db.h2gis;
+
+import org.knime.database.agent.DBAgentFactory;
+import org.knime.database.extension.h2.H2AgentFactory;
 
 /**
+ * {@linkplain DBAgentFactory Agent factory} for the H2 database.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
-@SuppressWarnings("restriction")
-public class GeoDBNodeFactory extends WebUINodeFactory<GeoDBNodeModel> {
+public class H2GISAgentFactory extends H2AgentFactory {
 
-    private static final WebUINodeConfiguration CONFIG = WebUINodeConfiguration.builder()//
-            .name("Geo DB")//
-            .icon("./rename.png")//
-            .shortDescription("Test node.")//
-            .fullDescription("Test node.")//
-            .modelSettingsClass(GeoDBSettings.class)//
-            .addInputTable("Input Table", "The input table that contains columns that should be renamed.")//
-            .addOutputTable("Output Table", "The input table with the renamed columns.")//
-            .keywords("Change column name", "Select")//
-            .sinceVersion(5, 2, 0)
-            .build();
 
     /**
-     * Constructor.
+     * Constructs an {@link H2GISAgentFactory}.
      */
-    public GeoDBNodeFactory() {
-        super(CONFIG);
-    }
+    public H2GISAgentFactory() {
+        super();
 
-    @Override
-    public GeoDBNodeModel createNodeModel() {
-        return new GeoDBNodeModel(CONFIG);
     }
-
 
 }

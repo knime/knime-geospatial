@@ -3,11 +3,34 @@ Bundle-ManifestVersion: 2
 Bundle-Name: KNIME Geospatial Database plugin that allows to push down Geospatial Analysis into supported databases.
 Bundle-SymbolicName: org.knime.geospatial.db;singleton:=true
 Bundle-Version: 5.2.0.qualifier
-Bundle-ClassPath: knime-geospatial-db.jar
+Bundle-ClassPath: knime-geospatial-db.jar,
+ lib/h2gis/commons-compress-1.21.jar,
+ lib/h2gis/cts-1.7.0.jar,
+ lib/h2gis/h2-2.1.214.jar,
+ lib/h2gis/h2gis-2.2.0.jar,
+ lib/h2gis/h2gis-api-2.2.0.jar,
+ lib/h2gis/h2gis-dist-2.2.0.jar,
+ lib/h2gis/h2gis-network-2.2.0.jar,
+ lib/h2gis/h2gis-osgi-2.2.0.jar,
+ lib/h2gis/h2gis-utilities-2.2.0.jar,
+ lib/h2gis/jackson-core-2.13.2.jar,
+ lib/h2gis/java-network-analyzer-0.4.0.jar,
+ lib/h2gis/jgrapht-core-1.0.1.jar,
+ lib/h2gis/jts-core-1.19.0.jar,
+ lib/h2gis/org.osgi.compendium-5.0.0.jar,
+ lib/h2gis/org.osgi.core-6.0.0.jar,
+ lib/h2gis/poly2tri-0.4.0.jar,
+ lib/h2gis/postgis-jts-2.2.0.jar,
+ lib/h2gis/postgis-jts-osgi-2.2.0.jar,
+ lib/h2gis/slf4j-api-1.7.36.jar
 Bundle-Vendor: KNIME AG, Zurich, Switzerland
 Require-Bundle: org.knime.core;bundle-version="[5.0.0,6.0.0)",
  org.knime.core.ui;bundle-version="[5.2.0,6.0.0)",
  org.knime.geospatial.core;bundle-version="[5.2.0,6.0.0)",
- org.knime.database;bundle-version="[5.2.0,6.0.0)"
+ org.knime.database;bundle-version="[5.2.0,6.0.0)",
+ org.knime.database.nodes,
+ org.apache.commons.lang3;bundle-version="[3.9.0,4.0.0)",
+ org.knime.database.extensions
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
+Bundle-Activator: org.knime.geospatial.db.GeoDBExtensionsPlugin
