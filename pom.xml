@@ -108,6 +108,11 @@
             <layout>p2</layout>
             <url>${knime.kerberos.p2}</url>
         </repository>
+        <repository>
+            <id>p2-knime-office365</id>
+            <layout>p2</layout>
+            <url>${knime.office365.p2}</url>
+        </repository>
 		<repository>
 			<id>p2-knime-python</id>
 			<layout>p2</layout>
