@@ -46,22 +46,35 @@
  * History
  *   22 Sep 2023 (Tobias): created
  */
-package org.knime.geospatial.db.nodes;
+package org.knime.geospatial.db.nodes.calculation;
 
-import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeSettings;
-import org.knime.core.webui.node.dialog.defaultdialog.widget.ChoicesWidget;
-import org.knime.core.webui.node.dialog.defaultdialog.widget.Widget;
-import org.knime.geospatial.db.util.DBColumnChoicesProvider;
+import org.knime.core.webui.node.impl.WebUINodeConfiguration;
+import org.knime.core.webui.node.impl.WebUINodeFactory;
+import org.knime.geospatial.db.util.GeoConfigBuilder;
+import org.knime.geospatial.db.util.SingleGeoColumnNodeModel;
 
 /**
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
 @SuppressWarnings("restriction")
-public class GeoDBSettings implements DefaultNodeSettings {
+public class GeoDBLengthNodeFactory extends WebUINodeFactory<SingleGeoColumnNodeModel> {
 
-    @Widget(title = "Geo column", description = "The Geo column to use.")
-    @ChoicesWidget(choices = DBColumnChoicesProvider.class)
-    public String m_geoColName;
+    private static final WebUINodeConfiguration CONFIG =
+            GeoConfigBuilder.createSingelGeoColConfig("Length", "Computes the length.",
+                "This really computes the length");
+
+    /**
+     * Constructor.
+     */
+    public GeoDBLengthNodeFactory() {
+        super(CONFIG);
+    }
+
+    @Override
+    public SingleGeoColumnNodeModel createNodeModel() {
+        return new SingleGeoColumnNodeModel(CONFIG, "ST_LENGTH");
+    }
+
 
 }
