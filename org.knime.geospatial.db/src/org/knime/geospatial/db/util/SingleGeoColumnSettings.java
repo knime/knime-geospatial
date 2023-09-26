@@ -60,7 +60,7 @@ import org.knime.core.webui.node.dialog.defaultdialog.widget.Widget;
 public class SingleGeoColumnSettings implements DefaultNodeSettings {
 
     @Widget(title = "Geo column", description = "The Geo column to use.")
-    @ChoicesWidget(choices = DBColumnChoicesProvider.class)
+    @ChoicesWidget(choices = DBGeoColumnChoicesProvider.class)
     public String m_geoColName;
 
 }
