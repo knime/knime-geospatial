@@ -30,6 +30,7 @@ try {
                         'knime-credentials-base',
                         'knime-database',
                         'knime-filehandling',
+                        'knime-gateway',
                         'knime-geospatial',
                         'knime-kerberos',
                         'knime-office365',
