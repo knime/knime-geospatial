@@ -60,16 +60,21 @@ public class GeoConfigBuilder {
 
     public static WebUINodeConfiguration createSingelGeoColConfig(final String name, final String shortDescription,
         final String description) {
-     return WebUINodeConfiguration.builder()//
+        return createSingelGeoColConfig(name, shortDescription, description, "globe");
+    }
+
+    public static WebUINodeConfiguration createSingelGeoColConfig(final String name, final String shortDescription,
+        final String description, final String iconName) {
+        final String iconPath = "./icons/" + iconName + ".png";
+        return WebUINodeConfiguration.builder()//
             .name(name)//
-            .icon("./rename.png")//
+            .icon(iconPath)//
             .shortDescription(shortDescription)//
             .fullDescription(description)//
             .modelSettingsClass(SingleGeoColumnSettings.class)//
             .addInputPort("DB Data", DBDataPortObject.TYPE, "The db data to query.")//
             .addOutputPort("DB Data", DBDataPortObject.TYPE, "The result db data.")//
             .keywords("Geospatial", "Geo", "DB", "Database")//
-            .sinceVersion(5, 2, 0)
-            .build();
+            .sinceVersion(5, 2, 0).build();
     }
 }

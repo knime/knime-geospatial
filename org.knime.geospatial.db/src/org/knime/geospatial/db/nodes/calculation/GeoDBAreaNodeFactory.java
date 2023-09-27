@@ -62,7 +62,7 @@ public class GeoDBAreaNodeFactory extends WebUINodeFactory<SingleGeoColumnNodeMo
 
     private static final WebUINodeConfiguration CONFIG =
             GeoConfigBuilder.createSingelGeoColConfig("DB Area", "Returns the area of the input geometry.",
-                "This really computes the area");
+                "This really computes the area", "Area");
 
     /**
      * Constructor.

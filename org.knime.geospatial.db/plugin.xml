@@ -4,7 +4,7 @@
     <extension
         point="org.knime.workbench.repository.categories">
         <category
-            icon="icons/globe.png"
+            icon="icons/Geospatial.png"
             level-id="geo"
             name="Geospatial"
             path="/db">

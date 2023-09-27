@@ -61,8 +61,8 @@ import org.knime.geospatial.db.util.SingleGeoColumnNodeModel;
 public class GeoDBLengthNodeFactory extends WebUINodeFactory<SingleGeoColumnNodeModel> {
 
     private static final WebUINodeConfiguration CONFIG =
-            GeoConfigBuilder.createSingelGeoColConfig("Length", "Computes the length.",
-                "This really computes the length");
+            GeoConfigBuilder.createSingelGeoColConfig("DB Length", "Computes the length.",
+                "This really computes the length", "Length");
 
     /**
      * Constructor.
