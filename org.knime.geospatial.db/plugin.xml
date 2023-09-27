@@ -3,7 +3,7 @@
 <plugin>
 
     <extension
-        point="org.knime.workbench.repository.nodes">
+          point="org.knime.workbench.repository.nodes">
         <node
             factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBLengthNodeFactory"
             category-path="/" />
@@ -11,6 +11,12 @@
               category-path="/"
               deprecated="false"
               factory-class="org.knime.geospatial.db.nodes.h2gis.H2GISDBConnectorNodeFactory"
+              hidden="false">
+        </node>
+        <node
+              category-path="/"
+              deprecated="false"
+              factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBBoundingBoxNodeFactory"
               hidden="false">
         </node>
     </extension>
