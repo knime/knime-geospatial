@@ -19,6 +19,12 @@
               factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBBoundingBoxNodeFactory"
               hidden="false">
         </node>
+        <node
+              category-path="/"
+              deprecated="false"
+              factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBTotalBoundsNodeFactory"
+              hidden="false">
+        </node>
     </extension>
     <!-- Database Types -->
     <extension point="org.knime.database.DBType">
