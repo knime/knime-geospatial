@@ -43,25 +43,24 @@
  * ------------------------------------------------------------------------
  */
 
-package org.knime.geospatial.db.h2gis;
+package org.knime.geospatial.db.type.h2gis;
 
 import org.knime.database.agent.DBAgentFactory;
 import org.knime.database.extension.h2.H2AgentFactory;
+import org.knime.geospatial.db.agent.GeoDB;
 
 /**
- * {@linkplain DBAgentFactory Agent factory} for the H2 database.
+ * {@linkplain DBAgentFactory Agent factory} for the H2GIS database.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
 public class H2GISAgentFactory extends H2AgentFactory {
-
-
     /**
      * Constructs an {@link H2GISAgentFactory}.
      */
     public H2GISAgentFactory() {
         super();
-
+        putCreator(GeoDB.class, parameters -> new H2GISGeoDB(parameters.getSessionReference()));
     }
 
 }

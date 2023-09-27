@@ -75,7 +75,7 @@ public class GeoDBAreaNodeFactory extends WebUINodeFactory<SingleGeoColumnNodeMo
 
     @Override
     public SingleGeoColumnNodeModel createNodeModel() {
-        return new SingleGeoColumnNodeModel(CONFIG, "ST_AREA");
+        return new SingleGeoColumnNodeModel(CONFIG, (a, d, s) -> a.area(d, s.m_geoColName, s));
     }
 
 

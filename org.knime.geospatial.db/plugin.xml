@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-
     <extension
-          point="org.knime.workbench.repository.nodes">
+        point="org.knime.workbench.repository.categories">
+        <category
+            icon="icons/globe.png"
+            level-id="geo"
+            name="Geospatial"
+            path="/db">
+        </category>
+    </extension>
+    <extension
+        point="org.knime.workbench.repository.nodes">
+        <node
+            factory-class="org.knime.geospatial.db.nodes.h2gis.H2GISDBConnectorNodeFactory"
+            category-path="/db/connector" />
         <node
             factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBLengthNodeFactory"
-            category-path="/" />
+            category-path="/db/geo" />
         <node
-              category-path="/"
-              deprecated="false"
-              factory-class="org.knime.geospatial.db.nodes.h2gis.H2GISDBConnectorNodeFactory"
-              hidden="false">
-        </node>
+            factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBBoundingBoxNodeFactory"
+            category-path="/db/geo" />
         <node
-              category-path="/"
-              deprecated="false"
-              factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBBoundingBoxNodeFactory"
-              hidden="false">
-        </node>
-        <node
-              category-path="/"
-              deprecated="false"
               factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBTotalBoundsNodeFactory"
-              hidden="false">
-        </node>
+              category-path="/db/geo" />
     </extension>
     <!-- Database Types -->
     <extension point="org.knime.database.DBType">
@@ -43,8 +42,13 @@
         <!-- H2GIS -->
         <Agent
             dbTypes="h2-gis"
-            factory="org.knime.database.extension.h2.H2AgentFactory"
-            interface="org.knime.database.agent.joiner.DBJoiner" />
+            factory="org.knime.geospatial.db.type.h2gis.H2GISAgentFactory"
+            interface="org.knime.geospatial.db.agent.GeoDB" />
+        <!-- Postgis -->
+        <Agent
+            dbTypes="postgres"
+            factory="org.knime.geospatial.db.type.postgis.PostgisAgentFactory"
+            interface="org.knime.geospatial.db.agent.GeoDB" />
     </extension>
 
     <!-- Dialects -->

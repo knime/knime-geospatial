@@ -44,54 +44,55 @@
  * ---------------------------------------------------------------------
  *
  * History
- *   26 Sep 2023 (Tobias): created
+ *   22 Sep 2023 (Tobias): created
  */
 package org.knime.geospatial.db.util;
 
-import java.sql.SQLType;
-
-import org.knime.core.node.ExecutionMonitor;
-import org.knime.core.node.InvalidSettingsException;
-import org.knime.core.webui.node.impl.WebUINodeConfiguration;
-import org.knime.database.DBDataObject;
-import org.knime.database.SQLQuery;
-import org.knime.database.agent.metadata.DBMetadataReader;
-import org.knime.database.session.DBSession;
-import org.knime.database.util.TriFunction;
-import org.knime.datatype.mapping.DataTypeMappingConfiguration;
-import org.knime.geospatial.db.agent.GeoDB;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeSettings;
+import org.knime.core.webui.node.dialog.defaultdialog.rule.OneOfEnumCondition;
+import org.knime.core.webui.node.dialog.defaultdialog.widget.Label;
+import org.knime.core.webui.node.dialog.defaultdialog.widget.TextInputWidget;
+import org.knime.core.webui.node.dialog.defaultdialog.widget.ValueSwitchWidget;
+import org.knime.core.webui.node.dialog.defaultdialog.widget.Widget;
 
 /**
- * This node model creates a DB query that calls a db function which expects a single geospatial column as input.
+ * Lets the user decide if the output column should be appended or replace the existing column.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
-public class SingleGeoColumnNodeModel extends DBDataWebNodeModel<SingleGeoColumnSettings> {
+@SuppressWarnings("restriction")
+public class AppendReplaceGeoResultColumnSettings implements DefaultNodeSettings, org.knime.geospatial.db.agent.DefaultGeoDB.OutputColumn {
 
-    private final TriFunction<GeoDB, DBDataObject, SingleGeoColumnSettings, SQLQuery> m_function;
+    enum OutputColumn {
+        @Label("Append")
+        APPEND, //
+        @Label("Replace")
+        REPLACE,;
+    }
+    @Widget(title = "Output column", description = "Choose where to place the result column.")
+    @ValueSwitchWidget()
+    public OutputColumn m_mode = OutputColumn.APPEND;
 
-    /**
-     * @param configuration
-     * @param function
-     */
-    @SuppressWarnings("restriction")
-    public SingleGeoColumnNodeModel(final WebUINodeConfiguration configuration,
-        final TriFunction<GeoDB, DBDataObject, SingleGeoColumnSettings, SQLQuery> function) {
-        super(configuration, SingleGeoColumnSettings.class);
-        m_function = function;
+    class IsAppend extends OneOfEnumCondition<OutputColumn> {
+        @Override
+        public OutputColumn[] oneOf() {
+            return new OutputColumn[] { OutputColumn.APPEND };
+        }
+    }
+    @Widget(title = "New name",
+            description = "The new column name. Must not be empty or consist only of whitespaces.")
+    @TextInputWidget(pattern = "\\S+.*")
+//    @Effect(signals = IsAppend.class, type = EffectType.SHOW)
+    public String m_newColumnName;
+
+    @Override
+    public String getNewColumnName() {
+        return m_newColumnName;
     }
 
     @Override
-    protected void validateSettings(final SingleGeoColumnSettings settings) throws InvalidSettingsException {
-        super.validateSettings(settings);
+    public boolean append() {
+        return OutputColumn.APPEND == m_mode;
     }
 
-    @Override
-    protected DBDataObject createDataObject(final ExecutionMonitor exec, final DBSession session,
-        final DBDataObject data, final DataTypeMappingConfiguration<SQLType> externalToKnime,
-        final SingleGeoColumnSettings modelSettings) throws Exception {
-        final GeoDB geoAgent = session.getAgent(GeoDB.class);
-        SQLQuery query = m_function.apply(geoAgent, data, modelSettings);
-        return session.getAgent(DBMetadataReader.class).getDBDataObject(exec, query, externalToKnime);
-    }
 }

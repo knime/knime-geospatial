@@ -80,7 +80,7 @@ public class GeoDBBoundingBoxNodeFactory extends WebUINodeFactory<SingleGeoColum
 
     @Override
     public SingleGeoColumnNodeModel createNodeModel() {
-        return new SingleGeoColumnNodeModel(CONFIG, "ST_ENVELOPE");
+        return new SingleGeoColumnNodeModel(CONFIG, (a, d, s) -> a.boundingBox(d, s.m_geoColName, s));
     }
 
 

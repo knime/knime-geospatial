@@ -44,54 +44,34 @@
  * ---------------------------------------------------------------------
  *
  * History
- *   26 Sep 2023 (Tobias): created
+ *   27 Sep 2023 (Tobias): created
  */
-package org.knime.geospatial.db.util;
+package org.knime.geospatial.db.agent;
 
-import java.sql.SQLType;
-
-import org.knime.core.node.ExecutionMonitor;
-import org.knime.core.node.InvalidSettingsException;
-import org.knime.core.webui.node.impl.WebUINodeConfiguration;
 import org.knime.database.DBDataObject;
 import org.knime.database.SQLQuery;
-import org.knime.database.agent.metadata.DBMetadataReader;
-import org.knime.database.session.DBSession;
-import org.knime.database.util.TriFunction;
-import org.knime.datatype.mapping.DataTypeMappingConfiguration;
-import org.knime.geospatial.db.agent.GeoDB;
 
 /**
- * This node model creates a DB query that calls a db function which expects a single geospatial column as input.
+ * Interface for pushing down Geo database functions.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
-public class SingleGeoColumnNodeModel extends DBDataWebNodeModel<SingleGeoColumnSettings> {
+public interface GeoDB {
 
-    private final TriFunction<GeoDB, DBDataObject, SingleGeoColumnSettings, SQLQuery> m_function;
+    public interface OutputColumn {
 
-    /**
-     * @param configuration
-     * @param function
-     */
-    @SuppressWarnings("restriction")
-    public SingleGeoColumnNodeModel(final WebUINodeConfiguration configuration,
-        final TriFunction<GeoDB, DBDataObject, SingleGeoColumnSettings, SQLQuery> function) {
-        super(configuration, SingleGeoColumnSettings.class);
-        m_function = function;
+        String getNewColumnName();
+
+        boolean append();
+
     }
 
-    @Override
-    protected void validateSettings(final SingleGeoColumnSettings settings) throws InvalidSettingsException {
-        super.validateSettings(settings);
-    }
+    public SQLQuery length(DBDataObject data, String geoColName, final OutputColumn outColumn);
 
-    @Override
-    protected DBDataObject createDataObject(final ExecutionMonitor exec, final DBSession session,
-        final DBDataObject data, final DataTypeMappingConfiguration<SQLType> externalToKnime,
-        final SingleGeoColumnSettings modelSettings) throws Exception {
-        final GeoDB geoAgent = session.getAgent(GeoDB.class);
-        SQLQuery query = m_function.apply(geoAgent, data, modelSettings);
-        return session.getAgent(DBMetadataReader.class).getDBDataObject(exec, query, externalToKnime);
-    }
+    public SQLQuery boundingBox(DBDataObject data, String geoColName, final OutputColumn outColumn);
+
+    public SQLQuery area(DBDataObject data, String geoColName, final OutputColumn outColumn);
+
+    public SQLQuery toalBounds(DBDataObject data, String geoColName, final OutputColumn outColumn);
+
 }

@@ -73,7 +73,7 @@ public class GeoDBTotalBoundsNodeFactory extends WebUINodeFactory<SingleGeoColum
 
     @Override
     public SingleGeoColumnNodeModel createNodeModel() {
-        return new SingleGeoColumnNodeModel(CONFIG, "ST_EXTENT");
+        return new SingleGeoColumnNodeModel(CONFIG, (a, d, s) -> a.toalBounds(d, s.m_geoColName, s));
     }
 
 

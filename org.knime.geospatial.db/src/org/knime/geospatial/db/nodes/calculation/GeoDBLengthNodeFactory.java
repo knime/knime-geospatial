@@ -73,7 +73,7 @@ public class GeoDBLengthNodeFactory extends WebUINodeFactory<SingleGeoColumnNode
 
     @Override
     public SingleGeoColumnNodeModel createNodeModel() {
-        return new SingleGeoColumnNodeModel(CONFIG, "ST_LENGTH");
+        return new SingleGeoColumnNodeModel(CONFIG, (a, d, s) -> a.length(d, s.m_geoColName, s));
     }
 
 

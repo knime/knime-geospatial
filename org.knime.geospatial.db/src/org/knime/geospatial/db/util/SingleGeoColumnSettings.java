@@ -48,7 +48,6 @@
  */
 package org.knime.geospatial.db.util;
 
-import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeSettings;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.ChoicesWidget;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.Widget;
 
@@ -57,7 +56,7 @@ import org.knime.core.webui.node.dialog.defaultdialog.widget.Widget;
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
 @SuppressWarnings("restriction")
-public class SingleGeoColumnSettings implements DefaultNodeSettings {
+public class SingleGeoColumnSettings extends AppendReplaceGeoResultColumnSettings {
 
     @Widget(title = "Geo column", description = "The Geo column to use.")
     @ChoicesWidget(choices = DBGeoColumnChoicesProvider.class)
