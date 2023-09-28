@@ -82,7 +82,7 @@ public interface GeoDB {
 
     public SQLQuery convexHull(DBDataObject data, String geoColName, final OutputColumn outColumn);
 
-    public SQLQuery buffer(DBDataObject data, String geoColName, double distance, final OutputColumn outColumn);
+    public SQLQuery buffer(DBDataObject data, String geoColName, double distance, int quad_segs, final OutputColumn outColumn);
 
     public SQLQuery lineToMultiPoint(DBDataObject data, String geoColName, final OutputColumn outColumn);
 

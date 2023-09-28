@@ -96,7 +96,11 @@ public class DefaultGeoDB implements GeoDB {
 
     @Override
     public SQLQuery totalBounds(final DBDataObject data, final String geoColName, final OutputColumn outColumn) {
-        return createSingleFunction(m_sessionReference.get(), data, geoColName, "ST_EXTENT", outColumn);
+        return createSingleFunction(m_sessionReference.get(), data, geoColName, outColumn,
+            (inputColumnName, resultColumnName) -> "ST_Xmin(ST_EXTENT(" + inputColumnName +
+            ")) as minx,ST_Ymin(ST_Extent(" + inputColumnName +
+            ")) as miny, ST_Xmax(ST_Extent(" + inputColumnName +
+            ")) as maxx, ST_Ymax(ST_Extent(" + inputColumnName +"))  as maxy");
     }
 
     @Override
@@ -120,17 +124,15 @@ public class DefaultGeoDB implements GeoDB {
             (inputColumnName, resultColumnName) -> "ST_UNION(ST_ACCUM(" + inputColumnName +")) as " + resultColumnName);
     }
 
-    // not yet ready, Ali will look at it tomorrow
     @Override
-    public SQLQuery buffer(final DBDataObject data, final String geoColName, final double distance, final OutputColumn outColumn) {
+    public SQLQuery buffer(final DBDataObject data, final String geoColName, final double distance, final int quad_segs, final OutputColumn outColumn) {
         // replicate function createSingleFunction for double params
         return createSingleFunction(m_sessionReference.get(), data, geoColName, outColumn,
-            (inputColumnName, resultColumnName) -> "ST_BUFFER(" + inputColumnName + ", " + distance + ") as " + resultColumnName);
+            (inputColumnName, resultColumnName) -> "ST_BUFFER(" + inputColumnName + ", " + distance + ", " +  quad_segs + ") as " + resultColumnName);
     }
 
     @Override
     public SQLQuery lineToMultiPoint(final DBDataObject data, final String geoColName, final OutputColumn outColumn) {
-        //return createSingleFunction(m_sessionReference.get(), data, geoColName, "ST_LINEFROMMULTIPOINT", outColumn); // this line with the function is valid for postgis
         // valid call foe H2GIS
         return createSingleFunction(m_sessionReference.get(), data, geoColName, "ST_TOMULTIPOINT", outColumn);
     }
@@ -171,5 +173,10 @@ public class DefaultGeoDB implements GeoDB {
         final StringBuilder sb = new StringBuilder(dialect.dataManipulation().selectColumns(buf.toString()).getPart())
             .append("FROM (").append(dialect.asTable(data.getQuery() + ")", tmpTable));
         return new SQLQuery(sb.toString());
+    }
+
+    @Override
+    public SQLQuery multipartToSinglepart(final DBDataObject data, final String geoColName, final OutputColumn outColumn) {
+        return null;
     }
 }

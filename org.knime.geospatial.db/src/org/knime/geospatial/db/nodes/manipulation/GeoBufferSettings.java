@@ -63,4 +63,10 @@ public class GeoBufferSettings extends SingleGeoColumnSettings {
             description = "Enter the distance buffer size.")
         @NumberInputWidget(min = 0, max = Double.MAX_VALUE)
     double m_distance;
+
+
+    @Widget(title = "Quad Seqments",
+            description = "Number of sepgments to be used (optional)", advanced = true)
+        @NumberInputWidget(min = 0, max = Integer.MAX_VALUE)
+    int m_quad_segs;
 }

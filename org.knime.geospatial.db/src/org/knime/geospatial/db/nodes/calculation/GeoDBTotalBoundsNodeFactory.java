@@ -62,8 +62,7 @@ public class GeoDBTotalBoundsNodeFactory extends WebUINodeFactory<SingleGeoColum
 
     private static final WebUINodeConfiguration CONFIG =
             GeoConfigBuilder.createSingelGeoColConfig("DB Total Bounds", "Computes the total bounds for all the geoms in the column.",
-                "The node is based on the GeoPandas project and uses the following related information and function: ",
-                "TotalBounds");
+                "The node replicates the behavior of 'Total Bounds' node in the Geospatial extension.", "TotalBounds");
 
     /**
      * Constructor.
