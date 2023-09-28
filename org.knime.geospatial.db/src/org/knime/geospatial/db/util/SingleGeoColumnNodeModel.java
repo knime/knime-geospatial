@@ -48,17 +48,10 @@
  */
 package org.knime.geospatial.db.util;
 
-import java.sql.SQLType;
-
-import org.knime.core.node.ExecutionMonitor;
-import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.webui.node.impl.WebUINodeConfiguration;
 import org.knime.database.DBDataObject;
 import org.knime.database.SQLQuery;
-import org.knime.database.agent.metadata.DBMetadataReader;
-import org.knime.database.session.DBSession;
 import org.knime.database.util.TriFunction;
-import org.knime.datatype.mapping.DataTypeMappingConfiguration;
 import org.knime.geospatial.db.agent.GeoDB;
 
 /**
@@ -66,9 +59,7 @@ import org.knime.geospatial.db.agent.GeoDB;
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
-public class SingleGeoColumnNodeModel extends DBDataWebNodeModel<SingleGeoColumnSettings> {
-
-    private final TriFunction<GeoDB, DBDataObject, SingleGeoColumnSettings, SQLQuery> m_function;
+public class SingleGeoColumnNodeModel extends SimpleGeoNodeModel<SingleGeoColumnSettings> {
 
     /**
      * @param configuration
@@ -77,21 +68,6 @@ public class SingleGeoColumnNodeModel extends DBDataWebNodeModel<SingleGeoColumn
     @SuppressWarnings("restriction")
     public SingleGeoColumnNodeModel(final WebUINodeConfiguration configuration,
         final TriFunction<GeoDB, DBDataObject, SingleGeoColumnSettings, SQLQuery> function) {
-        super(configuration, SingleGeoColumnSettings.class);
-        m_function = function;
-    }
-
-    @Override
-    protected void validateSettings(final SingleGeoColumnSettings settings) throws InvalidSettingsException {
-        super.validateSettings(settings);
-    }
-
-    @Override
-    protected DBDataObject createDataObject(final ExecutionMonitor exec, final DBSession session,
-        final DBDataObject data, final DataTypeMappingConfiguration<SQLType> externalToKnime,
-        final SingleGeoColumnSettings modelSettings) throws Exception {
-        final GeoDB geoAgent = session.getAgent(GeoDB.class);
-        SQLQuery query = m_function.apply(geoAgent, data, modelSettings);
-        return session.getAgent(DBMetadataReader.class).getDBDataObject(exec, query, externalToKnime);
+        super(configuration, SingleGeoColumnSettings.class, function);
     }
 }

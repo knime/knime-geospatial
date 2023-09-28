@@ -44,45 +44,37 @@
  * ---------------------------------------------------------------------
  *
  * History
- *   26 Sep 2023 (Tobias): created
+ *   28 Sep 2023 (Tobias): created
  */
-package org.knime.geospatial.db.util;
+package org.knime.geospatial.db.nodes.manipulation;
 
 import org.knime.core.webui.node.impl.WebUINodeConfiguration;
-import org.knime.database.port.DBDataPortObject;
+import org.knime.core.webui.node.impl.WebUINodeFactory;
+import org.knime.geospatial.db.util.GeoConfigBuilder;
+import org.knime.geospatial.db.util.SimpleGeoNodeModel;
 
 /**
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
 @SuppressWarnings("restriction")
-public class GeoConfigBuilder {
+public class GeoDBBufferNodeFactory extends WebUINodeFactory<SimpleGeoNodeModel<GeoBufferSettings>> {
 
-    public static WebUINodeConfiguration createSingelGeoColConfig(final String name, final String shortDescription,
-        final String description) {
-        return createSingelGeoColConfig(name, shortDescription, description, "globe");
+    private static final WebUINodeConfiguration CONFIG =
+        GeoConfigBuilder.createSingelGeoColConfig("DB Buffer", "Returns the buffer of the input geometry.",
+            "Returns the buffer of the input geometry.", "Buffer", GeoBufferSettings.class);
+
+    /**
+     * Constructor.
+     */
+    public GeoDBBufferNodeFactory() {
+        super(CONFIG);
     }
 
-
-    public static WebUINodeConfiguration createSingelGeoColConfig(final String name, final String shortDescription,
-        final String description, final String iconName) {
-        return createSingelGeoColConfig(name, shortDescription, description, iconName, SingleGeoColumnSettings.class);
-    
+    @Override
+    public SimpleGeoNodeModel<GeoBufferSettings> createNodeModel() {
+        return new SimpleGeoNodeModel<GeoBufferSettings>(CONFIG, GeoBufferSettings.class,
+            (a, d, s) -> a.toalBounds(d, s.m_geoColName, s));
     }
 
-
-    public static WebUINodeConfiguration createSingelGeoColConfig(final String name, final String shortDescription,
-        final String description, final String iconName, final Class<? extends SingleGeoColumnSettings> settingsClass) {
-        final String iconPath = "./icons/" + iconName + ".png";
-        return WebUINodeConfiguration.builder()//
-            .name(name)//
-            .icon(iconPath)//
-            .shortDescription(shortDescription)//
-            .fullDescription(description)//
-            .modelSettingsClass(settingsClass)//
-            .addInputPort("DB Data", DBDataPortObject.TYPE, "The db data to query.")//
-            .addOutputPort("DB Data", DBDataPortObject.TYPE, "The result db data.")//
-            .keywords("Geospatial", "Geo", "DB", "Database")//
-            .sinceVersion(5, 2, 0).build();
-    }
 }

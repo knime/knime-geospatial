@@ -44,45 +44,23 @@
  * ---------------------------------------------------------------------
  *
  * History
- *   26 Sep 2023 (Tobias): created
+ *   28 Sep 2023 (Tobias): created
  */
-package org.knime.geospatial.db.util;
+package org.knime.geospatial.db.nodes.manipulation;
 
-import org.knime.core.webui.node.impl.WebUINodeConfiguration;
-import org.knime.database.port.DBDataPortObject;
+import org.knime.core.webui.node.dialog.defaultdialog.widget.NumberInputWidget;
+import org.knime.core.webui.node.dialog.defaultdialog.widget.Widget;
+import org.knime.geospatial.db.util.SingleGeoColumnSettings;
 
 /**
- *
+ * Bufffer settings.
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
 @SuppressWarnings("restriction")
-public class GeoConfigBuilder {
+public class GeoBufferSettings extends SingleGeoColumnSettings {
 
-    public static WebUINodeConfiguration createSingelGeoColConfig(final String name, final String shortDescription,
-        final String description) {
-        return createSingelGeoColConfig(name, shortDescription, description, "globe");
-    }
-
-
-    public static WebUINodeConfiguration createSingelGeoColConfig(final String name, final String shortDescription,
-        final String description, final String iconName) {
-        return createSingelGeoColConfig(name, shortDescription, description, iconName, SingleGeoColumnSettings.class);
-    
-    }
-
-
-    public static WebUINodeConfiguration createSingelGeoColConfig(final String name, final String shortDescription,
-        final String description, final String iconName, final Class<? extends SingleGeoColumnSettings> settingsClass) {
-        final String iconPath = "./icons/" + iconName + ".png";
-        return WebUINodeConfiguration.builder()//
-            .name(name)//
-            .icon(iconPath)//
-            .shortDescription(shortDescription)//
-            .fullDescription(description)//
-            .modelSettingsClass(settingsClass)//
-            .addInputPort("DB Data", DBDataPortObject.TYPE, "The db data to query.")//
-            .addOutputPort("DB Data", DBDataPortObject.TYPE, "The result db data.")//
-            .keywords("Geospatial", "Geo", "DB", "Database")//
-            .sinceVersion(5, 2, 0).build();
-    }
+    @Widget(title = "Distance",
+            description = "Enter the distance buffer size.")
+        @NumberInputWidget(min = 0, max = Double.MAX_VALUE)
+    double m_buffer;
 }

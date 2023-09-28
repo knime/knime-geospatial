@@ -24,6 +24,9 @@
         <node
               factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBTotalBoundsNodeFactory"
               category-path="/db/geo" />
+        <node
+              factory-class="org.knime.geospatial.db.nodes.manipulation.GeoDBBufferNodeFactory"
+              category-path="/db/geo" />
     </extension>
     <!-- Database Types -->
     <extension point="org.knime.database.DBType">
