@@ -62,5 +62,5 @@ public class GeoBufferSettings extends SingleGeoColumnSettings {
     @Widget(title = "Distance",
             description = "Enter the distance buffer size.")
         @NumberInputWidget(min = 0, max = Double.MAX_VALUE)
-    double m_buffer;
+    double m_distance;
 }

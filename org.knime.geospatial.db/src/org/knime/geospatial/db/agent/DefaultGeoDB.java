@@ -108,7 +108,7 @@ public class DefaultGeoDB implements GeoDB {
 
     // not yet ready, Ali will look at it tomorrow
     @Override
-    public SQLQuery buffer(final DBDataObject data, final String geoColName, final OutputColumn outColumn) {
+    public SQLQuery buffer(final DBDataObject data, final String geoColName, final double distance, final OutputColumn outColumn) {
         // replicate function createSingleFunction for double params
         return createSingleFunction(m_sessionReference.get(), data, geoColName, "ST_BUFFER", outColumn);
     }

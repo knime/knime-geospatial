@@ -74,7 +74,7 @@ public class GeoDBBufferNodeFactory extends WebUINodeFactory<SimpleGeoNodeModel<
     @Override
     public SimpleGeoNodeModel<GeoBufferSettings> createNodeModel() {
         return new SimpleGeoNodeModel<GeoBufferSettings>(CONFIG, GeoBufferSettings.class,
-            (a, d, s) -> a.totalBounds(d, s.m_geoColName, s));
+            (a, d, s) -> a.buffer(d, s.m_geoColName, s.m_distance, s));
     }
 
 }
