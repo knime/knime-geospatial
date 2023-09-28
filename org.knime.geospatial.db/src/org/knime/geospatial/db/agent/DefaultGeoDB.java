@@ -50,6 +50,8 @@ package org.knime.geospatial.db.agent;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.function.BiFunction;
+
 import org.knime.core.data.DataTableSpec;
 import org.knime.database.DBDataObject;
 import org.knime.database.SQLQuery;
@@ -122,6 +124,13 @@ public class DefaultGeoDB implements GeoDB {
 
     private static SQLQuery createSingleFunction(final DBSession session, final DBDataObject data, final
         String geoColName, final String function, final OutputColumn outColumn) {
+        return createSingleFunction(session, data, geoColName, outColumn,
+            (inputColName, resultColName) -> function + "(" + inputColName + ") as " + resultColName);
+    }
+
+    private static SQLQuery createSingleFunction(final DBSession session, final DBDataObject data, final
+        String geoColName, final OutputColumn outColumn,
+        final BiFunction<String, String, String> createFunction) {
         final DBSQLDialect dialect = session.getDialect();
         final String tmpTable = dialect.getTempTableName();
         final StringBuilder buf = new StringBuilder();
@@ -129,7 +138,7 @@ public class DefaultGeoDB implements GeoDB {
         if (outColumn.append()) {
             buf.append("*, ");
             resultColName = DataTableSpec.getUniqueColumnName(data.getKNIMETableSpec(),  outColumn.getNewColumnName());
-            buf.append(createFunctionPart(function, geoColName, dialect, resultColName));
+            buf.append(createFunction.apply(dialect.delimit(geoColName), dialect.delimit(resultColName)));
         } else {
             resultColName = geoColName;
             final DBColumn[] columns = data.getDBTableSpec().getColumns();
@@ -142,7 +151,7 @@ public class DefaultGeoDB implements GeoDB {
                 if (!name.equals(geoColName)) {
                     buf.append(dialect.delimit(name));
                 } else {
-                    buf.append(createFunctionPart(function, geoColName, dialect, resultColName));
+                    buf.append(createFunction.apply(dialect.delimit(geoColName), dialect.delimit(resultColName)));
                 }
             }
         }
@@ -150,13 +159,4 @@ public class DefaultGeoDB implements GeoDB {
             .append("FROM (").append(dialect.asTable(data.getQuery() + ")", tmpTable));
         return new SQLQuery(sb.toString());
     }
-
-    private static String createFunctionPart(final String function, final String geoColName,
-        final DBSQLDialect dialect, final String resultColName) {
-        return function + "(" + dialect.delimit(geoColName) + ") as "
-        + dialect.delimit(resultColName);
-    }
-
-
-
 }
