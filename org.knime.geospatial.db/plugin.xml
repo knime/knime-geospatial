@@ -9,6 +9,27 @@
             name="Geospatial"
             path="/db">
         </category>
+        <category
+              icon="icons/CalculationCategory.png"
+              level-id="calculation"
+              locked="false"
+              name="Spatial Calculation"
+              path="/db/geo">
+        </category>
+        <category
+              icon="icons/ManipulationCategory.png"
+              level-id="manipulation"
+              locked="true"
+              name="Spatial Manipulation"
+              path="/db/geo">
+        </category>
+        <category
+              icon="icons/TransformationCategory.png"
+              level-id="transformation"
+              locked="false"
+              name="Spatial Transformation"
+              path="/db/geo">
+        </category>
     </extension>
     <extension
         point="org.knime.workbench.repository.nodes">
@@ -17,48 +38,48 @@
             category-path="/db/connector" />
         <node
             factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBLengthNodeFactory"
-            category-path="/db/geo" />
+            category-path="/db/geo/calculation" />
         <node
             factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBBoundingBoxNodeFactory"
-            category-path="/db/geo" />
+            category-path="/db/geo/calculation" />
         <node
               factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBTotalBoundsNodeFactory"
-              category-path="/db/geo" />
+              category-path="/db/geo/calculation" />
         <node
               factory-class="org.knime.geospatial.db.nodes.manipulation.GeoDBBufferNodeFactory"
-              category-path="/db/geo" />
+              category-path="/db/geo/manipulation" />
       <node
-              category-path="/db/geo"
+              category-path="/db/geo/calculation"
               deprecated="false"
               factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBConvexHullNodeFactory"
               hidden="false">
         </node>
         <node
-              category-path="/db/geo"
+              category-path="/db/geo/calculation"
               deprecated="false"
               factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBAreaNodeFactory"
               hidden="false">
         </node>
         <node
-              category-path="/db/geo"
+              category-path="/db/geo/calculation"
               deprecated="false"
               factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBBoundingCircleNodeFactory"
               hidden="false">
         </node>
         <node
-              category-path="/db/geo"
+              category-path="/db/geo/transformation"
               deprecated="false"
               factory-class="org.knime.geospatial.db.nodes.transformation.GeoDBMultipartToSinglepartNodeFactory"
               hidden="false">
         </node>
         <node
-              category-path="/db/geo"
+              category-path="/db/geo/transformation"
               deprecated="false"
               factory-class="org.knime.geospatial.db.nodes.transformation.GeoDBLineToMultiPointNodeFactory"
               hidden="false">
         </node>
         <node
-              category-path="/db/geo"
+              category-path="/db/geo/calculation"
               deprecated="false"
               factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBUnaryUnionNodeFactory"
               hidden="false">
