@@ -62,7 +62,8 @@ public class GeoDBBoundingBoxNodeFactory extends WebUINodeFactory<SingleGeoColum
 
     private static final WebUINodeConfiguration CONFIG =
             GeoConfigBuilder.createSingelGeoColConfig("DB Bounding Box", "Computes the minimum bounding box.",
-                "Returns the minimum bounding box for the supplied geometry, as a geometry.\nhttps://postgis.net/docs/ST_Envelope.html");
+                "Returns the minimum bounding box for the supplied geometry, as a geometry.\nhttps://postgis.net/docs/ST_Envelope.html",
+                "BoundingBox");
 
     /**
      * Currently, the node just throws away all input columns and creates a geometry column with the computed bounding box.

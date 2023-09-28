@@ -57,6 +57,12 @@
               factory-class="org.knime.geospatial.db.nodes.transformation.GeoDBMultipartToSinglepartNodeFactory"
               hidden="false">
         </node>
+        <node
+              category-path="/db/geo"
+              deprecated="false"
+              factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBUnaryUnionNodeFactory"
+              hidden="false">
+        </node>
               
     </extension>
     <!-- Database Types -->

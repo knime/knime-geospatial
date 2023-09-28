@@ -62,7 +62,8 @@ public class GeoDBUnaryUnionNodeFactory extends WebUINodeFactory<SingleGeoColumn
 
     private static final WebUINodeConfiguration CONFIG =
             GeoConfigBuilder.createSingelGeoColConfig("DB Unary Union", "Computes the Union of a set of Geometries.",
-                "Returns the aggregated union of the input geometries, as a geometry.\nhttp://www.h2gis.org/docs/1.3/ST_Union/");
+                "Returns the aggregated union of the input geometries, as a geometry.\nhttp://www.h2gis.org/docs/1.3/ST_Union/",
+                "UnaryUnion");
 
 
     /**
@@ -74,7 +75,7 @@ public class GeoDBUnaryUnionNodeFactory extends WebUINodeFactory<SingleGeoColumn
 
     @Override
     public SingleGeoColumnNodeModel createNodeModel() {
-        return null; //new SingleGeoColumnNodeModel(CONFIG, "ST_ENVELOPE"); /* "ST_UNION(ST_ACCUM())" */
+        return new SingleGeoColumnNodeModel(CONFIG, (a, d, s) -> a.unaryUnion(d, s.m_geoColName, s));
     }
 
 

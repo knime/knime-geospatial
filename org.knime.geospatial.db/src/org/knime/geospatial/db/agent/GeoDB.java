@@ -76,7 +76,9 @@ public interface GeoDB {
 
     public SQLQuery boundingCircle(DBDataObject data, String geoColName, final OutputColumn outColumn);
 
-//    public SQLQuery multipartToSinglepart(DBDataObject data, String geoColName, final OutputColumn outColumn);
+    public SQLQuery multipartToSinglepart(DBDataObject data, String geoColName, final OutputColumn outColumn);
+
+    public SQLQuery unaryUnion(DBDataObject data, String geoColName, final OutputColumn outColumn);
 
     public SQLQuery convexHull(DBDataObject data, String geoColName, final OutputColumn outColumn);
 

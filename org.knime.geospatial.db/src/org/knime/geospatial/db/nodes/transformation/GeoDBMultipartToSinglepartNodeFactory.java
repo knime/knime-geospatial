@@ -74,7 +74,7 @@ public class GeoDBMultipartToSinglepartNodeFactory extends WebUINodeFactory<Sing
 
     @Override
     public SingleGeoColumnNodeModel createNodeModel() {
-        return null; //new SingleGeoColumnNodeModel(CONFIG, (a, d, s) -> a.multipartToSinglepart(d, s.m_geoColName, s));
+        return new SingleGeoColumnNodeModel(CONFIG, (a, d, s) -> a.multipartToSinglepart(d, s.m_geoColName, s));
     }
 
 

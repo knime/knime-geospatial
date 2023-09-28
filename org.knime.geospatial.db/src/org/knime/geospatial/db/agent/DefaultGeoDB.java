@@ -107,12 +107,25 @@ public class DefaultGeoDB implements GeoDB {
     public SQLQuery convexHull(final DBDataObject data, final String geoColName, final OutputColumn outColumn) {
         return createSingleFunction(m_sessionReference.get(), data, geoColName, "ST_CONVEXHULL", outColumn);
     }
+/*
+    @Override
+    public SQLQuery multipartToSinglepart(final DBDataObject data, final String geoColName, final OutputColumn outColumn) {
+        return createSingleFunction(m_sessionReference.get(), data, geoColName, "ST_EXPLODE", outColumn);
+    }
+*/
+    @Override
+    public SQLQuery unaryUnion(final DBDataObject data, final String geoColName, final OutputColumn outColumn) {
+        // replicate function createSingleFunction for double params
+        return createSingleFunction(m_sessionReference.get(), data, geoColName, outColumn,
+            (inputColumnName, resultColumnName) -> "ST_UNION(ST_ACCUM(" + inputColumnName +")) as " + resultColumnName);
+    }
 
     // not yet ready, Ali will look at it tomorrow
     @Override
     public SQLQuery buffer(final DBDataObject data, final String geoColName, final double distance, final OutputColumn outColumn) {
         // replicate function createSingleFunction for double params
-        return createSingleFunction(m_sessionReference.get(), data, geoColName, "ST_BUFFER", outColumn);
+        return createSingleFunction(m_sessionReference.get(), data, geoColName, outColumn,
+            (inputColumnName, resultColumnName) -> "ST_BUFFER(" + inputColumnName + ", " + distance + ") as " + resultColumnName);
     }
 
     @Override

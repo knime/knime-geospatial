@@ -61,8 +61,9 @@ import org.knime.geospatial.db.util.SingleGeoColumnNodeModel;
 public class GeoDBTotalBoundsNodeFactory extends WebUINodeFactory<SingleGeoColumnNodeModel> {
 
     private static final WebUINodeConfiguration CONFIG =
-            GeoConfigBuilder.createSingelGeoColConfig("DB Total bounds", "Computes the total bounds for all the geoms in the column.",
-                "The node is based on the GeoPandas project and uses the following related information and function: ");
+            GeoConfigBuilder.createSingelGeoColConfig("DB Total Bounds", "Computes the total bounds for all the geoms in the column.",
+                "The node is based on the GeoPandas project and uses the following related information and function: ",
+                "TotalBounds");
 
     /**
      * Constructor.
