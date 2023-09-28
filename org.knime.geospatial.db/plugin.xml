@@ -45,6 +45,18 @@
               factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBLineToMultiPointNodeFactory"
               hidden="false">
         </node>
+        <node
+              category-path="/db/geo"
+              deprecated="false"
+              factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBBoundingCircleNodeFactory"
+              hidden="false">
+        </node>
+        <node
+              category-path="/db/geo"
+              deprecated="false"
+              factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBMultipartToSinglepartNodeFactory"
+              hidden="false">
+        </node>
               
     </extension>
     <!-- Database Types -->
