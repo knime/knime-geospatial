@@ -46,7 +46,7 @@
  * History
  *   22 Sep 2023 (Tobias): created
  */
-package org.knime.geospatial.db.nodes.calculation;
+package org.knime.geospatial.db.nodes.transformation;
 
 import org.knime.core.webui.node.impl.WebUINodeConfiguration;
 import org.knime.core.webui.node.impl.WebUINodeFactory;
@@ -58,22 +58,23 @@ import org.knime.geospatial.db.util.SingleGeoColumnNodeModel;
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
 @SuppressWarnings("restriction")
-public class GeoDBLineToMultiPointNodeFactory extends WebUINodeFactory<SingleGeoColumnNodeModel> {
+public class GeoDBMultipartToSinglepartNodeFactory extends WebUINodeFactory<SingleGeoColumnNodeModel> {
 
     private static final WebUINodeConfiguration CONFIG =
-            GeoConfigBuilder.createSingelGeoColConfig("DB Line To MultiPoint", "Converts the line to multipoint geometry.",
-                "Converts the line to multipoint geometry.", "LinePolygonToPoints");
+            GeoConfigBuilder.createSingelGeoColConfig("DB Multipart To Singlepart", "Explodes the geometry into multiple Geometries.",
+                "Explodes the geometry into multiple Geometries.\nhttp://www.h2gis.org/docs/1.3/ST_Explode/",
+                "Explode");
 
     /**
      * Constructor.
      */
-    public GeoDBLineToMultiPointNodeFactory() {
+    public GeoDBMultipartToSinglepartNodeFactory() {
         super(CONFIG);
     }
 
     @Override
     public SingleGeoColumnNodeModel createNodeModel() {
-        return new SingleGeoColumnNodeModel(CONFIG, (a, d, s) -> a.lineToMultiPoint(d, s.m_geoColName, s));
+        return null; //new SingleGeoColumnNodeModel(CONFIG, (a, d, s) -> a.multipartToSinglepart(d, s.m_geoColName, s));
     }
 
 

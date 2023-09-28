@@ -61,8 +61,8 @@ import org.knime.geospatial.db.util.SimpleGeoNodeModel;
 public class GeoDBBufferNodeFactory extends WebUINodeFactory<SimpleGeoNodeModel<GeoBufferSettings>> {
 
     private static final WebUINodeConfiguration CONFIG =
-        GeoConfigBuilder.createSingelGeoColConfig("DB Buffer", "Returns the buffer of the input geometry.",
-            "Returns the buffer of the input geometry.", "Buffer", GeoBufferSettings.class);
+            GeoConfigBuilder.createSingelGeoColConfig("DB Buffer", "Returns the buffer region of the input geometry.",
+                "This really computes the Buffer", "Buffer", GeoBufferSettings.class);
 
     /**
      * Constructor.

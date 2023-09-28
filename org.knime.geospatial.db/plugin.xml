@@ -42,7 +42,7 @@
         <node
               category-path="/db/geo"
               deprecated="false"
-              factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBLineToMultiPointNodeFactory"
+              factory-class="org.knime.geospatial.db.nodes.transformation.GeoDBLineToMultiPointNodeFactory"
               hidden="false">
         </node>
         <node
@@ -54,7 +54,7 @@
         <node
               category-path="/db/geo"
               deprecated="false"
-              factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBMultipartToSinglepartNodeFactory"
+              factory-class="org.knime.geospatial.db.nodes.transformation.GeoDBMultipartToSinglepartNodeFactory"
               hidden="false">
         </node>
               
