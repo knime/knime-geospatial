@@ -44,37 +44,39 @@
  * ---------------------------------------------------------------------
  *
  * History
- *   28 Sep 2023 (Tobias): created
+ *   22 Sep 2023 (Tobias): created
  */
-package org.knime.geospatial.db.nodes.manipulation;
+package org.knime.geospatial.db.nodes.calculation;
 
 import org.knime.core.webui.node.impl.WebUINodeConfiguration;
 import org.knime.core.webui.node.impl.WebUINodeFactory;
 import org.knime.geospatial.db.util.GeoConfigBuilder;
-import org.knime.geospatial.db.util.SimpleGeoNodeModel;
+import org.knime.geospatial.db.util.SingleGeoColumnNodeModel;
 
 /**
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
 @SuppressWarnings("restriction")
-public class GeoDBBufferNodeFactory extends WebUINodeFactory<SimpleGeoNodeModel<GeoBufferSettings>> {
+public class GeoDBBufferNodeFactory extends WebUINodeFactory<SingleGeoColumnNodeModel> {
 
     private static final WebUINodeConfiguration CONFIG =
-        GeoConfigBuilder.createSingelGeoColConfig("DB Buffer", "Returns the buffer of the input geometry.",
-            "Returns the buffer of the input geometry.", "Buffer", GeoBufferSettings.class);
+            GeoConfigBuilder.createSingelGeoColConfig("DB Buffer", "Returns the buffer region of the input geometry.",
+                "This really computes the Buffer", "Buffer");
 
     /**
      * Constructor.
+     *
+     * Currently the output is a stand alone column. This should be appended to the input schema.
      */
     public GeoDBBufferNodeFactory() {
         super(CONFIG);
     }
 
     @Override
-    public SimpleGeoNodeModel<GeoBufferSettings> createNodeModel() {
-        return new SimpleGeoNodeModel<GeoBufferSettings>(CONFIG, GeoBufferSettings.class,
-            (a, d, s) -> a.totalBounds(d, s.m_geoColName, s));
+    public SingleGeoColumnNodeModel createNodeModel() {
+        return new SingleGeoColumnNodeModel(CONFIG, (a, d, s) -> a.buffer(d, s.m_geoColName, s));
     }
+
 
 }
