@@ -27,6 +27,25 @@
         <node
               factory-class="org.knime.geospatial.db.nodes.manipulation.GeoDBBufferNodeFactory"
               category-path="/db/geo" />
+      <node
+              category-path="/db/geo"
+              deprecated="false"
+              factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBConvexHullNodeFactory"
+              hidden="false">
+        </node>
+        <node
+              category-path="/db/geo"
+              deprecated="false"
+              factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBAreaNodeFactory"
+              hidden="false">
+        </node>
+        <node
+              category-path="/db/geo"
+              deprecated="false"
+              factory-class="org.knime.geospatial.db.nodes.calculation.GeoDBLineToMultiPointNodeFactory"
+              hidden="false">
+        </node>
+              
     </extension>
     <!-- Database Types -->
     <extension point="org.knime.database.DBType">

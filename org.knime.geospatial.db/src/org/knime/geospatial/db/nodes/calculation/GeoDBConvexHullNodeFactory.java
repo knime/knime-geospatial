@@ -44,40 +44,38 @@
  * ---------------------------------------------------------------------
  *
  * History
- *   27 Sep 2023 (Tobias): created
+ *   22 Sep 2023 (Tobias): created
  */
-package org.knime.geospatial.db.agent;
+package org.knime.geospatial.db.nodes.calculation;
 
-import org.knime.database.DBDataObject;
-import org.knime.database.SQLQuery;
+import org.knime.core.webui.node.impl.WebUINodeConfiguration;
+import org.knime.core.webui.node.impl.WebUINodeFactory;
+import org.knime.geospatial.db.util.GeoConfigBuilder;
+import org.knime.geospatial.db.util.SingleGeoColumnNodeModel;
 
 /**
- * Interface for pushing down Geo database functions.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
-public interface GeoDB {
+@SuppressWarnings("restriction")
+public class GeoDBConvexHullNodeFactory extends WebUINodeFactory<SingleGeoColumnNodeModel> {
 
-    public interface OutputColumn {
+    private static final WebUINodeConfiguration CONFIG =
+            GeoConfigBuilder.createSingelGeoColConfig("DB Convex Hull", "",
+                "This node computes the Convex Hull for the input geometery. The output is essentially a polygon, much like the output in 'Convex Hull' node."
+                , "ConvexHull");
 
-        String getNewColumnName();
-
-        boolean append();
-
+    /**
+     * Constructor.
+     */
+    public GeoDBConvexHullNodeFactory() {
+        super(CONFIG);
     }
 
-    public SQLQuery length(DBDataObject data, String geoColName, final OutputColumn outColumn);
+    @Override
+    public SingleGeoColumnNodeModel createNodeModel() {
+        return new SingleGeoColumnNodeModel(CONFIG, (a, d, s) -> a.convexHull(d, s.m_geoColName, s));
+    }
 
-    public SQLQuery boundingBox(DBDataObject data, String geoColName, final OutputColumn outColumn);
-
-    public SQLQuery area(DBDataObject data, String geoColName, final OutputColumn outColumn);
-
-    public SQLQuery toalBounds(DBDataObject data, String geoColName, final OutputColumn outColumn);
-
-    public SQLQuery convexHull(DBDataObject data, String geoColName, final OutputColumn outColumn);
-
-    public SQLQuery buffer(DBDataObject data, String geoColName, final OutputColumn outColumn);
-
-    public SQLQuery lineToMultiPoint(DBDataObject data, String geoColName, final OutputColumn outColumn);
 
 }

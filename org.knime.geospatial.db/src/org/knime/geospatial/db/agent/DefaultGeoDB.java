@@ -97,6 +97,25 @@ public class DefaultGeoDB implements GeoDB {
         return createSingleFunction(m_sessionReference.get(), data, geoColName, "ST_EXTENT", outColumn);
     }
 
+    @Override
+    public SQLQuery convexHull(final DBDataObject data, final String geoColName, final OutputColumn outColumn) {
+        return createSingleFunction(m_sessionReference.get(), data, geoColName, "ST_CONVEXHULL", outColumn);
+    }
+
+    // not yet ready, Ali will look at it tomorrow
+    @Override
+    public SQLQuery buffer(final DBDataObject data, final String geoColName, final OutputColumn outColumn) {
+        // replicate function createSingleFunction for double params
+        return createSingleFunction(m_sessionReference.get(), data, geoColName, "ST_BUFFER", outColumn);
+    }
+
+    @Override
+    public SQLQuery lineToMultiPoint(final DBDataObject data, final String geoColName, final OutputColumn outColumn) {
+        //return createSingleFunction(m_sessionReference.get(), data, geoColName, "ST_LINEFROMMULTIPOINT", outColumn); // this line with the function is valid for postgis
+        // valid call foe H2GIS
+        return createSingleFunction(m_sessionReference.get(), data, geoColName, "ST_TOMULTIPOINT", outColumn);
+    }
+
     private static SQLQuery createSingleFunction(final DBSession session, final DBDataObject data, final
         String geoColName, final String function, final OutputColumn outColumn) {
         final DBSQLDialect dialect = session.getDialect();
@@ -133,4 +152,7 @@ public class DefaultGeoDB implements GeoDB {
         return function + "(" + dialect.delimit(geoColName) + ") as "
         + dialect.delimit(resultColName);
     }
+
+
+
 }
