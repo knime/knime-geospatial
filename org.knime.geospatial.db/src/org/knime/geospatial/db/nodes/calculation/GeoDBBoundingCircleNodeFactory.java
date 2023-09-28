@@ -44,38 +44,45 @@
  * ---------------------------------------------------------------------
  *
  * History
- *   27 Sep 2023 (Tobias): created
+ *   22 Sep 2023 (Tobias): created
  */
-package org.knime.geospatial.db.agent;
+package org.knime.geospatial.db.nodes.calculation;
 
-import org.knime.database.DBDataObject;
-import org.knime.database.SQLQuery;
+import org.knime.core.webui.node.impl.WebUINodeConfiguration;
+import org.knime.core.webui.node.impl.WebUINodeFactory;
+import org.knime.geospatial.db.util.GeoConfigBuilder;
+import org.knime.geospatial.db.util.SingleGeoColumnNodeModel;
 
 /**
- * Interface for pushing down Geo database functions.
  *
  * @author Tobias Koetter, KNIME GmbH, Konstanz, Germany
  */
-public interface GeoDB {
+@SuppressWarnings("restriction")
+public class GeoDBBoundingCircleNodeFactory extends WebUINodeFactory<SingleGeoColumnNodeModel> {
 
-    public interface OutputColumn {
+    private static final WebUINodeConfiguration CONFIG =
+            GeoConfigBuilder.createSingelGeoColConfig("DB Bounding Circle", "Returns the minimum bounding circle of the provided geometry.",
+                "Returns the minimum bounding circle of the provided geometry. Each circle contains 32 line segments.\nhttp://www.h2gis.org/docs/1.3/ST_BoundingCircle/",
+                "BoundCircle");
 
-        String getNewColumnName();
+    /**
+     * Currently, the node just throws away all input columns and creates a geometry column with the computed bounding box.
+     * In a final state, the user should be able to select if it should overwrite the existing geometry column or
+     * append the newly created geometry column (+ keep all other columns).
+     */
 
-        boolean append();
 
+    /**
+     * Constructor.
+     */
+    public GeoDBBoundingCircleNodeFactory() {
+        super(CONFIG);
     }
 
-    public SQLQuery length(DBDataObject data, String geoColName, final OutputColumn outColumn);
+    @Override
+    public SingleGeoColumnNodeModel createNodeModel() {
+        return new SingleGeoColumnNodeModel(CONFIG, (a, d, s) -> a.boundingCircle(d, s.m_geoColName, s));
+    }
 
-    public SQLQuery boundingBox(DBDataObject data, String geoColName, final OutputColumn outColumn);
-
-    public SQLQuery area(DBDataObject data, String geoColName, final OutputColumn outColumn);
-
-    public SQLQuery totalBounds(DBDataObject data, String geoColName, final OutputColumn outColumn);
-
-    public SQLQuery boundingCircle(DBDataObject data, String geoColName, final OutputColumn outColumn);
-
-//    public SQLQuery multipartToSinglepart(DBDataObject data, String geoColName, final OutputColumn outColumn);
 
 }

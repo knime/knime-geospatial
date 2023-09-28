@@ -93,10 +93,20 @@ public class DefaultGeoDB implements GeoDB {
     }
 
     @Override
-    public SQLQuery toalBounds(final DBDataObject data, final String geoColName, final OutputColumn outColumn) {
+    public SQLQuery totalBounds(final DBDataObject data, final String geoColName, final OutputColumn outColumn) {
         return createSingleFunction(m_sessionReference.get(), data, geoColName, "ST_EXTENT", outColumn);
     }
 
+    @Override
+    public SQLQuery boundingCircle(final DBDataObject data, final String geoColName, final OutputColumn outColumn) {
+        return createSingleFunction(m_sessionReference.get(), data, geoColName, "ST_BOUNDINGCIRCLE", outColumn);
+    }
+
+/*    @Override
+    public SQLQuery multipartToSinglepart(final DBDataObject data, final String geoColName, final OutputColumn outColumn) {
+        return createSingleFunction(m_sessionReference.get(), data, geoColName, "ST_EXPLODE", outColumn); //SELECT * FROM ST_Explode('geometry');
+    }
+*/
     private static SQLQuery createSingleFunction(final DBSession session, final DBDataObject data, final
         String geoColName, final String function, final OutputColumn outColumn) {
         final DBSQLDialect dialect = session.getDialect();
