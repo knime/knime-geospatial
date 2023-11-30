@@ -1,4 +1,9 @@
-# ![Image](https://www.knime.com/files/knime_logo_github_40x40_4layers.png) KNIME® - Geospatial Data Types
+# KNIME® Geospatial Data Types
+
+[![Jenkins](https://jenkins.knime.com/buildStatus/icon?job=knime-geospatial%2Fmaster)](https://jenkins.knime.com/job/knime-geospatial/job/master/)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=KNIME_knime-geospatial&metric=alert_status&token=55129ac721eacd76417f57921368ed587ad8339d)](https://sonarcloud.io/summary/new_code?id=KNIME_knime-geospatial)
+
+This repository is maintained by the [KNIME Team Rakete](mailto:team-rakete@knime.com).
 
 The KNIME Geospatial Data Types repository contains the source code for Geospatial data types for the KNIME Analytics Platform. These data types are available for node development in Java and Python.
 
