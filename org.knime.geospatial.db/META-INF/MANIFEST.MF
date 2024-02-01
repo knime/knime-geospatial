@@ -21,7 +21,8 @@ Require-Bundle: org.knime.core;bundle-version="[5.0.0,6.0.0)",
  org.knime.database;bundle-version="[5.2.0,6.0.0)",
  org.knime.database.nodes,
  org.apache.commons.lang3;bundle-version="[3.9.0,4.0.0)",
- org.knime.database.extensions
+ org.knime.database.extensions,
+ com.fasterxml.jackson.core.jackson-databind;bundle-version="2.13.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.knime.geospatial.db.GeoDBExtensionsPlugin
