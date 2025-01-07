@@ -28,6 +28,9 @@
         <module>org.knime.geospatial.core/lib/fetch_jars</module>
         <module>org.knime.geospatial.core</module>
 		<module>org.knime.geospatial.core.tests</module>
+		<module>org.knime.geospatial.extensions/js-src</module>
+		<module>org.knime.geospatial.extensions</module>
+		<module>org.knime.geospatial.extensions.tests</module>
 <!-- <module>org.knime.geospatial/lib/fetch_jars</module> -->
 <!--No nodes only data types in first release	<module>org.knime.geospatial</module> -->
 		<module>org.knime.geospatial.python</module>
@@ -110,6 +113,16 @@
 			<id>p2-knime-workbench</id>
 			<layout>p2</layout>
 			<url>${knime.workbench.p2}</url>
+		</repository>
+		<repository>
+			<id>p2-knime-core-ui</id>
+			<url>${knime.core.ui.p2}</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>p2-knime-filehandling-core</id>
+			<layout>p2</layout>
+			<url>${knime.filehandling.core.p2}</url>
 		</repository>
 	</repositories>
 </project><!-- vim: set shiftwidth=4 expandtab smarttab: -->

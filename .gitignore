@@ -10,3 +10,24 @@
 **/.polyglot.feature.xml
 **/.polyglot.META-INF
 
+# Tests
+coverage
+test-results/
+
+# Dependency directories
+node_modules/
+
+# Build output
+dist
+
+# Generated Sbom file
+bom.json
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+
+.stylelintcache
+.eslintcache

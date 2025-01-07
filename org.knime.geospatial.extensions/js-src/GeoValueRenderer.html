@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>KNIME Geo Renderer</title>
+  </head>
+  <body>
+    <div id="map" style="height: 100vh" />
+    <script type="module">
+      import { GeoValueRenderer } from "./src/html-renderers/GeoValueRenderer.ts";
+      const geoValueRenderer = new GeoValueRenderer(
+        document.getElementById("map"),
+      );
+      geoValueRenderer.init();
+    </script>
+  </body>
+</html>

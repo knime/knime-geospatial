@@ -1,0 +1,1 @@
+cd org.knime.geospatial.extensions/js-src && npx lint-staged

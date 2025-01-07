@@ -1,0 +1,64 @@
+{
+  "name": "knime-geospatial-extensions",
+  "version": "0.1.0",
+  "description": "Plain HTML + Typescript based view components for the geospatial KNIME data types",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "npm run cleanDist && run-p type-check build:*",
+    "build-only": "npm run cleanDist && run-p build:*",
+    "build:GeoValueRenderer": "vite build --mode GeoValueRenderer",
+    "type-check": "tsc -p tsconfig.vitest.json",
+    "format": "prettier --cache --write .",
+    "format:check": "prettier --cache --check .",
+    "cleanDist": "rimraf dist",
+    "lint": "run-p 'lint:* -- --fix'",
+    "lint:js": "eslint . --cache --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts",
+    "lint:css": "stylelint --cache '**/*.{css,vue}'",
+    "ci:lint-format": "run-p ci:lint:* format:check -c",
+    "ci:lint:js": "npm run lint:js && npm run lint:js -- -f json -o test-results/eslint.json",
+    "ci:lint:css": "npm run lint:css -- -f json -o test-results/stylelint.json",
+    "audit": "check-audit --omit dev",
+    "test:unit": "vitest",
+    "coverage": "vitest run --coverage",
+    "prepare": "cd ../.. && husky ./org.knime.geospatial.extensions/js-src/.husky",
+    "sbom": "npx @cyclonedx/cyclonedx-npm --output-file bom.json --ignore-npm-errors --omit dev",
+    "postinstall": "license-check -c"
+  },
+  "license": "UNLICENSED",
+  "author": "KNIME AG, Zurich, Switzerland",
+  "dependencies": {
+    "@knime/styles": "1.1.1",
+    "@knime/ui-extension-service": "1.2.1",
+    "@terraformer/wkt": "2.2.1",
+    "leaflet": "1.9.4"
+  },
+  "devDependencies": {
+    "@cyclonedx/cyclonedx-npm": "1.16.1",
+    "@knime/eslint-config": "8.2.0",
+    "@knime/licenses": "1.0.5",
+    "@tsconfig/node20": "20.1.2",
+    "@types/geojson": "7946.0.15",
+    "@types/jsdom": "21.1.0",
+    "@types/leaflet": "1.9.15",
+    "@types/node": "20.11.26",
+    "@types/terraformer__wkt": "2.0.3",
+    "@vitest/coverage-v8": "2.1.5",
+    "eslint": "8.56.0",
+    "husky": "9.1.4",
+    "jsdom": "20.0.3",
+    "npm-audit-resolver": "3.0.0-RC.0",
+    "npm-run-all": "4.1.5",
+    "prettier": "3.0.0",
+    "stylelint": "16.1.0",
+    "typescript": "5.3.3",
+    "vite": "5.4.11",
+    "vitest": "2.1.5"
+  },
+  "engines": {
+    "node": "20.x"
+  },
+  "volta": {
+    "node": "20.11.1"
+  }
+}
