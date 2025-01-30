@@ -15,16 +15,29 @@ L.Icon.Default.mergeOptions({
   shadowUrl,
 });
 
-import { JsonDataService } from "@knime/ui-extension-service";
+import { AlertingService, JsonDataService } from "@knime/ui-extension-service";
 
 const INITIAL_MAP_ZOOM = 13;
 const INITIAL_MAP_CENTER = [0, 0] as L.LatLngExpression;
 
 export class GeoValueRenderer {
   private jsonDataService!: JsonDataService;
-  private readonly map!: L.Map;
+  private readonly map: L.Map | null = null;
 
   constructor(map: HTMLElement) {
+    if (!navigator.onLine) {
+      const message =
+        "Sorry, we couldn't load the data.\n Check your connection or try again later.";
+      AlertingService.getInstance().then((service) => {
+        service.sendAlert({
+          message,
+          type: "error",
+          isBlocking: true,
+        });
+      });
+      return;
+    }
+
     this.map = L.map(map);
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
@@ -34,6 +47,9 @@ export class GeoValueRenderer {
   }
 
   async init() {
+    if (!this.map) {
+      return;
+    }
     this.jsonDataService = await JsonDataService.getInstance();
     const initialData = await this.jsonDataService.initialData();
 

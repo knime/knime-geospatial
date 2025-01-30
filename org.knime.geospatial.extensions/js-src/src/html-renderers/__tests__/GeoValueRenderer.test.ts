@@ -1,7 +1,7 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import L from "leaflet";
 
-import { JsonDataService } from "@knime/ui-extension-service";
+import { AlertingService, JsonDataService } from "@knime/ui-extension-service";
 
 import { GeoValueRenderer } from "../GeoValueRenderer";
 
@@ -39,14 +39,28 @@ describe("GeoValueRenderer", () => {
     const addToSpy = vi.spyOn(L.Layer.prototype, "addTo");
     const setViewSpy = vi.spyOn(L.Map.prototype, "setView");
     const fitBoundsSpy = vi.spyOn(L.Map.prototype, "fitBounds");
+    const sendAlertMock = vi.fn();
     const map = document.createElement("div");
     map.id = "map";
-    const geoValueRenderer = new GeoValueRenderer(map);
     JsonDataService.getInstance = vi.fn().mockResolvedValue({
       initialData: vi.fn().mockResolvedValue(initialData),
     });
-    return { geoValueRenderer, addToSpy, setViewSpy, fitBoundsSpy };
+    AlertingService.getInstance = vi.fn().mockResolvedValue({
+      sendAlert: sendAlertMock,
+    });
+    const geoValueRenderer = new GeoValueRenderer(map);
+    return {
+      geoValueRenderer,
+      addToSpy,
+      setViewSpy,
+      fitBoundsSpy,
+      sendAlertMock,
+    };
   };
+
+  beforeEach(() => {
+    vi.stubGlobal("navigator", { onLine: true });
+  });
 
   it("adds a tileLayer with attribution to the map during GeoValueRenderer construction", () => {
     const tileLayerSpy = vi.spyOn(L, "tileLayer");
@@ -58,6 +72,32 @@ describe("GeoValueRenderer", () => {
           '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       },
     );
+  });
+
+  it("does not add a tileLayer during construction when no connection can be established, but sends an alert", async () => {
+    vi.useFakeTimers();
+    vi.stubGlobal("navigator", { onLine: false });
+    const tileLayerSpy = vi.spyOn(L, "tileLayer");
+    const {
+      geoValueRenderer,
+      sendAlertMock,
+      addToSpy,
+      setViewSpy,
+      fitBoundsSpy,
+    } = createGeoValueRendererAndSpies("POINT (1 1)");
+    await vi.runAllTimers();
+
+    expect(tileLayerSpy).not.toHaveBeenCalled();
+    expect(sendAlertMock).toHaveBeenCalledWith({
+      message:
+        "Sorry, we couldn't load the data.\n Check your connection or try again later.",
+      type: "error",
+      isBlocking: true,
+    });
+    await geoValueRenderer.init();
+    expect(addToSpy).not.toHaveBeenCalled();
+    expect(setViewSpy).not.toHaveBeenCalled();
+    expect(fitBoundsSpy).not.toHaveBeenCalled();
   });
 
   it.each([

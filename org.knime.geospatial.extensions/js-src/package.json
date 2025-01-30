@@ -29,7 +29,7 @@
   "author": "KNIME AG, Zurich, Switzerland",
   "dependencies": {
     "@knime/styles": "1.1.1",
-    "@knime/ui-extension-service": "1.2.1",
+    "@knime/ui-extension-service": "2.1.1",
     "@terraformer/wkt": "2.2.1",
     "leaflet": "1.9.4"
   },
