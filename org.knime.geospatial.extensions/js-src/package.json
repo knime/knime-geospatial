@@ -28,20 +28,20 @@
   "license": "UNLICENSED",
   "author": "KNIME AG, Zurich, Switzerland",
   "dependencies": {
-    "@knime/styles": "1.1.1",
+    "@knime/styles": "1.2.0",
     "@knime/ui-extension-service": "2.1.1",
     "@terraformer/wkt": "2.2.1",
     "leaflet": "1.9.4"
   },
   "devDependencies": {
     "@cyclonedx/cyclonedx-npm": "1.16.1",
-    "@knime/eslint-config": "8.2.0",
-    "@knime/licenses": "1.0.5",
-    "@tsconfig/node20": "20.1.2",
+    "@knime/eslint-config": "8.3.0",
+    "@knime/licenses": "1.1.0",
+    "@tsconfig/node22": "22.0.0",
     "@types/geojson": "7946.0.15",
     "@types/jsdom": "21.1.0",
     "@types/leaflet": "1.9.15",
-    "@types/node": "20.11.26",
+    "@types/node": "22.10.10",
     "@types/terraformer__wkt": "2.0.3",
     "@vitest/coverage-v8": "2.1.5",
     "eslint": "8.56.0",
@@ -50,15 +50,16 @@
     "npm-audit-resolver": "3.0.0-RC.0",
     "npm-run-all": "4.1.5",
     "prettier": "3.0.0",
-    "stylelint": "16.1.0",
+    "stylelint": "16.14.1",
     "typescript": "5.3.3",
     "vite": "5.4.11",
     "vitest": "2.1.5"
   },
   "engines": {
-    "node": "20.x"
+    "node": "22.x"
   },
   "volta": {
-    "node": "20.11.1"
+    "node": "22.11.0",
+    "npm": "10.9.1"
   }
 }
