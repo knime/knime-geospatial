@@ -30,6 +30,7 @@ try {
                         'knime-filehandling',
                         'knime-geospatial',
                         'knime-python',
+                        'knime-conda-channels',
                         'knime-scripting-editor',
                         'knime-python-legacy',
                         'knime-scripting-editor',
