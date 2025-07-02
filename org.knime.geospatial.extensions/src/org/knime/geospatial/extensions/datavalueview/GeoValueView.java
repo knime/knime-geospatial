@@ -72,8 +72,8 @@ public final class GeoValueView implements DataValueView {
 
     @Override
     public Page getPage() {
-        return Page.builder(this.getClass(), "js-src/dist", "GeoValueRenderer.html").addResourceDirectory("assets")
-            .build();
+        return Page.create().fromFile().bundleClass(this.getClass()).basePath("js-src/dist")
+            .relativeFilePath("GeoValueRenderer.html").addResourceDirectory("assets");
     }
 
     @SuppressWarnings("unchecked")

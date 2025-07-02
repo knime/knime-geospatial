@@ -5,8 +5,8 @@ Bundle-SymbolicName: org.knime.geospatial.extensions;singleton:=true
 Bundle-Version: 5.6.0.qualifier
 Bundle-ClassPath: knime-geospatial-extensions.jar
 Bundle-Vendor: KNIME AG, Zurich, Switzerland
-Require-Bundle: org.knime.core;bundle-version="[5.5.0,6.0.0)",
- org.knime.core.ui;bundle-version="[5.5.0,6.0.0)",
+Require-Bundle: org.knime.core;bundle-version="[5.6.0,6.0.0)",
+ org.knime.core.ui;bundle-version="[5.6.0,6.0.0)",
  org.knime.geospatial.core;bundle-version="[5.5.0,6.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
