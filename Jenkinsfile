@@ -16,7 +16,7 @@ properties([
 
 try {
     // provide the name of the update site project
-    knimetools.defaultTychoBuild('org.knime.update.geospatial', 'maven && workflow-tests && java17')
+    knimetools.defaultTychoBuild('org.knime.update.geospatial', 'maven && workflow-tests && java21')
 
     String envYml = "${DEFAULT_WF_TESTS_PYTHON_ENV}"
 
