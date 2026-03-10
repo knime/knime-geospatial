@@ -31,8 +31,6 @@
 		<module>org.knime.geospatial.extensions/js-src</module>
 		<module>org.knime.geospatial.extensions</module>
 		<module>org.knime.geospatial.extensions.tests</module>
-<!-- <module>org.knime.geospatial/lib/fetch_jars</module> -->
-<!--No nodes only data types in first release	<module>org.knime.geospatial</module> -->
 		<module>org.knime.geospatial.python</module>
 		<module>org.knime.features.geospatial</module>
 		<module>org.knime.update.geospatial</module>
