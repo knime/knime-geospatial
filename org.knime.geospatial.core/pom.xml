@@ -9,7 +9,11 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-    <groupId>org.knime</groupId>
+	<groupId>org.knime</groupId>
 	<artifactId>org.knime.geospatial.core</artifactId>
 	<packaging>${packaging.default}</packaging>
+
+	<properties>
+		<revision>5.9.0</revision>
+	</properties>
 </project>
